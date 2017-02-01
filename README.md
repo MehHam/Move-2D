@@ -1,4 +1,4 @@
-# Move-2D
+# Center Of Mass
 Center Of Mass GameWe have developed at the CRI-Paris MobileLab a multi-pedagogical serious game. It is based on the collaborative aspect of the center of mass in physics applied to first grade pupils and their elders in high school. The major point is to organize the learning process around: corporal and oral language, action through physical activity, logical structuration of thinking and world exploration using gaming.
 
 ![alt tag](https://github.com/MehHam/Move-2D/blob/master/ImageCDM.png) 
