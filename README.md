@@ -14,13 +14,13 @@ A player needs to lunch an instance on his own platform (Android smartphone or t
 
 ![alt tag](https://github.com/MehHam/Move-2D/blob/master/images/ImageServer.png) 
 
-# Client Side:
+# Client Side (for two players):
 1- Click on Client button
 2- Enter Server parameters : IP adress and Port
-3- 
+3- Click on Connect to Server
 
 ![alt tag](https://github.com/MehHam/Move-2D/blob/master/images/ImageClient.png) 
 
-Considering two equivalent masses for the two players P1 and P2, 5 levels have been developed up to now. For equivalent masses, the position of the center of mass is always given by the average position between player P1 and P2. In this context, the team composed of P1 and P2 follow a first tutorial of pick-ups collecting. Then they have to reconstruct mapping trajectories (circular, oscillating along a simple axis or totally random) in level 2. Finally precision activity takes place. This activity consists of collecting and motion mapping while avoiding death zones. 
+Considering two equivalent masses for two players P1 and P2, 5 levels have been developed up to now. For equivalent masses, the position of the center of mass is always given by the average position between player P1 and P2. In this context, the team composed of P1 and P2 follow a first tutorial of pick-ups collecting. Then they have to reconstruct mapping trajectories (circular, oscillating along a simple axis or totally random) in level 2. Finally precision activity takes place. This activity consists of collecting and motion mapping while avoiding death zones. 
 
 ![alt tag](https://github.com/MehHam/Move-2D/blob/master/images/level11.png) 
