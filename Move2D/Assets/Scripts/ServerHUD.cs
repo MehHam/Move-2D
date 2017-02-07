@@ -145,7 +145,7 @@ public class ServerHUD : MonoBehaviour {
         }
         else maximumConnections = 4;
        
-        manager.StartServer(config, maximumConnections);
+        manager.StartHost(config, maximumConnections);
 
         //manager.StartServer();
     }
@@ -192,7 +192,9 @@ public class ServerHUD : MonoBehaviour {
 
             //getting the ip from the pc the server is running on. (a local Lan address) 
             //onely used to connect from inside your house/network.
+			#if !UNITY_WEBGL
             localIP = Network.player.ipAddress;
+			#endif 
 
             getIP.GetComponentInChildren<Text>().text = "Server IP Address\nExternal :" + externalip+"\nLocal :"+localIP;
             //saving the ip addresses.

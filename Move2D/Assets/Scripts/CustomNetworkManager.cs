@@ -7,20 +7,42 @@ using System;
 
 public class CustomNetworkManager : NetworkManager
 {
+	public class CustomMessageType {
+		public static short TimeMessage = MsgType.Highest + 1;
+		public static short PasswordMessage = MsgType.Highest + 2;
+	}
+
+	public class TimeMessage: MessageBase {
+		public float time;
+	}
+
     public Text clientsInfoText;
     public ClientHUD clientHudScript;
     public ServerHUD serverHudScript;
 
     private int connectedClients = 0;
+	private float _offset = 0.0f;
 
     [HideInInspector]
     public string serverPassword;
 
-    //Server Side
+	public static CustomNetworkManager singleton;
 
-    public override void OnStartServer()
+	void Awake()
+	{
+		if (FindObjectsOfType<CustomNetworkManager>().Length > 1)
+			Destroy (gameObject);
+	}
+	void Start()
+	{
+		CustomNetworkManager.singleton = this;
+		DontDestroyOnLoad (gameObject);
+	}
+
+    //Server Side
+	public override void OnStartHost()
     {
-        base.OnStartServer();
+        base.OnStartHost();
         RegisterServerHandles();
 
         serverPassword = serverHudScript.passwordText.text;
@@ -31,8 +53,9 @@ public class CustomNetworkManager : NetworkManager
     //keeping track of Clients connecting.
     public override void OnServerConnect(NetworkConnection conn)
     {
+		Debug.Log ("Connect");
         base.OnServerConnect(conn);
-        connectedClients += 1;
+		connectedClients = NetworkServer.connections.Count;
         clientsInfoText.text = "Connected Clients : " + connectedClients;
 
         //Sending password information to client.
@@ -66,6 +89,13 @@ public class CustomNetworkManager : NetworkManager
         clientHudScript.ConnectSuccses();
     }
 
+
+	public override void OnClientDisconnect(NetworkConnection conn)
+	{
+		base.OnClientDisconnect(conn);
+		clientHudScript.DisConnect(false);
+	}
+		
     //when client recieves password information from the server.
     public void OnReceivePassword(NetworkMessage netMsg)
     {
@@ -76,12 +106,14 @@ public class CustomNetworkManager : NetworkManager
             clientHudScript.DisConnect(true);
     }
 
-    public override void OnClientDisconnect(NetworkConnection conn)
-    {
-        base.OnClientDisconnect(conn);
-        clientHudScript.DisConnect(false);
-    }
+	//when client recieve time information from the server
+	public void OnReceiveTime(NetworkMessage netMsg)
+	{
+		//read the server time
+		var time = netMsg.ReadMessage<TimeMessage>().time;
 
+		this._offset = time - Time.time;
+	}
 
     //Messages that need to be Registered on Server and Client Startup.
     void RegisterServerHandles()
@@ -91,6 +123,12 @@ public class CustomNetworkManager : NetworkManager
 
     void RegisterClientHandles()
     {
-        client.RegisterHandler(MsgType.Highest + 1, OnReceivePassword);
+		client.RegisterHandler(CustomMessageType.PasswordMessage, OnReceivePassword);
+		client.RegisterHandler (CustomMessageType.TimeMessage, OnReceiveTime);
     }
+
+	public float GetEstimatedServerTime()
+	{
+		return Time.time + this._offset;
+	}
 }
