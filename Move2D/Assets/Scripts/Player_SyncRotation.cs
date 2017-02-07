@@ -10,18 +10,18 @@ public class Player_SyncRotation : NetworkBehaviour { //script to Sync motion pa
 	[SyncVar] private Quaternion syncPlayerRotation;
 		
 	[SerializeField] Transform myTransform;
-	[SerializeField] float learpRate;
-	[SerializeField] private bool useHistoricalInterpolation=false;
+	//[SerializeField] float learpRate;
+	//[SerializeField] private bool useHistoricalInterpolation=false;
 
 
 	//private Quaternion syncRot;
 	private NetworkClient nclient;
 	private int latency;
 	private Text latencyText;
-	private List<Vector3> syncPlayerRotList = new List<Vector3>();
-	private float normalLerpRate = 20;
-	private float FasterLearpRate=30;
-	private float closeEnought=0.5f;
+	//private List<Vector3> syncPlayerRotList = new List<Vector3>();
+	//private float normalLerpRate = 20;
+	//private float FasterLearpRate=30;
+	//private float closeEnought=0.5f;
 
 	private float threshold =1;
 	private Quaternion lastPlayerRot;
@@ -32,7 +32,7 @@ public class Player_SyncRotation : NetworkBehaviour { //script to Sync motion pa
 	
 
 
-		learpRate=normalLerpRate;
+		//learpRate=normalLerpRate;
 
 	}
 

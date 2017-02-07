@@ -51,7 +51,7 @@ public class scoreCDM : MonoBehaviour {
 						{
 							int j=i+1;
 							physics.playerArr[i].go.transform.position=GameObject.Find("masseffect"+j).transform.position;
-							physics.playerArr[i].masse=(i*4)+1;
+							physics.playerArr[i].mass=(i*4)+1;
 						}
 						
 					}

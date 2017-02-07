@@ -100,7 +100,7 @@ public class DragSphere : NetworkBehaviour
 		var ray = finger.GetRay();
 		//var hit = default(RaycastHit);
 
-		Vector2 rayPos = finger.ScreenPosition;
+		//Vector2 rayPos = finger.ScreenPosition;
 		RaycastHit2D[] hit = Physics2D.RaycastAll(ray.origin,ray.direction,0f);
 	
 		// Was that collider this one?

@@ -89,17 +89,17 @@ public class levelDesign: NetworkBehaviour
 		if(!isLocalPlayer)
 			return;
 		
-		if(physics.playerArr.Length>=physics.playerLimit)
+		if(physics.playerArr != null && physics.playerArr.Length>=physics.playerLimit)
 		{
 			if(localTime0!=0){
-				localTime= (int)CustomNetworkManager.singleton.GetEstimatedServerTime() - localTime0;
+				localTime= (int)CustomNetworkManager.s_singleton.GetEstimatedServerTime() - localTime0;
 				levelNum = levelState(localTime,level0time,level1time,level11time,level2time,level22time,level3time,level4time,level5time);
 				CmdTellServerLevel(localTime,endGame, levelNum, level3switch);
 				//SetTimeUpdate(localTime);
 
 			}else{
 				endGame=level0time+level1time+level2time+level11time+level22time+level3time+level4time+level5time+localTime0;
-				localTime0= (int)CustomNetworkManager.singleton.GetEstimatedServerTime(); 
+				localTime0= (int)CustomNetworkManager.s_singleton.GetEstimatedServerTime(); 
 				endGame=level0time+level1time+level2time+level3time+level4time+level5time+level11time+level22time;
 
 			}

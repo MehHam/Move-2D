@@ -15,8 +15,8 @@ public class Player_SyncPosition : NetworkBehaviour { //script to Sync motion pa
 
 
 	//private Quaternion syncRot;
-	private NetworkClient nclient;
-	private int latency;
+	//private NetworkClient nclient;
+	//private int latency;
 	private Text latencyText;
 	private List<Vector3> syncPosList = new List<Vector3>();
 	private float normalLerpRate = 16;
@@ -27,7 +27,7 @@ public class Player_SyncPosition : NetworkBehaviour { //script to Sync motion pa
 	void Start(){
 	
 
-		nclient=GameObject.Find("Manager_Network").GetComponent<NetworkManager>().client;
+		//nclient=GameObject.Find("Manager_Network").GetComponent<NetworkManager>().client;
 		//latencyText=GameObject.Find ("LatencyText").GetComponent<Text>();
 		learpRate=normalLerpRate;
 
@@ -107,7 +107,7 @@ public class Player_SyncPosition : NetworkBehaviour { //script to Sync motion pa
 	{
 		if(isLocalPlayer)
 		{
-			latency = nclient.GetRTT();
+			//latency = nclient.GetRTT();
 
 		}
 	}

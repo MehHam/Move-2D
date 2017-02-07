@@ -11,11 +11,11 @@ public class AccelerometerMotion : NetworkBehaviour
 	const int accCte = 50;
 
 	Rigidbody2D rb;
-	private Vector2 accel=new Vector2(0,0);
+	//private Vector2 accel=new Vector2(0,0);
 	private Vector2 gyROT=new Vector2(0,0);
 	public Gyroscope gyro;
 	private Slider slider;
-	private Transform transf;
+	//private Transform transf;
 
 
 	void Awake(){
@@ -30,7 +30,7 @@ public class AccelerometerMotion : NetworkBehaviour
 		{
 		slider=GameObject.Find ("Slider").GetComponent<Slider>();
 		rb=gameObject.GetComponent<Rigidbody2D>();
-		transf=rb.transform;
+		//transf=rb.transform;
 		//
 		//if (!isLocalPlayer)
 		//	return;
@@ -60,7 +60,7 @@ public class AccelerometerMotion : NetworkBehaviour
 			gyro=Input.gyro;
 			gyro.enabled=true;
 
-			float h=gyro.rotationRateUnbiased.z;
+			//float h=gyro.rotationRateUnbiased.z;
 
 			//gyROT=new Vector2(-gyro.attitude.y*gyro.attitude.y*gyroCte*Time.deltaTime*10.0f* Mathf.Cos (gyro.attitude.y*Time.deltaTime),-gyro.attitude.y*gyro.attitude.y*gyroCte*Time.deltaTime*10.0f* Mathf.Sin (gyro.attitude.y*Time.deltaTime));
 			//gyROT=new Vector2(gyro.rotationRateUnbiased.z*gyroCte*Time.deltaTime,gyro.rotationRateUnbiased.z*gyroCte*Time.deltaTime);
@@ -101,7 +101,7 @@ public class AccelerometerMotion : NetworkBehaviour
 			gyro=Input.gyro;
 			gyro.enabled=true;
 			
-			accel=new Vector3(Input.acceleration.x,0,Input.acceleration.y);
+			//accel=new Vector3(Input.acceleration.x,0,Input.acceleration.y);
 			//gyROT=new Vector2(10*Time.deltaTime*Mathf.Cos(gyro.rotationRateUnbiased.z),10*Time.deltaTime*Mathf.Sin(gyro.rotationRateUnbiased.z));
 			//gyROT=new Vector2(gyro.gravity.x*Time.deltaTime*gyroCte,gyro.gravity.y*Time.deltaTime*gyroCte);
 			

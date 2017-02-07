@@ -17,8 +17,6 @@ public class CustomNetworkManager : NetworkManager
 	}
 
     public Text clientsInfoText;
-    public ClientHUD clientHudScript;
-    public ServerHUD serverHudScript;
 
     private int connectedClients = 0;
 	private float _offset = 0.0f;
@@ -26,16 +24,13 @@ public class CustomNetworkManager : NetworkManager
     [HideInInspector]
     public string serverPassword;
 
-	public static CustomNetworkManager singleton;
+	public static CustomNetworkManager s_singleton;
 
 	void Awake()
 	{
 		if (FindObjectsOfType<CustomNetworkManager>().Length > 1)
 			Destroy (gameObject);
-	}
-	void Start()
-	{
-		CustomNetworkManager.singleton = this;
+		CustomNetworkManager.s_singleton = this;
 		DontDestroyOnLoad (gameObject);
 	}
 
@@ -45,8 +40,8 @@ public class CustomNetworkManager : NetworkManager
         base.OnStartHost();
         RegisterServerHandles();
 
-        serverPassword = serverHudScript.passwordText.text;
-        connectedClients = 0;
+		serverPassword = this.GetComponent<ServerHUD>().passwordText.text;
+		connectedClients = NetworkServer.connections.Count;
         clientsInfoText.text = "Connected Clients : " + connectedClients;
     }
 
@@ -67,13 +62,14 @@ public class CustomNetworkManager : NetworkManager
     public override void OnServerDisconnect(NetworkConnection conn)
     {
         base.OnServerDisconnect(conn);
-        connectedClients -= 1;
+		connectedClients = NetworkServer.connections.Count;
         clientsInfoText.text = "Connected Clients : " + connectedClients;
     }
 
     public override void OnStopServer()
     {
         base.OnStopServer();
+		this.GetComponent<ClientHUD>().ShowConnectPanels ();
     }
 
     //Client Side
@@ -86,14 +82,14 @@ public class CustomNetworkManager : NetworkManager
     public override void OnClientConnect(NetworkConnection conn)
     {
         base.OnClientConnect(conn);
-        clientHudScript.ConnectSuccses();
+		this.GetComponent<ClientHUD>().ConnectSuccses();
     }
 
 
 	public override void OnClientDisconnect(NetworkConnection conn)
 	{
 		base.OnClientDisconnect(conn);
-		clientHudScript.DisConnect(false);
+		this.GetComponent<ClientHUD>().DisConnect(false);
 	}
 		
     //when client recieves password information from the server.
@@ -102,8 +98,8 @@ public class CustomNetworkManager : NetworkManager
         //read the server password.
         var msg = netMsg.ReadMessage<StringMessage>().value;
         //serverPassword = msg;
-        if (msg != clientHudScript.passwordText.text)
-            clientHudScript.DisConnect(true);
+		if (msg != this.GetComponent<ClientHUD> ().passwordText.text)
+			this.GetComponent<ClientHUD>().DisConnect(true);
     }
 
 	//when client recieve time information from the server

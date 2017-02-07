@@ -6,19 +6,19 @@ using UnityEngine.UI;
 
 public class motionKiller : NetworkBehaviour {
 	[SyncVar] private Vector3 syncposFollow;
-	private Vector2 centrePos; 
+	//private Vector2 centrePos; 
 	private GameObject objectFollow;
-	private string nomme="";
+	//private string nomme="";
 
-	private int translation;
-	private int randomRange;
+	//private int translation;
+	//private int randomRange;
 	private int velocity;
 
 	private Rigidbody2D rb;
 	public static int motionMode;
 	public static int modeCounter=0;
 	public static int modeTimer;
-	private int numbOfTransitions;
+	//private int numbOfTransitions;
 	private float timerPerTransition;
 	private GameObject progressBar;
 	private Vector2 tempPos;
@@ -26,11 +26,11 @@ public class motionKiller : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		centrePos=new Vector2(0,0);
-		translation = 1;
-		randomRange= 7;
+		//centrePos=new Vector2(0,0);
+		//translation = 1;
+		//randomRange= 7;
 		motionMode=1;
-		numbOfTransitions=10;
+		//numbOfTransitions=10;
 
 
 	//numbOfTransitions= (int)(modeTimer/numbOfTransitions);

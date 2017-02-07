@@ -17,7 +17,7 @@ public class ServerHUD : MonoBehaviour {
     private int maximumConnections;
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         if (!manager)
             manager = GetComponent<NetworkManager>();
         

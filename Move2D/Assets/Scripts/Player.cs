@@ -8,7 +8,7 @@ public class Player {
 
 	public string namePlayer; 
 	//public Rigidbody2D rigidB;
-	public int masse; 
+	public int mass; 
 	public GameObject go; 
 	public Vector2 originPlayer; 
 	public ArrayList bufferPosition;
@@ -21,7 +21,7 @@ public class Player {
 	{ 					//contructor
 		this.namePlayer = namePlayer;
 		//this.rigidB=rigidB;
-		this.masse=masse;
+		this.mass=masse;
 		this.go=go;
 		this.originPlayer=originPlayer;
 		this.bufferPosition=bufferPosition;
@@ -38,12 +38,14 @@ public class Player {
 	}
 
 	public void setMass(int mass){
-		masse= mass;
+		this.mass= mass;
 	}
 
+	/*
 	public void setRigidb(Rigidbody2D rigidB){
-		rigidB= rigidB;
+		this.rigidB = rigidB;
 	}
+	*/
 
 	public string getName(){
 	

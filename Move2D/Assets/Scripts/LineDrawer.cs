@@ -8,9 +8,9 @@ public class LineDrawer : MonoBehaviour {
 		public  GameObject goCdM;
 		private GameObject goPlayer1;
 		private Rigidbody rigidBod;
-		private NetworkCharac NetwChr = new NetworkCharac();
-		private physics phys=new physics();
-		private Player joueur=new Player();
+		//private NetworkCharac NetwChr = new NetworkCharac();
+		//private physics phys=new physics();
+		//private Player joueur=new Player();
 
 	//	public static float translation = Time.deltaTime * 0.01f;
 		public LineRenderer[] LineRenderers;

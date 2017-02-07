@@ -11,7 +11,7 @@ public class motionPointFollow : NetworkBehaviour {
 	public static GameObject objectFollow;
 	public GameObject sphereCDM;
 
-	private int translation;
+	//private int translation;
 	private int randomRange;
 	private int velocity;
 
@@ -28,7 +28,7 @@ public class motionPointFollow : NetworkBehaviour {
 	void Start () {
 
 		centrePos=new Vector2(0,0);
-		translation = 1;
+		//translation = 1;
 		randomRange= 7;
 		motionMode=1;
 		numbOfTransitions=5;

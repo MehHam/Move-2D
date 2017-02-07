@@ -43,7 +43,7 @@ public class RotationSphere : MonoBehaviour {
 	public void RotatingRigidBody(Rigidbody rb, Vector3 origin,Vector3 axis, float angle)
 	{
 
-		Quaternion q = Quaternion.AngleAxis(angle,axis);
+		//Quaternion q = Quaternion.AngleAxis(angle,axis);
 		rb.transform.RotateAround(origin,axis,angle);
 		//rb.MovePosition(q*(rb.transform.position-origin)+origin);
 		//rb.MoveRotation(q*rb.transform.rotation);

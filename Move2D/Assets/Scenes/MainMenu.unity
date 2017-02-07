@@ -85,6 +85,12 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &385238959 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11421470, guid: e71713e78f413ab40a1c818f8fa3c231,
+    type: 2}
+  m_PrefabInternal: {fileID: 1632973054}
+  m_Script: {fileID: 11500000, guid: 0afcdfcd7dd950d4896cec2a4119f2c5, type: 3}
 --- !u!1 &457112496
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,7 +106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &457112497
 Light:
   m_ObjectHideFlags: 0
@@ -597,7 +603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverCanvas: {fileID: 1968636112}
   clientCanvas: {fileID: 776120308}
-  clientHudScript: {fileID: 11421470, guid: e71713e78f413ab40a1c818f8fa3c231, type: 2}
+  clientHUDScript: {fileID: 385238959}
   serverHUDScript: {fileID: 11405480, guid: e71713e78f413ab40a1c818f8fa3c231, type: 2}
 --- !u!114 &1817217545
 MonoBehaviour:

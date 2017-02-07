@@ -10,7 +10,7 @@ public class Player_SyncCounters : NetworkBehaviour { //script to Sync motion pa
 	[SyncVar] public int syncPlayerCounter;
 	
 	[SerializeField] public static int count;
-	[SerializeField] float learpRate;
+	[SerializeField] public float learpRate;
 	//[SerializeField] private bool useHistoricalInterpolation=false;
 	
 	
@@ -23,7 +23,7 @@ public class Player_SyncCounters : NetworkBehaviour { //script to Sync motion pa
 	//private float FasterLearpRate=30;
 	//private float closeEnought=0.5f;
 	
-	private float threshold =1;
+	//private float threshold =1;
 	private int lastPlayerCounter;
 	
 	

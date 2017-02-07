@@ -4,8 +4,8 @@ using System.Collections;
 
 public class Player_Scoring : NetworkBehaviour {
 
-	private float damage=1;
-	private float range=0;
+	//private float damage=1;
+	//private float range=0;
 	private GameObject goCDM;
 	private int score=0;
 

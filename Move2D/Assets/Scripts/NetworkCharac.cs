@@ -11,13 +11,13 @@ public class NetworkCharac : NetworkBehaviour{
 
 	private GameObject goObj1;
 	private GameObject goObj2;
-	private int numbOfPlayerTags;
-	private bool networkSwitch = false;
+	//private int numbOfPlayerTags;
+	//private bool networkSwitch = false;
 
 	// Use this for initialization
 
 	void Start(){
-		numbOfPlayerTags=0;
+	//	numbOfPlayerTags=0;
 		Vector3 temp=GameObject.Find ("CenterGO").transform.position;
 		coloursArray = new ArrayList{Color.blue, Color.yellow,Color.green,Color.red, Color.black,Color.magenta,Color.white,Color.gray}; 
 		positionsArray = new ArrayList{}; 

@@ -15,7 +15,7 @@ public class FPS : MonoBehaviour
 	//public float timeleft ; // Left time for current interval
 	//public float timeElapsed;
 	//public float deadTime; 
-	private Text FPScounter;
+	//private Text FPScounter;
 	public float tempo=0;
 
 
@@ -24,7 +24,7 @@ public class FPS : MonoBehaviour
 
 	
 	
-			FPScounter = GetComponent<Text>();
+			//FPScounter = GetComponent<Text>();
 			//print ("FramesPerSecond needs a GUIText component!");
 			
 			
