@@ -12,7 +12,7 @@ public class levelDesign: NetworkBehaviour
 	[SyncVar] public int levelNum=0;
 	[SyncVar] public bool level3switch;
 
-	private int level0time=3;//30
+	private int level0time=9;//30
 
 	private int level1time=25;//25
 	private int level11time=40;//40
@@ -66,8 +66,8 @@ public class levelDesign: NetworkBehaviour
 		{
 			int timeStamp4 = level3time+level11time+level2time+level22time+level1time+level0time;
 			progressBar=GameObject.Find("ProgressRadialBar");
-		
 			progressBar.GetComponentInChildren<ProgressRadialBehaviourMOD>().Value = 100.0f*(localTime-timeStamp4)/level4time;
+
 		}
 
 		
