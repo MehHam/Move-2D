@@ -29,19 +29,19 @@ public class LineDrawer : MonoBehaviour {
 
 
 		Debug.Log (physics.joueurCDM.namePlayer);
-		Debug.Log (physics.playerArr[0].namePlayer);
-		Debug.Log (physics.playerArr[1].namePlayer);
+		Debug.Log (physics.players[0].namePlayer);
+		Debug.Log (physics.players[1].namePlayer);
 
 
 		if(levelDesign.levelValue>= 1 && levelDesign.levelValue<=3)
 		{
 		DrawLine(physics.joueurCDM.originPlayer, physics.joueurCDM.go.transform.position,physics.joueurCDM.bufferPosition,0,physics.joueurCDM.go);
 
-		for(int i=0;i< physics.playerArr.Length;i++)
+			for(int i=0;i< physics.players.Count ;i++)
 		{
 
-			DrawLine(physics.playerArr[i].originPlayer, physics.playerArr[i].go.transform.position,physics.playerArr[i].bufferPosition,1+i,physics.playerArr[i].go);
-			DrawLinker(physics.playerArr[i].namePlayer,physics.joueurCDM.namePlayer,50,5+i);
+			DrawLine(physics.players[i].originPlayer, physics.players[i].go.transform.position,physics.players[i].bufferPosition,1+i,physics.players[i].go);
+			DrawLinker(physics.players[i].namePlayer,physics.joueurCDM.namePlayer,50,5+i);
 
 		}
 		

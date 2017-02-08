@@ -34,6 +34,17 @@ public class CustomNetworkManager : NetworkManager
 		DontDestroyOnLoad (gameObject);
 	}
 
+	public int getNumberOfActiveConnections()
+	{
+		var connections = NetworkServer.connections;
+		int count = 0;
+		foreach (var connection in connections) {
+			if (connection != null)
+				count++;
+		}
+		return count;
+	}
+
     //Server Side
 	public override void OnStartHost()
     {
@@ -41,7 +52,7 @@ public class CustomNetworkManager : NetworkManager
         RegisterServerHandles();
 
 		serverPassword = this.GetComponent<ServerHUD>().passwordText.text;
-		connectedClients = NetworkServer.connections.Count;
+		connectedClients = getNumberOfActiveConnections ();
         clientsInfoText.text = "Connected Clients : " + connectedClients;
     }
 
@@ -50,7 +61,7 @@ public class CustomNetworkManager : NetworkManager
     {
 		Debug.Log ("Connect");
         base.OnServerConnect(conn);
-		connectedClients = NetworkServer.connections.Count;
+		connectedClients = getNumberOfActiveConnections ();
         clientsInfoText.text = "Connected Clients : " + connectedClients;
 
         //Sending password information to client.
@@ -62,7 +73,7 @@ public class CustomNetworkManager : NetworkManager
     public override void OnServerDisconnect(NetworkConnection conn)
     {
         base.OnServerDisconnect(conn);
-		connectedClients = NetworkServer.connections.Count;
+		connectedClients = getNumberOfActiveConnections ();
         clientsInfoText.text = "Connected Clients : " + connectedClients;
     }
 

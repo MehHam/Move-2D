@@ -83,7 +83,7 @@ public class motionKiller : NetworkBehaviour {
 
 	void transmitPosition(string nameFollow){
 
-		if(!isLocalPlayer || this.gameObject.GetComponent<PlayerID>().playerUniqueIdentity!=physics.playerArr[0].namePlayer){
+		if(!isLocalPlayer || this.gameObject.GetComponent<PlayerID>().playerUniqueIdentity!=physics.players[0].namePlayer){
 
 			objectFollow=GameObject.Find(nameFollow);
 			objectFollow.transform.position= syncposFollow;

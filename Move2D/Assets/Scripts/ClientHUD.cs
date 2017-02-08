@@ -37,17 +37,30 @@ public class ClientHUD : MonoBehaviour
         }
     }
 
+	void OnEnable()
+	{
+		ToggleInteraction (true);
+	}
+
     void Update()
     {
     }
 
 	private void ToggleInteraction(bool interactable)
 	{
-		var server_button = GameObject.Find ("/Canvas_Main/Panel_Mid/Button_Server").GetComponent<Button>();
-		var client_button = GameObject.Find ("/Canvas_Main/Panel_Mid/Button_Client").GetComponent<Button>();
+		var server = GameObject.Find ("/Canvas_Main/Panel_Mid/Button_Server");
+		Button server_button = null;
+		if (server != null)
+			server_button = server.GetComponent<Button> ();
+		var client = GameObject.Find ("/Canvas_Main/Panel_Mid/Button_Client");
+		Button client_button = null;
+		if (client != null)
+			client_button = server.GetComponent<Button> ();
 
-		server_button.interactable = interactable;
-		client_button.interactable = interactable;
+		if (server_button != null)
+			server_button.interactable = interactable;
+		if (client_button != null)
+			client_button.interactable = interactable;
 		connectToServer.GetComponent<Button> ().interactable = interactable;
 		portText.interactable = interactable;
 		ipText.interactable = interactable;
@@ -105,6 +118,7 @@ public class ClientHUD : MonoBehaviour
         connected = true;
         connecting.SetActive(false);
 		HideConnectPanels ();
+		ToggleInteraction (true);
         //menuCam.SetActive(false);   //if your player has a camera on him this one should be turned off when entering the game/lobby.
     }
 

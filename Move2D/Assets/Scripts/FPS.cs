@@ -58,7 +58,7 @@ public class FPS : MonoBehaviour
 			frames = 0;
 		}*/
 
-		if(physics.playerArr.Length>=physics.playerLimit)
+		if(physics.players.Count >= physics.playerLimit)
 		{
 			//FPScounter.text = "Time	" + levelDesign.localTime.ToString("f2");//(tempo).ToString("f2");//(accum/frames).ToString("f2");
 
