@@ -12,16 +12,16 @@ public class levelDesign: NetworkBehaviour
 	[SyncVar] public int levelNum = 0;
 	[SyncVar] public bool level3switch;
 
-	private int level0time=9;//30
+	private const int level0time=9;//30
 
-	private int level1time=25;//25
-	private int level11time=40;//40
+	private const int level1time=25;//25
+	private const int level11time=40;//40
 
-	private int level2time=30;//30
-	private int level22time=40;//40
-	private int level3time=40;//40
-	private int level4time=10;//10
-	private int level5time=2;//2
+	private const int level2time=30;//30
+	private const int level22time=40;//40
+	private const int level3time=40;//40
+	private const int level4time=10;//10
+	private const int level5time=2;//2
 
 	//public static int levelPublic=-1;
 	public static int level2Timerlenght;
@@ -305,16 +305,14 @@ public class levelDesign: NetworkBehaviour
 
 
 	[Command]
-	void CmdTellServerLevel (int time, int endG, int lev, bool levelswitch)
+	void CmdTellServerLevel (int localTime, int endGame, int levelNum, bool level3switch)
 	{
-
-		localTime = time;
-		endGame = endG;
-		levelNum = lev;
-		level3switch = levelswitch;
-		levelGestion (levelNum);
+		this.localTime = localTime;
+		this.endGame = endGame;
+		this.levelNum = levelNum;
+		this.level3switch = level3switch;
+		levelGestion (this.levelNum);
 		//Apply the dammage
-
 	}
 
 

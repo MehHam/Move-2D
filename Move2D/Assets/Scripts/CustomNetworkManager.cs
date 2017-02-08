@@ -16,15 +16,17 @@ public class CustomNetworkManager : NetworkManager
 		public float time;
 	}
 
+
+	public static CustomNetworkManager s_singleton;
+
     public Text clientsInfoText;
+
+	[HideInInspector]
+	public string serverPassword;
 
     private int connectedClients = 0;
 	private float _offset = 0.0f;
 
-    [HideInInspector]
-    public string serverPassword;
-
-	public static CustomNetworkManager s_singleton;
 
 	void Awake()
 	{
@@ -118,7 +120,7 @@ public class CustomNetworkManager : NetworkManager
 	{
 		//read the server time
 		var time = netMsg.ReadMessage<TimeMessage>().time;
-
+		Debug.Log (_offset);
 		this._offset = time - Time.time;
 	}
 
