@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Scenes/gainPoints.unity
-  isLoaded: 1
-  isActive: 1
