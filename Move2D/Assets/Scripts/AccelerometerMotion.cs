@@ -73,9 +73,17 @@ public class AccelerometerMotion : NetworkBehaviour
 			//
 			//gyROT=new Vector2(1f*Mathf.Cos(Mathf.Atan(gyro.gravity.y/gyro.gravity.x))*Time.deltaTime*gyroCte,1f*Mathf.Sin(Mathf.Atan(gyro.gravity.y/gyro.gravity.x))*Time.deltaTime*gyroCte);
 			float radiusR=15.7f;
-			float theta =Mathf.Acos(gyro.gravity.y/gyro.gravity.magnitude);
-			Vector2 playerPos= new Vector2(radiusR*Mathf.Cos(2*(theta)),radiusR*Mathf.Sin(2*(theta))); //TODO change the angle expression to take into account the sign of cos(alpha) and cos(-alpha)
+			/*float theta =Mathf.Acos(gyro.gravity.y/gyro.gravity.magnitude);
+			float alpha=2*theta+Mathf.PI;
+			Vector2 playerPos= new Vector2(radiusR*Mathf.Cos(alpha),radiusR*Mathf.Sin(alpha)); //TODO change the angle expression to take into account the sign of cos(alpha) and cos(-alpha)
+			*/
+			float alpha=0f;
+			float theta =Mathf.Atan(gyro.gravity.x/gyro.gravity.y);
 
+			if(theta< Mathf.PI/2 && theta> -Mathf.PI/2){
+			alpha=2*theta;
+			}
+			Vector2 playerPos= new Vector2(radiusR*Mathf.Cos(alpha),radiusR*Mathf.Sin(alpha));
 			if(playerPos.magnitude>radiusR*0.95f && playerPos.magnitude<radiusR*1.05f){
 			rb.transform.position=Vector2.Lerp(rb.transform.position,playerPos,0.5f);
 				//rb.transform.position=playerPos;
