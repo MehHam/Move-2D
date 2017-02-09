@@ -2,11 +2,8 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class GameScore : NetworkBehaviour
+public class SphereCDM : NetworkBehaviour
 {
-
-	[SyncVar]public int count;
-
 	//OnTriggerEnter2D is called whenever this object overlaps with a trigger collider.
 	[ServerCallback]
 	void OnTriggerEnter2D (Collider2D other)
@@ -16,15 +13,15 @@ public class GameScore : NetworkBehaviour
 			//... then set the other object we just collided with to inactive.
 			other.gameObject.SetActive (false);
 			//Add one to the current value of our count variable.
-			count = count + 1;
+			GameManager.singleton.score++;
 		}
 		//Update the currently displayed count by calling the SetCountText function.
 		//SetCountText ();
 
 		if (other.gameObject.name == "PetitChartres" || other.gameObject.name == "CrossLava")
-			count--;
+			GameManager.singleton.score--;
 		if (other.gameObject.name == "pointFollow")
-			count++;
+			GameManager.singleton.score++;
 		else {
 			if (other.gameObject.name == "massEffect" && levelDesign.levelValue == 3) {
 				//gameObject.transform.position;
@@ -61,14 +58,14 @@ public class GameScore : NetworkBehaviour
 
 
 			if (other.gameObject.name == "LabyrinthEnding1" || other.gameObject.name == "LabyrinthEnding2" && levelDesign.levelValue == 3) {
-				count = count + 1;
+				GameManager.singleton.score++;
 			} else {
 				if (other.gameObject.name == "PetitChartres" || other.gameObject.name == "CrossLava") {
-					count = count - 1;
+					GameManager.singleton.score--;
 				} else {
 
 					if (other.gameObject.name == "Killer1" || other.gameObject.name == "Killer2" || other.gameObject.name == "Killer3" || other.gameObject.name == "Killer4" && levelDesign.levelValue == 3) {
-						count = count - 1;
+						GameManager.singleton.score++;
 						gameObject.transform.position = Vector3.zero;
 						if (physics.playerLimit >= 1) {
 							for (int i = 0; i < physics.players.Count; i++) {
@@ -86,10 +83,10 @@ public class GameScore : NetworkBehaviour
 	void OnTriggerStay2D (Collider2D other)
 	{
 		if (other.gameObject.name == "pointFollow" || other.gameObject.name == "LabyrinthEnding1" || other.gameObject.name == "LabyrinthEnding2") {
-			count = count + 1;
+			GameManager.singleton.score++;
 		}
 		if (other.gameObject.name == "CrossLava" || other.gameObject.name == "Killer1" || other.gameObject.name == "Killer2" || other.gameObject.name == "Killer3" || other.gameObject.name == "Killer4") {
-			count = count - 1;
+			GameManager.singleton.score--;
 		}
 
 	}
