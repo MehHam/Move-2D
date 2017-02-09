@@ -74,7 +74,7 @@ public class levelDesign: NetworkBehaviour
 			level3switch = true;
 			
 			level2Timerlenght = level3time;
-			motionPointFollow.motionMode = (int)Random.Range (-0.0f, 2.9f);
+			MotionPointFollow.motionMode = (int)Random.Range (-0.0f, 2.9f);
 			progressBar.GetComponentInChildren<ProgressRadialBehaviourMOD> ().Value = 0;
 
 		}
@@ -153,8 +153,8 @@ public class levelDesign: NetworkBehaviour
 		case 11:
 			gestionGO ("Level2", "Canvas", false);
 			GameObject.Find ("SphereCDM").transform.localScale = new Vector3 (2.0f, 2.0f, 2.0f);	
-			motionPointFollow.objectFollow = GameObject.Find ("pointFollow");
-			motionPointFollow.motionMode = 1;
+			MotionPointFollow.objectFollow = GameObject.Find ("pointFollow");
+			MotionPointFollow.motionMode = 1;
 			gestionGO ("Background1bis", "Main_Background", true);
 			gestionGO ("Background2", "Main_Background", false);
 
@@ -166,13 +166,13 @@ public class levelDesign: NetworkBehaviour
 
 			gestionGO ("Background2", "Main_Background", true);
 			GameObject.Find ("SphereCDM").transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
-			motionPointFollow.motionMode = 2;
+			MotionPointFollow.motionMode = 2;
 
 			break;
 			
 		case 2:
-			motionPointFollow.objectFollow = GameObject.Find ("pointFollow");
-			motionPointFollow.motionMode = 0;
+			MotionPointFollow.objectFollow = GameObject.Find ("pointFollow");
+			MotionPointFollow.motionMode = 0;
 
 			gestionGO ("Background2", "Main_Background", true);
 			gestionGO ("Background1", "Main_Background", false);
@@ -188,8 +188,8 @@ public class levelDesign: NetworkBehaviour
 			GameObjectAlphaHide ("permanent", 1);
 
 			level2Timerlenght = level2time;
-			motionPointFollow.modeTimer = level2time * 24;
-			motionPointFollow.modeCounter = 10 + level2Timerlenght * 24;
+			MotionPointFollow.modeTimer = level2time * 24;
+			MotionPointFollow.modeCounter = 10 + level2Timerlenght * 24;
 
 			gestionGO ("Background1", "Main_Background", true);
 			gestionGO ("Background0", "Main_Background", false);

@@ -4,7 +4,7 @@ using System.Collections;
 using ProgressBar;
 using UnityEngine.UI;
 
-public class motionPointFollow : NetworkBehaviour
+public class MotionPointFollow : NetworkBehaviour
 {
 	[SyncVar] private Vector3 syncposFollow;
 	[SyncVar] private int syncBarValue;

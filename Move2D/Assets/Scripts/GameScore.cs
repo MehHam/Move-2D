@@ -1,31 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class scoreCDM : MonoBehaviour
+public class GameScore : NetworkBehaviour
 {
 
-	public int count;
-
-	// Use this for initialization
-	void Start ()
-	{
-
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-
-	}
+	[SyncVar]public int count;
 
 	//OnTriggerEnter2D is called whenever this object overlaps with a trigger collider.
+	[ServerCallback]
 	void OnTriggerEnter2D (Collider2D other)
 	{
 		//Check the provided Collider2D parameter other to see if it is tagged "PickUp", if it is...
 		if (other.gameObject.CompareTag ("PickUp")) {
 			//... then set the other object we just collided with to inactive.
 			other.gameObject.SetActive (false);
-
 			//Add one to the current value of our count variable.
 			count = count + 1;
 		}
@@ -93,9 +82,9 @@ public class scoreCDM : MonoBehaviour
 		}
 	}
 
+	[ServerCallback]
 	void OnTriggerStay2D (Collider2D other)
 	{
-
 		if (other.gameObject.name == "pointFollow" || other.gameObject.name == "LabyrinthEnding1" || other.gameObject.name == "LabyrinthEnding2") {
 			count = count + 1;
 		}

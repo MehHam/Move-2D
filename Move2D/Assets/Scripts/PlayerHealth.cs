@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 
-public class PlayerMove : NetworkBehaviour {
+public class PlayerHealth : NetworkBehaviour {
 
 	const int nudgeAmount = 25;
 	

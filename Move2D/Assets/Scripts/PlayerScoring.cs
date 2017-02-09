@@ -37,9 +37,9 @@ public class PlayerScoring : NetworkBehaviour {
 	{
 		goCDM=GameObject.Find("SphereCDM");
 
-		if(score!= goCDM.GetComponent<scoreCDM>().count){
+		if(score!= goCDM.GetComponent<GameScore>().count){
 		
-		score = goCDM.GetComponent<scoreCDM>().count;
+		score = goCDM.GetComponent<GameScore>().count;
 		CmdTellServerScore(score);
 		
 		}
@@ -50,7 +50,7 @@ public class PlayerScoring : NetworkBehaviour {
 	[Command]
 	void CmdTellServerScore(int damage){
 
-		gameObject.GetComponent<Player_Health>().increaseHealth(damage);
+		gameObject.GetComponent<PlayerScore>().increaseHealth(damage);
 		//Apply the dammage
 	
 	}
