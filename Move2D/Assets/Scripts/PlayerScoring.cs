@@ -2,7 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class Player_Scoring : NetworkBehaviour {
+public class PlayerScoring : NetworkBehaviour {
 
 	//private float damage=1;
 	//private float range=0;

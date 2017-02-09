@@ -204,7 +204,7 @@ public class levelDesign: NetworkBehaviour
 			gestionGO ("Background0", "Main_Background", true);
 			gestionGO ("Level0", "Canvas", true);
 					
-			GameObject.Find ("SphereCDM").transform.localScale = new Vector3 (2.0f, 2.0f, 2.0f);
+			this.goCDM.transform.localScale = new Vector3 (2.0f, 2.0f, 2.0f);
 						
 			if (localTime < (int)(0.4f * level0time) && localTime >= 0) {
 				gestionGO ("ready", "Level0", true);

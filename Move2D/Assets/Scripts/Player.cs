@@ -1,44 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player {
-
+public class Player
+{
 	public static ArrayList playersNamesList;
 	// Use this for initialization
 
-	public string namePlayer; 
+	public string namePlayer;
 	//public Rigidbody2D rigidB;
-	public int mass; 
-	public GameObject go; 
-	public Vector2 originPlayer; 
+	public int mass;
+	public GameObject go;
+	public Vector2 originPlayer;
 	public ArrayList bufferPosition;
 	public Color color;
 
-	public Player(){} 
+	public Player ()
+	{
+	}
 
 
-	public Player(string namePlayer,/* Rigidbody2D rigidB, */int masse, GameObject go, Vector2 originPlayer, ArrayList bufferPosition,Color color)
+	public Player (string namePlayer,/* Rigidbody2D rigidB, */int masse, GameObject go, Vector2 originPlayer, ArrayList bufferPosition, Color color)
 	{ 					//contructor
 		this.namePlayer = namePlayer;
 		//this.rigidB=rigidB;
-		this.mass=masse;
-		this.go=go;
-		this.originPlayer=originPlayer;
-		this.bufferPosition=bufferPosition;
-		this.color=color;
-
-	} 
-
-
-	public void InitializePlayer(Player joueur)
-	{
-		joueur.playerOrigin(joueur.originPlayer);
-		joueur.bufferPosition.Clear();
+		this.mass = masse;
+		this.go = go;
+		this.originPlayer = originPlayer;
+		this.bufferPosition = bufferPosition;
+		this.color = color;
 
 	}
 
-	public void setMass(int mass){
-		this.mass= mass;
+
+	public void InitializePlayer (Player joueur)
+	{
+		joueur.playerOrigin (joueur.originPlayer);
+		joueur.bufferPosition.Clear ();
+
+	}
+
+	public void setMass (int mass)
+	{
+		this.mass = mass;
 	}
 
 	/*
@@ -47,40 +50,43 @@ public class Player {
 	}
 	*/
 
-	public string getName(){
+	public string getName ()
+	{
 	
-		namePlayer=go.name;
+		namePlayer = go.name;
 		return namePlayer;
 	}
 
-	public ArrayList updatebufferPosition(Player joueur){
+	public ArrayList updatebufferPosition (Player joueur)
+	{
 	
-		joueur.bufferPosition.Add(go.transform.position);
+		joueur.bufferPosition.Add (go.transform.position);
 		return joueur.bufferPosition;
 	}
 
-	public ArrayList addPlayertoList(ArrayList playerList,Player joueur)
+	public ArrayList addPlayertoList (ArrayList playerList, Player joueur)
 	{
-		playerList.Add(joueur);
+		playerList.Add (joueur);
 		return playerList;
 	}
 
-	public Vector2 playerOrigin(Vector2 originGO)
+	public Vector2 playerOrigin (Vector2 originGO)
 	{
-		originPlayer=originGO;
+		originPlayer = originGO;
 		return originGO;
 	}
 
-	public ArrayList playerMotion(Vector2 posPLAYER)
+	public ArrayList playerMotion (Vector2 posPLAYER)
 	{
 	
-		bufferPosition.Add(posPLAYER);
+		bufferPosition.Add (posPLAYER);
 		return bufferPosition;
 	}
 
-	public ArrayList addPlayersNames(){
+	public ArrayList addPlayersNames ()
+	{
 
-		playersNamesList.Add(namePlayer);
+		playersNamesList.Add (namePlayer);
 		return playersNamesList;
 	}
 	
