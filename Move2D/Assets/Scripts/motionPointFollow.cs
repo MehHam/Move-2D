@@ -6,6 +6,12 @@ using UnityEngine.UI;
 
 public class MotionPointFollow : NetworkBehaviour
 {
+	public enum MotionMode 
+	{
+		Random,
+		Cos,
+		Rotate
+	}
 	[SyncVar] private Vector3 syncposFollow;
 	[SyncVar] private int syncBarValue;
 	private Vector2 centrePos;
@@ -17,9 +23,9 @@ public class MotionPointFollow : NetworkBehaviour
 	private int velocity;
 
 	private Rigidbody2D rb;
-	public static int motionMode;
-	public static int modeCounter = 0;
-	public static int modeTimer;
+	public static MotionMode motionMode = MotionMode.Cos;
+	//public static int modeCounter = 0;
+	//public static int modeTimer;
 	private int numbOfTransitions;
 	private float timerPerTransition;
 	private GameObject progressBar;
@@ -28,11 +34,10 @@ public class MotionPointFollow : NetworkBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-
+		sphereCDM = GameObject.FindGameObjectWithTag ("Sphere CDM");
 		centrePos = new Vector2 (0, 0);
 		//translation = 1;
 		randomRange = 7;
-		motionMode = 1;
 		numbOfTransitions = 5;
 
 		//numbOfTransitions= (int)(modeTimer/numbOfTransitions);
@@ -40,29 +45,22 @@ public class MotionPointFollow : NetworkBehaviour
 
 	void Update ()
 	{
-
-		if (levelDesign.levelValue == 2 || levelDesign.levelValue == 3 || levelDesign.levelValue == 22) {
-			transmitPosition ();
-		} else {
-			return;
-		}
-		
+		if (GameManager.singleton.GetCurrentLevel ().gameMode == GameManager.GameMode.MotionPointFollow)
+			transmitPosition();
 	}
 
 	//Update is called once per frame
+	[ServerCallback]
 	void FixedUpdate ()
 	{
-		if (!isLocalPlayer)
-			return;
-
-		if (levelDesign.levelValue == 2 || levelDesign.levelValue == 3 || levelDesign.levelValue == 22) {
+		if (GameManager.singleton.GetCurrentLevel ().gameMode == GameManager.GameMode.MotionPointFollow) {
 			if (objectFollow == null || rb == null) {
 				objectFollow = GameObject.Find ("pointFollow");
 				if (objectFollow != null)
 					rb = objectFollow.GetComponent<Rigidbody2D> ();
 			}
 		
-			if (motionMode == 2) {
+			if (motionMode == MotionMode.Random) {
 				
 				if (modeCounter < (int)modeTimer / numbOfTransitions) {
 					motionCriterion (rb, sphereCDM);
@@ -81,22 +79,24 @@ public class MotionPointFollow : NetworkBehaviour
 	}
 
 
-	public void randomMotion (Rigidbody2D rb, int option, float velocity, int randomRange)
+	public void randomMotion (Rigidbody2D rb, MotionMode mode, float velocity, int randomRange)
 	{
 
-		switch (option) {
-		case 2: 
+		switch (mode) {
+		// random position
+		case MotionMode.Random: 
 			Vector2 randomPosition = new Vector2 ((int)Random.Range (-randomRange, randomRange), (int)Random.Range (-randomRange, randomRange));
 			rb.position = 0.1f * velocity * randomPosition;
 			break;
-
-		case 1:
+		// cos
+		case MotionMode.Cos:
 			int Amplitude = 8;
 			rb.position = new Vector2 (0.0f, Amplitude * Mathf.Cos (6.24f * Time.fixedTime / velocity));
 			//rb.position =new Vector2(0.0f,11);
 
 			break;
-		case 0:
+		// rotate
+		case MotionMode.Rotate:
 			velocity = 10f;
 			rb.transform.RotateAround (centrePos, Vector3.forward * 10f, velocity * Time.deltaTime);
 			break;
@@ -110,8 +110,6 @@ public class MotionPointFollow : NetworkBehaviour
 		int criterion = (int)xiSquareCriterion (go, objectFollow, progressBar);
 		progressBar.GetComponent<ProgressRadialBehaviour> ().Value = criterion;
 		CmdTellServerFollowPos (rb.transform.position, criterion);
-
-
 	}
 
 
@@ -149,7 +147,6 @@ public class MotionPointFollow : NetworkBehaviour
 				progressBar = GameObject.Find ("ProgressRadialHollow");
 				objectFollow.transform.position = syncposFollow;
 				progressBar.GetComponent<ProgressRadialBehaviour> ().Value = syncBarValue;
-
 			}
 
 		}
@@ -158,18 +155,8 @@ public class MotionPointFollow : NetworkBehaviour
 	[Command]
 	void CmdTellServerFollowPos (Vector3 position, int barValue)
 	{
-		/*if(!isLocalPlayer || this.gameObject.GetComponent<PlayerID>().playerUniqueIdentity!=physics.playerArr[0].namePlayer)
-		{
-			Debug.Log(this.gameObject.GetComponent<PlayerID>().playerUniqueIdentity);
-			return;
-		}*/
-
 		syncposFollow = position;
 		syncBarValue = barValue;
-		//syncRandomValue=barValue;
-
-		//Apply the dammage
-		
 	}
 
 }

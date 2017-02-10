@@ -8,8 +8,6 @@ public class PlayerDragMove : NetworkBehaviour
 {
 	// This stores the layers we want the raycast to hit (make sure this GameObject's layer is included!)
 	public LayerMask LayerMask = UnityEngine.Physics.DefaultRaycastLayers;
-	private Rigidbody2D rb;
-	private Transform transf;
 	private int counterFing;
 	private Vector2 frameDelta = Vector2.zero;
 	// This stores the finger that's currently dragging this GameObject
@@ -21,7 +19,7 @@ public class PlayerDragMove : NetworkBehaviour
 		if (!isLocalPlayer)
 			return;
 		
-		rb.constraints = RigidbodyConstraints2D.None;
+		this.GetComponent<Rigidbody2D>().constraints= RigidbodyConstraints2D.None;
 		// If there is an active finger, move this GameObject based on it
 		if (_draggingFinger != null && counterFing < 10) {
 
@@ -47,13 +45,13 @@ public class PlayerDragMove : NetworkBehaviour
 		cam = Camera.main;
 		//Vector3 nouvVelocity;
 		Vector3 herePosition;
-		var screenPosition = cam.WorldToScreenPoint (transf.position);
+		var screenPosition = cam.WorldToScreenPoint (this.GetComponent<Rigidbody2D>().transform.position);
 		// Modify screen position
 		screenPosition += (Vector3)deltaPosition;
 
 		// Write new world position
 		herePosition = cam.ScreenToWorldPoint (screenPosition);
-		rb.MovePosition (herePosition);
+		this.GetComponent<Rigidbody2D>().MovePosition (herePosition);
 
 		//nouvVelocity =0.07f*(cam.ScreenToWorldPoint(screenPosition)-(Vector3)physics.bufferPositionPlayer1[physics.bufferPositionPlayer1.Count-2])*Time.fixedTime;
 		//rb.AddForce(herePosition*Time.deltaTime*0.7f);
@@ -90,9 +88,6 @@ public class PlayerDragMove : NetworkBehaviour
 	
 		// Was that collider this one?
 		if (hit.Length > 0) {
-			rb = gameObject.GetComponent<Rigidbody2D> ();
-			transf = rb.transform;
-
 			// Set the current finger to this one
 			_draggingFinger = finger;
 		}

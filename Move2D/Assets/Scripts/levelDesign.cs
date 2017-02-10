@@ -45,9 +45,9 @@ public class levelDesign: NetworkBehaviour
 
 	void Update ()
 	{
-		timeUpdate ();
-		SetTimeText (localTime);
-		SetLevelText (levelNum);
+		//timeUpdate ();
+		//SetTimeText (localTime);
+		//SetLevelText (levelNum);
 		levelGestion (levelNum);
 		levelValue = levelNum;
 
@@ -74,7 +74,7 @@ public class levelDesign: NetworkBehaviour
 			level3switch = true;
 			
 			level2Timerlenght = level3time;
-			MotionPointFollow.motionMode = (int)Random.Range (-0.0f, 2.9f);
+			//MotionPointFollow.motionMode = (MotionMotionMode)Random.Range (0, 3);
 			progressBar.GetComponentInChildren<ProgressRadialBehaviourMOD> ().Value = 0;
 
 		}
@@ -154,7 +154,7 @@ public class levelDesign: NetworkBehaviour
 			gestionGO ("Level2", "Canvas", false);
 			GameObject.Find ("SphereCDM").transform.localScale = new Vector3 (2.0f, 2.0f, 2.0f);	
 			MotionPointFollow.objectFollow = GameObject.Find ("pointFollow");
-			MotionPointFollow.motionMode = 1;
+			//MotionPointFollow.motionMode = 1;
 			gestionGO ("Background1bis", "Main_Background", true);
 			gestionGO ("Background2", "Main_Background", false);
 
@@ -166,7 +166,7 @@ public class levelDesign: NetworkBehaviour
 
 			gestionGO ("Background2", "Main_Background", true);
 			GameObject.Find ("SphereCDM").transform.localScale = new Vector3 (0.8f, 0.8f, 0.8f);
-			MotionPointFollow.motionMode = 2;
+			//MotionPointFollow.motionMode = 2;
 
 			break;
 			
@@ -269,7 +269,7 @@ public class levelDesign: NetworkBehaviour
 		
 	}
 
-	void SetTimeText (int localTi)
+	/*void SetTimeText (int localTi)
 	{
 		timeText = GameObject.Find ("timeScore").GetComponent<Text> ();
 		timeText.text = "Time : " + (endGame - (localTi)).ToString ();
@@ -279,7 +279,7 @@ public class levelDesign: NetworkBehaviour
 	{
 		levelText = GameObject.Find ("levelText").GetComponent<Text> ();
 		levelText.text = "Level : " + localLev.ToString ();
-	}
+	}*/
 
 	void GameObjectAlphaHide (string goName, int AlphaValue)
 	{

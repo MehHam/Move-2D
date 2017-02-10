@@ -95,8 +95,6 @@ GameObject:
   - component: {fileID: 11461956}
   - component: {fileID: 5022182}
   - component: {fileID: 5815376}
-  - component: {fileID: 11453360}
-  - component: {fileID: 11432522}
   - component: {fileID: 11434400}
   - component: {fileID: 11403898}
   - component: {fileID: 114714412699776628}
@@ -480,17 +478,6 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!114 &11432522
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 152500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14667845f4dea40d8a36df546440e366, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11434400
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -508,18 +495,6 @@ MonoBehaviour:
   level3switch: 1
   progressBar: {fileID: 130144, guid: 0a05ae0285ab3424f831ac052dc348b8, type: 2}
   goCDM: {fileID: 183040, guid: 8e2fd6ae2a6f8ca4d82ba8f4b11d045d, type: 2}
---- !u!114 &11453360
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 152500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d434adb36ec45ccbbbad7319f4e56d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}
 --- !u!114 &11461956
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1698,7 +1673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee875d9e08596584fbbefa0c483374b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereCDM: {fileID: 0}
+  sphereCDM: {fileID: 183040, guid: 8e2fd6ae2a6f8ca4d82ba8f4b11d045d, type: 2}
 --- !u!114 &114725727204643620
 MonoBehaviour:
   m_ObjectHideFlags: 1
