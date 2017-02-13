@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 114424921309173602}
   m_Layer: 0
   m_Name: SphereCDM
-  m_TagString: Untagged
+  m_TagString: SphereCDM
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -228,7 +228,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183040}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.08, z: 0.13}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
@@ -450,7 +450,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalMass: 1
-  goCDM: {fileID: 183040}
+  goCDM: {fileID: 0}
   playerObjects: []
   isRegularCDM: 1
 --- !u!114 &11407542

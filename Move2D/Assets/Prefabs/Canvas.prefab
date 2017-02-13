@@ -108,7 +108,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1136402162095382
 GameObject:
   m_ObjectHideFlags: 1
@@ -322,7 +322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224788033379103202}
   m_Layer: 5
-  m_Name: Level2
+  m_Name: ProgressBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -393,7 +393,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1879112107275978
 GameObject:
   m_ObjectHideFlags: 1
@@ -487,7 +487,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224056120932162340}
   m_Layer: 5
-  m_Name: Level0
+  m_Name: ReadyImages
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -715,23 +715,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c913a3aa4976b9441b02259107cab25c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AttachedText: {fileID: 114008124589206314}
-  ProgressSpeed: 0.4
-  TriggerOnComplete: 1
+  m_AttachedText: {fileID: 0}
+  ProgressSpeed: 0
+  TriggerOnComplete: 0
   OnCompleteMethods:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114008124589206314}
-        m_MethodName: set_text
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: ProgressBar.Utils.OnCompleteEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114202651843847506
@@ -930,23 +919,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b20fbabe568f754c8adbc45c81ee1a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AttachedText: {fileID: 114424429243030238}
-  ProgressSpeed: 0.35
-  TriggerOnComplete: 1
+  m_AttachedText: {fileID: 0}
+  ProgressSpeed: 0
+  TriggerOnComplete: 0
   OnCompleteMethods:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114424429243030238}
-        m_MethodName: set_text
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Done
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: ProgressBar.Utils.OnCompleteEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114484383620509224

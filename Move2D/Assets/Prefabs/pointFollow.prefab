@@ -5,18 +5,19 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 446518}
-  - 33: {fileID: 3382284}
-  - 23: {fileID: 2334826}
-  - 58: {fileID: 5846920}
-  - 50: {fileID: 5052728}
-  - 114: {fileID: 11495082}
-  - 114: {fileID: 11454790}
+  - component: {fileID: 446518}
+  - component: {fileID: 3382284}
+  - component: {fileID: 2334826}
+  - component: {fileID: 5846920}
+  - component: {fileID: 5052728}
+  - component: {fileID: 11495082}
+  - component: {fileID: 11454790}
+  - component: {fileID: 114806310424004206}
   m_Layer: 0
   m_Name: pointFollow
-  m_TagString: Untagged
+  m_TagString: PointFollow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,10 +31,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.32727274, y: 4.02, z: 0}
   m_LocalScale: {x: 0.7902448, y: 0.82261825, z: 0.7}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &2334826
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -43,17 +44,22 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: 37f3fd5f5a1a78748aa86006f82a6f86, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
   m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -69,17 +75,20 @@ MeshFilter:
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!50 &5052728
 Rigidbody2D:
-  serializedVersion: 2
+  serializedVersion: 4
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 191588}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_IsKinematic: 0
+  m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -161,3 +170,20 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 191588}
   m_IsPrefabParent: 1
+--- !u!114 &114806310424004206
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 191588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee875d9e08596584fbbefa0c483374b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sphereCDM: {fileID: 0}
+  amplitude: 8
+  velocity: 0
+  randomPositionRange: 7
+  randomTransitions: 5
+  centrePos: {x: 0, y: 0}

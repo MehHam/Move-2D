@@ -25,9 +25,5 @@ public class PlayerAccelerometerMove : NetworkBehaviour
 		if (!isLocalPlayer)
 			return;
 		Move ();
-	}
-
-
-
-	
+	}				
 }

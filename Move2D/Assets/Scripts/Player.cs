@@ -28,7 +28,6 @@ public class Player
 		this.originPlayer = originPlayer;
 		this.bufferPosition = bufferPosition;
 		this.color = color;
-
 	}
 
 
@@ -78,14 +77,12 @@ public class Player
 
 	public ArrayList playerMotion (Vector2 posPLAYER)
 	{
-	
 		bufferPosition.Add (posPLAYER);
 		return bufferPosition;
 	}
 
 	public ArrayList addPlayersNames ()
 	{
-
 		playersNamesList.Add (namePlayer);
 		return playersNamesList;
 	}

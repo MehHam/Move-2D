@@ -153,7 +153,7 @@ public class levelDesign: NetworkBehaviour
 		case 11:
 			gestionGO ("Level2", "Canvas", false);
 			GameObject.Find ("SphereCDM").transform.localScale = new Vector3 (2.0f, 2.0f, 2.0f);	
-			MotionPointFollow.objectFollow = GameObject.Find ("pointFollow");
+	//		MotionPointFollow.objectFollow = GameObject.Find ("pointFollow");
 			//MotionPointFollow.motionMode = 1;
 			gestionGO ("Background1bis", "Main_Background", true);
 			gestionGO ("Background2", "Main_Background", false);
@@ -171,8 +171,8 @@ public class levelDesign: NetworkBehaviour
 			break;
 			
 		case 2:
-			MotionPointFollow.objectFollow = GameObject.Find ("pointFollow");
-			MotionPointFollow.motionMode = 0;
+//			MotionPointFollow.objectFollow = GameObject.Find ("pointFollow");
+//			MotionPointFollow.motionMode = 0;
 
 			gestionGO ("Background2", "Main_Background", true);
 			gestionGO ("Background1", "Main_Background", false);
@@ -188,8 +188,8 @@ public class levelDesign: NetworkBehaviour
 			GameObjectAlphaHide ("permanent", 1);
 
 			level2Timerlenght = level2time;
-			MotionPointFollow.modeTimer = level2time * 24;
-			MotionPointFollow.modeCounter = 10 + level2Timerlenght * 24;
+			//MotionPointFollow.modeTimer = level2time * 24;
+			//MotionPointFollow.modeCounter = 10 + level2Timerlenght * 24;
 
 			gestionGO ("Background1", "Main_Background", true);
 			gestionGO ("Background0", "Main_Background", false);
