@@ -55,22 +55,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
+    i0: 169
+    i1: 130
+    i2: 255
+    i3: 184
+    i4: 121
+    i5: 128
+    i6: 52
+    i7: 81
+    i8: 249
+    i9: 219
+    i10: 133
+    i11: 131
+    i12: 19
+    i13: 43
+    i14: 14
+    i15: 166
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &114135214025442948
@@ -93,8 +93,8 @@ MonoBehaviour:
   - index: 2
     time: 40
     sceneName: Level1
-    gameMode: 0
-    motionMode: 0
+    gameMode: 1
+    motionMode: 2
   - index: 3
     time: 30
     sceneName: Level2
@@ -103,7 +103,7 @@ MonoBehaviour:
   - index: 4
     time: 40
     sceneName: Level3
-    gameMode: 1
+    gameMode: 0
     motionMode: 0
   - index: 5
     time: 40

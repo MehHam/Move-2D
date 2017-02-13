@@ -34,7 +34,7 @@ public class MotionPointFollow : NetworkBehaviour
 			this.enabled = false;
 			return;
 		}
-		sphereCDM = GameObject.FindGameObjectWithTag ("Sphere CDM");
+		sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
 	}
 
 	[Server]
