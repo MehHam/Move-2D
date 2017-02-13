@@ -8,6 +8,7 @@ TagManager:
   - NetworkManager
   - Lab
   - SphereCDM
+  - PointFollow
   layers:
   - Default
   - TransparentFX

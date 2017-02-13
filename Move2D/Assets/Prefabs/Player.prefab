@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 11461956}
   - component: {fileID: 5022182}
   - component: {fileID: 5815376}
-  - component: {fileID: 11434400}
   - component: {fileID: 11403898}
   - component: {fileID: 114823621133685236}
   - component: {fileID: 114595224658271792}
@@ -103,6 +102,7 @@ GameObject:
   - component: {fileID: 114534432676812246}
   - component: {fileID: 114102541042533036}
   - component: {fileID: 114318507200441486}
+  - component: {fileID: 114226452451224076}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -470,30 +470,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 2
   m_SendInterval: 0.04347826
-  m_SyncRotationAxis: 7
+  m_SyncRotationAxis: 2
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
   m_MovementTheshold: 0.01
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!114 &11434400
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 152500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72a8c4f78d5d379479780b5d88d8977d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  localTime: 0
-  endGame: 0
-  levelNum: 0
-  level3switch: 1
-  progressBar: {fileID: 130144, guid: 0a05ae0285ab3424f831ac052dc348b8, type: 2}
-  goCDM: {fileID: 183040, guid: 8e2fd6ae2a6f8ca4d82ba8f4b11d045d, type: 2}
 --- !u!114 &11461956
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1625,6 +1608,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+--- !u!114 &114226452451224076
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 152500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1023d2db129c4c0cb4e653b31401341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerName: 
+  mass: 1
 --- !u!114 &114318507200441486
 MonoBehaviour:
   m_ObjectHideFlags: 1

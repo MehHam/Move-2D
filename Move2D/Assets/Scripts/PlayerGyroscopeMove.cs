@@ -17,8 +17,6 @@ class PlayerGyroscopeMove : NetworkBehaviour
 			float radiusR = 15.7f;
 			float alpha = 0f;
 			float theta = Mathf.Atan (gyro.gravity.x / gyro.gravity.y);
-
-			Debug.Log ("Flat gyro");
 			gyro = Input.gyro;
 			gyro.enabled = true;
 
@@ -31,9 +29,6 @@ class PlayerGyroscopeMove : NetworkBehaviour
 			{
 				this.GetComponent<Rigidbody2D> ().transform.position = Vector2.Lerp (this.GetComponent<Rigidbody2D> ().position, playerPos, 0.5f);
 			}
-		} else
-		{
-			Debug.Log ("gyro not supported");
 		}
 	}
 

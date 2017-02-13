@@ -11,12 +11,9 @@ public class PlayerAccelerometerMove : NetworkBehaviour
 	public void Move ()
 	{
 		if (SystemInfo.supportsGyroscope) {
-			Debug.Log ("Ball Player gyro");
 			gyro = Input.gyro;
 			gyro.enabled = true;
 			this.GetComponent<Rigidbody2D>().AddForce (gyROT, ForceMode2D.Force);
-		} else {
-			Debug.Log ("gyro not supported");
 		}
 	}
 

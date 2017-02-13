@@ -23,55 +23,47 @@ public class SphereCDM : NetworkBehaviour
 		if (other.gameObject.name == "pointFollow")
 			GameManager.singleton.score++;
 		else {
-			if (other.gameObject.name == "massEffect" && levelDesign.levelValue == 3) {
+			if (other.gameObject.name == "massEffect") {
 				//gameObject.transform.position;
-				if (physics.playerLimit >= 1) {
-					for (int i = 0; i < physics.players.Count; i++) {
-						int j = i + 1;
-						physics.players [i].go.transform.position = GameObject.Find ("masseffect" + j).transform.position;
-						physics.players [i].mass = (i * 4) + 1;
-					}
+				for (int i = 0; i < this.GetComponent<SpherePhysics>().players.Count; i++) {
+					int j = i + 1;
+					this.GetComponent<SpherePhysics>().players [i].gameObject.transform.position = GameObject.Find ("masseffect" + j).transform.position;
+					this.GetComponent<SpherePhysics>().players [i].mass = (i * 4) + 1;
 				}
 			}
 
-			if (other.gameObject.name == "Teleporter1" && levelDesign.levelValue == 3) {
+			if (other.gameObject.name == "Teleporter1") {
 
 				gameObject.transform.position = GameObject.Find ("Teleporter3").transform.position;
-				if (physics.playerLimit >= 1) {
-					for (int i = 0; i < physics.players.Count; i++) {
-						int j = i + 1;
-						physics.players [i].go.transform.position = GameObject.Find ("Telep" + j).transform.position;
-					}
+				for (int i = 0; i < this.GetComponent<SpherePhysics>().players.Count; i++) {
+					int j = i + 1;
+					this.GetComponent<SpherePhysics>().players [i].gameObject.transform.position = GameObject.Find ("Telep" + j).transform.position;
 				}
 			}
 
-			if (other.gameObject.name == "Teleporter2" && levelDesign.levelValue == 3) {
+			if (other.gameObject.name == "Teleporter2") {
 					
 				gameObject.transform.position = GameObject.Find ("Teleporter4").transform.position;
-				if (physics.playerLimit >= 1) {
-					for (int i = 0; i < physics.players.Count; i++) {
-						int j = i + 3;
-						physics.players [i].go.transform.position = GameObject.Find ("Telep" + j).transform.position;
-					}
+				for (int i = 0; i < this.GetComponent<SpherePhysics>().players.Count; i++) {
+					int j = i + 3;
+					this.GetComponent<SpherePhysics>().players [i].gameObject.transform.position = GameObject.Find ("Telep" + j).transform.position;
 				}
 			}
 
 
-			if (other.gameObject.name == "LabyrinthEnding1" || other.gameObject.name == "LabyrinthEnding2" && levelDesign.levelValue == 3) {
+			if (other.gameObject.name == "LabyrinthEnding1" || other.gameObject.name == "LabyrinthEnding2") {
 				GameManager.singleton.score++;
 			} else {
 				if (other.gameObject.name == "PetitChartres" || other.gameObject.name == "CrossLava") {
 					GameManager.singleton.score--;
 				} else {
 
-					if (other.gameObject.name == "Killer1" || other.gameObject.name == "Killer2" || other.gameObject.name == "Killer3" || other.gameObject.name == "Killer4" && levelDesign.levelValue == 3) {
+					if (other.gameObject.name == "Killer1" || other.gameObject.name == "Killer2" || other.gameObject.name == "Killer3" || other.gameObject.name == "Killer4") {
 						GameManager.singleton.score++;
 						gameObject.transform.position = Vector3.zero;
-						if (physics.playerLimit >= 1) {
-							for (int i = 0; i < physics.players.Count; i++) {
-								int j = i + 1;
-								physics.players [i].go.transform.position = GameObject.Find ("StartPosition" + j).transform.position;
-							}
+						for (int i = 0; i < this.GetComponent<SpherePhysics>().players.Count; i++) {
+							int j = i + 1;
+							this.GetComponent<SpherePhysics>().players [i].gameObject.transform.position = GameObject.Find ("StartPosition" + j).transform.position;
 						}
 					}
 				}
@@ -90,6 +82,4 @@ public class SphereCDM : NetworkBehaviour
 		}
 
 	}
-
-
 }

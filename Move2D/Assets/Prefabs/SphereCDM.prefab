@@ -140,10 +140,10 @@ GameObject:
   - component: {fileID: 11407542}
   - component: {fileID: 5820896}
   - component: {fileID: 5035116}
-  - component: {fileID: 11400938}
   - component: {fileID: 3327542}
   - component: {fileID: 2308496}
   - component: {fileID: 114424921309173602}
+  - component: {fileID: 114003466200835296}
   m_Layer: 0
   m_Name: SphereCDM
   m_TagString: SphereCDM
@@ -228,7 +228,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183040}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.08, z: 0.13}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
@@ -438,21 +438,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &11400938
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 183040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24e4b532e218da8489772981af778d40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  totalMass: 1
-  goCDM: {fileID: 0}
-  playerObjects: []
-  isRegularCDM: 1
 --- !u!114 &11407542
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1569,6 +1554,18 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 183040}
   m_IsPrefabParent: 1
+--- !u!114 &114003466200835296
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eabf803ad47fc4eecafa4283bd322d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
 --- !u!114 &114424921309173602
 MonoBehaviour:
   m_ObjectHideFlags: 1

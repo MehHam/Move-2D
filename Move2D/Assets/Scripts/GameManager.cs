@@ -40,17 +40,34 @@ public class GameManager : NetworkBehaviour {
 
 	void Awake()
 	{
-		if (GameManager.singleton != null)
-			Destroy (this);
+		if (GameObject.FindObjectsOfType<GameManager>().Length > 1) {
+			Destroy (gameObject);
+			return;
+		}
 		GameManager.singleton = this;
+		DontDestroyOnLoad (this);
 	}
 
-	void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+	[ServerCallback]
+	void Start()
+	{
+		StartLevel ();
+	}
+
+	[Server]
+	void StartLevel ()
 	{
 		if (isServer) {
+			StopTime ();
 			time = levels [currentLevelIndex].time;
 			StartTime ();
 		}
+	}
+
+	[Server]
+	void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+	{
+		StartLevel ();
 	}
 
 	[Server]
@@ -75,20 +92,26 @@ public class GameManager : NetworkBehaviour {
 		}
 		if (this.currentLevelIndex + 1 < this.levels.Length) {
 			this.currentLevelIndex++;
-			NetworkLobbyManager.singleton.ServerChangeScene (this.levels [this.currentLevelIndex].sceneName);
+			var sceneName = this.levels [this.currentLevelIndex].sceneName;
+			SceneManager.LoadScene (sceneName);
+			NetworkLobbyManager.singleton.ServerChangeScene (sceneName);
+			foreach (var conn in NetworkServer.connections)
+			{
+				NetworkServer.SetClientReady (conn);
+			}
 		}
 	}
 
 	[Server]
 	public void StartTime()
 	{
-		StartCoroutine ("TimeCount", DecreaseTime());
+		StartCoroutine (DecreaseTime());
 	}
 
 	[Server]
 	public void StopTime()
 	{
-		StopCoroutine ("TimeCount");
+		StopAllCoroutines ();
 	}
 
 	public Level GetCurrentLevel()

@@ -26,7 +26,7 @@ public class MotionPointFollow : NetworkBehaviour
 
 	private GameObject _progressBar;
 	private Vector2 _tempPos;
-	// Use this for initialization
+
 	[ServerCallback]
 	void Start ()
 	{

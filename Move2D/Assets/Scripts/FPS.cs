@@ -57,13 +57,13 @@ public class FPS : MonoBehaviour
 			accum = 0.0f;
 			frames = 0;
 		}*/
-
-		if(physics.players.Count >= physics.playerLimit)
+		/*
+		if(SpherePhysics.players.Count >= SpherePhysics.playerLimit)
 		{
 			//FPScounter.text = "Time	" + levelDesign.localTime.ToString("f2");//(tempo).ToString("f2");//(accum/frames).ToString("f2");
 
 		}
-
+		*/
 
 	}
 
