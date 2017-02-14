@@ -7,8 +7,8 @@ public class ScoreTextUI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (GameManager.singleton == null)
-			this.GetComponent<Text> ().text = "Score: /";
+			this.GetComponent<Text> ().text = "/";
 		else
-			this.GetComponent<Text> ().text = "Score: " + GameManager.singleton.score;
+			this.GetComponent<Text> ().text = GameManager.singleton.score.ToString();
 	}
 }

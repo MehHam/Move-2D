@@ -7,10 +7,10 @@ public class TimeTextUI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (GameManager.singleton == null)
-			this.GetComponent<Text> ().text = "Time: /";
+			this.GetComponent<Text> ().text = "/";
 		else {
 			string formattedTime = (GameManager.singleton.time / 60).ToString ("00") + ":" + (GameManager.singleton.time % 60).ToString ("00");
-			this.GetComponent<Text> ().text = "Time: " + formattedTime;
+			this.GetComponent<Text> ().text = formattedTime;
 		}
 	}
 }

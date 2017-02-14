@@ -4,7 +4,6 @@ using System.Collections;
 using ProgressBar;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Rigidbody2D))]
 public class MotionPointFollow : NetworkBehaviour, IInteractable
 {
 	public enum MotionMode 
@@ -44,6 +43,7 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 			return;
 		}
 		sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
+		StartMovePattern ();
 	}
 
 	[Server]
@@ -51,13 +51,13 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 	{
 		switch (GameManager.singleton.GetCurrentLevel ().motionMode) {
 			case MotionMode.Random:
-				StartCoroutine ("Move Pattern", RandomPattern ());
+				StartCoroutine (RandomPattern ());
 				break;
 			case MotionMode.Cos:
-				StartCoroutine ("Move Pattern", CosPattern ());
+				StartCoroutine (CosPattern ());
 				break;
 			case MotionMode.Rotate:
-				StartCoroutine ("Move Pattern", RotationPattern ());
+				StartCoroutine (RotationPattern ());
 				break;
 		}
 	}
@@ -68,8 +68,10 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 		float timeInterval = GameManager.singleton.GetCurrentLevel ().time / randomTransitions;
 		while (true)
 		{
-			this.transform.position = new Vector2 (Random.Range (-randomPositionRange, randomPositionRange),
-				Random.Range (-randomPositionRange, randomPositionRange));
+			var pos = new Vector2 (Random.Range (-randomPositionRange, randomPositionRange),
+				          Random.Range (-randomPositionRange, randomPositionRange));
+			Debug.Log (pos);
+			this.transform.position = pos;
 			yield return new WaitForSeconds (timeInterval);
 		}
 	}
@@ -79,7 +81,9 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 	{
 		while (true)
 		{
-			this.transform.position = new Vector2 (0.0f, amplitude * Mathf.Cos (6.24f * Time.fixedTime / velocity));
+			var pos = new Vector2 (0.0f, amplitude * Mathf.Cos (6.24f * Time.fixedTime / velocity));
+			Debug.Log (pos);
+			this.transform.position = pos;
 			yield return new WaitForFixedUpdate ();
 		}
 	}
@@ -89,7 +93,8 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 	{
 		while (true)
 		{
-			this.transform.RotateAround (centrePos, Vector3.forward * 10f, velocity * Time.fixedTime);
+			this.transform.RotateAround (centrePos, Vector3.forward * 10f, velocity * Time.fixedDeltaTime);
+			Debug.Log (this.transform.position);
 			yield return new WaitForFixedUpdate ();
 		}
 	}
