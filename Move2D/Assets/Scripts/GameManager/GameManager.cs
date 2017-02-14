@@ -24,6 +24,7 @@ public class GameManager : NetworkBehaviour {
 	public static GameManager singleton { get; private set; }
 
 	public Slider slider;
+	public Animator readySetGo;
 
 	public Level[] levels;
 
@@ -34,11 +35,13 @@ public class GameManager : NetworkBehaviour {
 	void OnEnable()
 	{
 		SceneManager.sceneLoaded += OnLevelFinishedLoading;
+		ReadySetGo.onAnimationFinished += OnAnimationFinished;
 	}
 
 	void OnDisable()
 	{
 		SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+		ReadySetGo.onAnimationFinished -= OnAnimationFinished;
 	}
 
 	void Awake()
@@ -51,10 +54,10 @@ public class GameManager : NetworkBehaviour {
 		DontDestroyOnLoad (this);
 	}
 
-	[ServerCallback]
 	void Start()
 	{
-		StartLevel ();
+		this.time = levels [currentLevelIndex].time;
+		readySetGo.SetTrigger ("Activation");
 	}
 
 	[Server]
@@ -126,6 +129,12 @@ public class GameManager : NetworkBehaviour {
 	void OnDisconnectedFromServer()
 	{
 		Destroy (this);
+	}
+
+	void OnAnimationFinished()
+	{
+		if (isServer)
+			StartLevel ();
 	}
 
 	public float GetSliderValue()
