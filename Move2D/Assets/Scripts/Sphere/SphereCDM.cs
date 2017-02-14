@@ -8,15 +8,11 @@ public class SphereCDM : NetworkBehaviour
 	[ServerCallback]
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		//Check the provided Collider2D parameter other to see if it is tagged "PickUp", if it is...
-		if (other.gameObject.CompareTag ("PickUp")) {
-			//... then set the other object we just collided with to inactive.
-			other.gameObject.SetActive (false);
-			//Add one to the current value of our count variable.
-			GameManager.singleton.score++;
-		}
+		if (other.gameObject.GetComponent<IInteractable> () != null)
+			other.gameObject.GetComponent<IInteractable> ().Effect (this);
 		//Update the currently displayed count by calling the SetCountText function.
 		//SetCountText ();
+		/*
 
 		if (other.gameObject.name == "PetitChartres" || other.gameObject.name == "CrossLava")
 			GameManager.singleton.score--;
@@ -68,7 +64,7 @@ public class SphereCDM : NetworkBehaviour
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	[ServerCallback]
@@ -80,6 +76,9 @@ public class SphereCDM : NetworkBehaviour
 		if (other.gameObject.name == "CrossLava" || other.gameObject.name == "Killer1" || other.gameObject.name == "Killer2" || other.gameObject.name == "Killer3" || other.gameObject.name == "Killer4") {
 			GameManager.singleton.score--;
 		}
+	}
 
+	void Start()
+	{
 	}
 }

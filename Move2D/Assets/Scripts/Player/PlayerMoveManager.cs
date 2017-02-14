@@ -12,23 +12,18 @@ using UnityEngine.UI;
 public class PlayerMoveManager : NetworkBehaviour
 {
 	//Store a reference to the UI Text component which will display the 'You win' message.
-	private Slider _slider;
-
-	// Use this for initialization
-	void Start ()
-	{
-		_slider = GameObject.Find ("Slider").GetComponent<Slider> ();
-	}
 
 	//FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
 	void FixedUpdate ()
 	{
 		if (!isLocalPlayer)
 			return;
-		this.GetComponent<PlayerKeyboardMove> ().enabled = (_slider.value == 0);
-		this.GetComponent<PlayerDragMove> ().enabled = (_slider.value == 1);
-		this.GetComponent<PlayerAccelerometerMove> ().enabled = (_slider.value == 2);
-		this.GetComponent<PlayerGyroscopeMove> ().enabled = (_slider.value == 3);
-
+		if (GameManager.singleton != null && GameManager.singleton.slider != null) {
+			var slider = GameManager.singleton.slider;
+			this.GetComponent<PlayerKeyboardMove> ().enabled = (slider.value == 0);
+			this.GetComponent<PlayerDragMove> ().enabled = (slider.value == 1);
+			this.GetComponent<PlayerAccelerometerMove> ().enabled = (slider.value == 2);
+			this.GetComponent<PlayerGyroscopeMove> ().enabled = (slider.value == 3);
+		}
 	}
 }

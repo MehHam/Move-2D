@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
@@ -22,6 +23,8 @@ public class GameManager : NetworkBehaviour {
 		
 	public static GameManager singleton { get; private set; }
 
+	public Slider slider;
+
 	public Level[] levels;
 
 	[SyncVar] public int currentLevelIndex = 0;
@@ -41,7 +44,7 @@ public class GameManager : NetworkBehaviour {
 	void Awake()
 	{
 		if (GameObject.FindObjectsOfType<GameManager>().Length > 1) {
-			Destroy (gameObject);
+			NetworkServer.Destroy (gameObject);
 			return;
 		}
 		GameManager.singleton = this;
@@ -95,10 +98,6 @@ public class GameManager : NetworkBehaviour {
 			var sceneName = this.levels [this.currentLevelIndex].sceneName;
 			SceneManager.LoadScene (sceneName);
 			NetworkLobbyManager.singleton.ServerChangeScene (sceneName);
-			foreach (var conn in NetworkServer.connections)
-			{
-				NetworkServer.SetClientReady (conn);
-			}
 		}
 	}
 
@@ -127,5 +126,10 @@ public class GameManager : NetworkBehaviour {
 	void OnDisconnectedFromServer()
 	{
 		Destroy (this);
+	}
+
+	public float GetSliderValue()
+	{
+		return slider.value;
 	}
 }

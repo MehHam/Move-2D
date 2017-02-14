@@ -5,7 +5,7 @@ using ProgressBar;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class MotionPointFollow : NetworkBehaviour
+public class MotionPointFollow : NetworkBehaviour, IInteractable
 {
 	public enum MotionMode 
 	{
@@ -26,6 +26,15 @@ public class MotionPointFollow : NetworkBehaviour
 
 	private GameObject _progressBar;
 	private Vector2 _tempPos;
+
+	#region IInteractable implementation
+
+	[Server]
+	public void Effect (SphereCDM sphere)
+	{
+		GameManager.singleton.IncreaseScore ();
+	}
+	#endregion
 
 	[ServerCallback]
 	void Start ()
