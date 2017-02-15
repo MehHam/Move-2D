@@ -6,9 +6,15 @@ using System.Collections;
 using UnityEngine.UI;
 
 [RequireComponent (typeof (Rigidbody2D))]
-class PlayerGyroscopeMove : NetworkBehaviour
+class PlayerGyroscopeMove : NetworkBehaviour, IPlayerMotion
 {
 	public Gyroscope gyro;
+	public int sliderValue = 0;
+
+	public bool IsActivated (int sliderValue)
+	{
+		return (this.sliderValue == sliderValue);
+	}
 
 	public void Move ()
 	{
@@ -30,13 +36,6 @@ class PlayerGyroscopeMove : NetworkBehaviour
 				this.GetComponent<Rigidbody2D> ().transform.position = Vector2.Lerp (this.GetComponent<Rigidbody2D> ().position, playerPos, 0.5f);
 			}
 		}
-	}
-
-	void FixedUpdate ()
-	{
-		if (!isLocalPlayer)
-			return;
-		Move ();
 	}
 }
 

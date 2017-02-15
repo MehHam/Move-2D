@@ -9,7 +9,7 @@ public class SphereCDM : NetworkBehaviour
 	void OnTriggerEnter2D (Collider2D other)
 	{
 		if (other.gameObject.GetComponent<IInteractable> () != null)
-			other.gameObject.GetComponent<IInteractable> ().Effect (this);
+			other.gameObject.GetComponent<IInteractable> ().OnEnterEffect (this);
 		//Update the currently displayed count by calling the SetCountText function.
 		//SetCountText ();
 		/*
@@ -70,12 +70,23 @@ public class SphereCDM : NetworkBehaviour
 	[ServerCallback]
 	void OnTriggerStay2D (Collider2D other)
 	{
+		if (other.gameObject.GetComponent<IInteractable> () != null)
+			other.gameObject.GetComponent<IInteractable> ().OnStayEffect (this);
+		/*
 		if (other.gameObject.name == "pointFollow" || other.gameObject.name == "LabyrinthEnding1" || other.gameObject.name == "LabyrinthEnding2") {
 			GameManager.singleton.score++;
 		}
 		if (other.gameObject.name == "CrossLava" || other.gameObject.name == "Killer1" || other.gameObject.name == "Killer2" || other.gameObject.name == "Killer3" || other.gameObject.name == "Killer4") {
 			GameManager.singleton.score--;
 		}
+		*/
+	}
+
+	[ServerCallback]
+	void OnTriggerExit2D (Collider2D other)
+	{
+		if (other.gameObject.GetComponent<IInteractable> () != null)
+			other.gameObject.GetComponent<IInteractable> ().OnExitEffect (this);
 	}
 
 	void Start()

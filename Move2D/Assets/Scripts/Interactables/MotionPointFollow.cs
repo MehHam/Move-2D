@@ -21,17 +21,34 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 	public float velocity = 10.0f;
 	public float randomPositionRange = 7.0f;
 	public int randomTransitions = 5;
+	public float scoreCooldownTime = 0.5f;
 	public Vector2 centrePos = new Vector2(0.0f, 0.0f);
 
+	private bool _cooldown = false;
 	private GameObject _progressBar;
 	private Vector2 _tempPos;
 
 	#region IInteractable implementation
-
 	[Server]
-	public void Effect (SphereCDM sphere)
+	public void OnEnterEffect (SphereCDM sphere)
 	{
 		GameManager.singleton.IncreaseScore ();
+		StartCoroutine (ScoreCooldown ());
+	}
+
+	[Server]
+	public void OnStayEffect (SphereCDM sphere)
+	{
+		if (!_cooldown) {
+			GameManager.singleton.IncreaseScore ();
+			StartCoroutine (ScoreCooldown());
+		}
+	}
+
+	[Server]
+	public void OnExitEffect (SphereCDM sphere)
+	{
+		StopCoroutine ("ScoreCooldown");
 	}
 	#endregion
 
@@ -94,9 +111,15 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 		while (true)
 		{
 			this.transform.RotateAround (centrePos, Vector3.forward * 10f, velocity * Time.fixedDeltaTime);
-			Debug.Log (this.transform.position);
 			yield return new WaitForFixedUpdate ();
 		}
 	}
-}
 
+	[Server]
+	IEnumerator ScoreCooldown()
+	{
+		_cooldown = true;
+		yield return new WaitForSeconds (scoreCooldownTime);
+		_cooldown = false;
+	}
+}

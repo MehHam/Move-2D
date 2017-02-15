@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IInteractable
 {
-	void Effect(SphereCDM sphere);
+	void OnEnterEffect(SphereCDM sphere);
+	void OnStayEffect(SphereCDM sphere);
+	void OnExitEffect(SphereCDM sphere);
 }
 

@@ -18,6 +18,36 @@ public class CustomNetworkLobbyManager : LobbyManager {
 		return networkClient;
 	}
 
+	public override void OnStopHost()
+	{
+		if (!_isMatchmaking) {
+			GameObject.Destroy (GameManager.singleton.gameObject);
+			NetworkServer.Destroy (GameManager.singleton.gameObject);
+			infoPanel.Display ("The host disconnected", "OK", null);
+		}
+		base.OnStopHost ();
+	}
+
+	public override void OnStopClient()
+	{
+		if (!_isMatchmaking) {
+			GameObject.Destroy (GameManager.singleton.gameObject);
+			NetworkServer.Destroy (GameManager.singleton.gameObject);
+			infoPanel.Display ("You were disconnected from server", "OK", null);
+		}
+		base.OnStopClient ();
+	}
+
+	public override void OnStopServer()
+	{
+		if (!_isMatchmaking) {
+			GameObject.Destroy (GameManager.singleton.gameObject);
+			NetworkServer.Destroy (GameManager.singleton.gameObject);
+			infoPanel.Display ("The server was stopped", "OK", null);
+		}
+		base.OnStopServer ();
+	}
+
 	public void OnClientDisconnectCustom(NetworkMessage msg)
 	{
 		if (onClientDisconnect != null)

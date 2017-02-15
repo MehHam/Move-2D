@@ -5,9 +5,9 @@ using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerMoveManager))]
 public class Player : NetworkBehaviour {
-	public string playerName;
-	public float mass = 1.0f;
-	public Color color;
+	[SyncVar] public string playerName;
+	[SyncVar] public float mass = 1.0f;
+	[SyncVar] public Color color;
 
 	void OnEnable()
 	{
@@ -21,6 +21,7 @@ public class Player : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		this.GetComponent<Renderer> ().material.color = color;
 		DontDestroyOnLoad (this);
 	}
 

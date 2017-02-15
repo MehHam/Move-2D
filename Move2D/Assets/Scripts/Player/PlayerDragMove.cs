@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 
 // This script allows you to drag this GameObject using any finger, as long it has a collider
 [RequireComponent (typeof (Rigidbody2D))]
-public class PlayerDragMove : NetworkBehaviour
+public class PlayerDragMove : NetworkBehaviour, IPlayerMotion
 {
 	// This stores the layers we want the raycast to hit (make sure this GameObject's layer is included!)
 	public LayerMask LayerMask = UnityEngine.Physics.DefaultRaycastLayers;
@@ -13,8 +13,14 @@ public class PlayerDragMove : NetworkBehaviour
 	// This stores the finger that's currently dragging this GameObject
 	private Lean.LeanFinger _draggingFinger;
 	public static bool isTouch = false;
+	public int sliderValue = 0;
+
+	public bool IsActivated (int sliderValue)
+	{
+		return (this.sliderValue == sliderValue);
+	}
 		
-	void FixedUpdate ()
+	public void Move ()
 	{
 		if (!isLocalPlayer)
 			return;
@@ -39,7 +45,7 @@ public class PlayerDragMove : NetworkBehaviour
 		}
 	}
 
-	public void CmdMotion (Vector2 deltaPosition)
+	void CmdMotion (Vector2 deltaPosition)
 	{
 		Camera cam;
 		cam = Camera.main;

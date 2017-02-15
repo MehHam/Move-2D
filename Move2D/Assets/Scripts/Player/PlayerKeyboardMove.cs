@@ -6,11 +6,17 @@ using System.Collections;
 using UnityEngine.UI;
 
 [RequireComponent (typeof (Rigidbody2D))]
-class PlayerKeyboardMove : NetworkBehaviour
+class PlayerKeyboardMove : NetworkBehaviour, IPlayerMotion
 {
 	public float speed = 0.0f;
+	public int sliderValue = 0;
 
-	void Move() {
+	public bool IsActivated (int sliderValue)
+	{
+		return (this.sliderValue == sliderValue);
+	}
+
+	public void Move() {
 		//Store the current horizontal input in the float moveHorizontal.
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 
@@ -23,12 +29,6 @@ class PlayerKeyboardMove : NetworkBehaviour
 		//Debug.Log(movement);
 		//Call the AddForce function of our Rigidbody2D rb2d supplying movement multiplied by speed to move our player.
 		this.GetComponent<Rigidbody2D>().AddForce (movement * speed);
-	}
-
-	void FixedUpdate () {
-		if (!isLocalPlayer)
-			return;
-		Move ();
 	}
 }
 

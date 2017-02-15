@@ -165,4 +165,5 @@ MonoBehaviour:
   velocity: 10
   randomPositionRange: 7
   randomTransitions: 5
+  scoreCooldownTime: 0.15
   centrePos: {x: 0, y: 0}

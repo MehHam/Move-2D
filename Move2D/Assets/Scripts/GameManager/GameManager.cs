@@ -28,6 +28,9 @@ public class GameManager : NetworkBehaviour {
 
 	public Level[] levels;
 
+	private AsyncOperation _nextLevel = null;
+
+	[SyncVar] public bool paused = true;
 	[SyncVar] public int currentLevelIndex = 0;
 	[SyncVar] public uint time = 0;
 	[SyncVar] public int score = 0;
@@ -67,13 +70,45 @@ public class GameManager : NetworkBehaviour {
 			StopTime ();
 			time = levels [currentLevelIndex].time;
 			StartTime ();
+			paused = false;
 		}
+		RpcLoadNextLevel ();
+		if (!isClient)
+			StartCoroutine (LoadNextLevel ());
 	}
 
+	[ClientRpc]
+	void RpcLoadNextLevel()
+	{
+		StartCoroutine (LoadNextLevel());
+	}
+
+	[ClientRpc]
+	void RpcAllowSceneActivation()
+	{
+		_nextLevel.allowSceneActivation = true;
+	}
+
+	IEnumerator LoadNextLevel()
+	{
+		if (this.currentLevelIndex + 1 < this.levels.Length)
+		{
+			var sceneName = this.levels [this.currentLevelIndex + 1].sceneName;
+			_nextLevel = SceneManager.LoadSceneAsync (sceneName, LoadSceneMode.Additive);
+			_nextLevel.allowSceneActivation = false;
+
+			Debug.Log (sceneName + " loading");
+
+			yield return _nextLevel;
+
+			Debug.Log (sceneName + " loaded");
+		}
+	}
+		
 	[Server]
 	void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
 	{
-		StartLevel ();
+		//StartLevel ();
 	}
 
 	[Server]
@@ -83,9 +118,23 @@ public class GameManager : NetworkBehaviour {
 	}
 
 	[Server]
+	public void IncreaseScore(int value)
+	{
+		this.score += value;
+	}
+
+	[Server]
 	public void DecreaseScore()
 	{
 		this.score--;
+		this.score = Mathf.Max (this.score, 0);
+	}
+
+	[Server]
+	public void DecreaseScore(int value)
+	{
+		this.score -= value;
+		this.score = Mathf.Max (this.score, 0);
 	}
 
 	[Server]
@@ -97,10 +146,13 @@ public class GameManager : NetworkBehaviour {
 			time--;
 		}
 		if (this.currentLevelIndex + 1 < this.levels.Length) {
+			paused = true;
 			this.currentLevelIndex++;
 			var sceneName = this.levels [this.currentLevelIndex].sceneName;
-			SceneManager.LoadScene (sceneName);
+			_nextLevel.allowSceneActivation = true;
+			RpcAllowSceneActivation ();
 			NetworkLobbyManager.singleton.ServerChangeScene (sceneName);
+			StartLevel ();
 		}
 	}
 
@@ -128,7 +180,7 @@ public class GameManager : NetworkBehaviour {
 
 	void OnDisconnectedFromServer()
 	{
-		Destroy (this);
+		Destroy (gameObject);
 	}
 
 	void OnAnimationFinished()
