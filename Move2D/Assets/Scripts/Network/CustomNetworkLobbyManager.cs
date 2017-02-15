@@ -20,7 +20,7 @@ public class CustomNetworkLobbyManager : LobbyManager {
 
 	public override void OnStopHost()
 	{
-		if (!_isMatchmaking) {
+		if (!_isMatchmaking && GameManager.singleton != null) {
 			GameObject.Destroy (GameManager.singleton.gameObject);
 			NetworkServer.Destroy (GameManager.singleton.gameObject);
 			infoPanel.Display ("The host disconnected", "OK", null);
@@ -30,7 +30,7 @@ public class CustomNetworkLobbyManager : LobbyManager {
 
 	public override void OnStopClient()
 	{
-		if (!_isMatchmaking) {
+		if (!_isMatchmaking && GameManager.singleton != null) {
 			GameObject.Destroy (GameManager.singleton.gameObject);
 			NetworkServer.Destroy (GameManager.singleton.gameObject);
 			infoPanel.Display ("You were disconnected from server", "OK", null);

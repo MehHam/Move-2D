@@ -3326,6 +3326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2337fd2cf2eea4b9d94709b17a98528e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreValue: 1
 --- !u!114 &1347308923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4295,6 +4296,11 @@ Prefab:
       propertyPath: readySetGo
       value: 
       objectReference: {fileID: 1841323259}
+    - target: {fileID: 114127948740101730, guid: a982ffb879803451f9db8583132b0ea6,
+        type: 2}
+      propertyPath: m_LocalPlayerAuthority
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a982ffb879803451f9db8583132b0ea6, type: 2}
   m_IsPrefabParent: 0
