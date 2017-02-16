@@ -3153,6 +3153,22 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 465922, guid: a02cd56951325b645973551f0bae4cc0, type: 2}
   m_PrefabInternal: {fileID: 1034346931}
+--- !u!1 &1133739593 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1853209499621498, guid: a982ffb879803451f9db8583132b0ea6,
+    type: 2}
+  m_PrefabInternal: {fileID: 1841323257}
+--- !u!114 &1133739594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1133739593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905a74bfd5c674216986fa0dc08f5198, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1142153247 stripped
 Transform:
   m_PrefabParentObject: {fileID: 465922, guid: a02cd56951325b645973551f0bae4cc0, type: 2}
@@ -4299,7 +4315,12 @@ Prefab:
     - target: {fileID: 114127948740101730, guid: a982ffb879803451f9db8583132b0ea6,
         type: 2}
       propertyPath: m_LocalPlayerAuthority
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114135214025442948, guid: a982ffb879803451f9db8583132b0ea6,
+        type: 2}
+      propertyPath: levels.Array.data[0].time
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a982ffb879803451f9db8583132b0ea6, type: 2}

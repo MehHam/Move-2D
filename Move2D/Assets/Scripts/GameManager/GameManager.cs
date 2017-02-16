@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(NetworkSceneManager))]
 public class GameManager : NetworkBehaviour {
 	public enum GameMode
 	{
@@ -32,9 +33,8 @@ public class GameManager : NetworkBehaviour {
 	const short LoadedMessage = MsgType.Highest + 1;
 	const short LevelChangedMessage = MsgType.Highest + 2;
 	const short AllowSceneActivationMessage = MsgType.Highest + 3;
-	private AsyncOperation _nextLevel = null;
-	private int _clientFinishedLoading = 0;
-	private int _clientLevelChanged = 0;
+
+	private NetworkSceneManager _networkSceneManager;
 
 	[SyncVar] public bool paused = true;
 	[SyncVar] public int currentLevelIndex = 0;
@@ -43,26 +43,27 @@ public class GameManager : NetworkBehaviour {
 
 	void OnEnable()
 	{
-		SceneManager.sceneLoaded += OnLevelFinishedLoading;
+		NetworkSceneManager.OnLevelLoaded += OnLevelFinishedLoading;
 		ReadySetGo.onAnimationFinished += OnAnimationFinished;
 	}
 
 	void OnDisable()
 	{
-		SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+		NetworkSceneManager.OnLevelLoaded -= OnLevelFinishedLoading;
 		ReadySetGo.onAnimationFinished -= OnAnimationFinished;
 	}
 
 	void Awake()
 	{
-		NetworkServer.RegisterHandler (LoadedMessage, OnClientLevelFinishedLoading);
+		/*NetworkServer.RegisterHandler (LoadedMessage, OnClientLevelFinishedLoading);
 		NetworkServer.RegisterHandler (LevelChangedMessage, OnClientLevelChanged);
 		if (isClient)
-			CustomNetworkLobbyManager.singleton.client.RegisterHandler (AllowSceneActivationMessage, OnAllowSceneActivation);
+			CustomNetworkLobbyManager.singleton.client.RegisterHandler (AllowSceneActivationMessage, OnAllowSceneActivation);*/
 		if (GameObject.FindObjectsOfType<GameManager>().Length > 1) {
 			NetworkServer.Destroy (gameObject);
 			return;
 		}
+		_networkSceneManager = this.GetComponent<NetworkSceneManager> ();
 		GameManager.singleton = this;
 		DontDestroyOnLoad (this);
 	}
@@ -80,67 +81,10 @@ public class GameManager : NetworkBehaviour {
 			time = levels [currentLevelIndex].time;
 			StartTime ();
 			paused = false;
-		}
-		RpcStartNextLevel ();
-	}
-
-	[ClientRpc]
-	void RpcStartNextLevel()
-	{
-		StartCoroutine (LoadNextLevel ());
-	}
-
-	IEnumerator LoadNextLevel()
-	{
-		if (this.currentLevelIndex + 1 < this.levels.Length)
-		{
-			Debug.Log ("Coroutine");
-			var sceneName = this.levels [this.currentLevelIndex + 1].sceneName;
-			_nextLevel = SceneManager.LoadSceneAsync (sceneName, LoadSceneMode.Single);
-			_nextLevel.allowSceneActivation = false;
-
-			while (_nextLevel.progress < 0.9f) {
-				Debug.Log (_nextLevel.progress);
-				yield return null;
+			if (this.currentLevelIndex + 1 < this.levels.Length) {
+				PreloadNextLevel ();
 			}
-
-			Debug.Log ("NextLevel.progress == 0.9f");
-			CustomNetworkLobbyManager.singleton.client.Send (LoadedMessage, new EmptyMessage ());
-
-			while (!_nextLevel.isDone)
-				yield return null;
-
-			CustomNetworkLobbyManager.singleton.client.Send (LevelChangedMessage, new EmptyMessage ());
-			ClientScene.Ready (this.connectionToServer);
 		}
-	}
-
-	void OnClientLevelChanged(NetworkMessage msg)
-	{
-		_clientLevelChanged++;
-		Debug.Log (_clientLevelChanged);
-	}
-
-	void OnClientLevelFinishedLoading(NetworkMessage msg)
-	{
-		_clientFinishedLoading++;
-		Debug.Log (_clientFinishedLoading);
-	}
-
-	void OnAllowSceneActivation(NetworkMessage msg)
-	{
-		_nextLevel.allowSceneActivation = true;
-	}
-
-	[Command]
-	void CmdInTheLevel()
-	{
-		_clientLevelChanged++;
-		Debug.Log (_clientLevelChanged);
-	}
-
-	void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
-	{
 	}
 
 	[Server]
@@ -170,30 +114,6 @@ public class GameManager : NetworkBehaviour {
 	}
 
 	[Server]
-	IEnumerator WaitForAllClients()
-	{
-		Debug.Log ("wait for all clients");
-		Debug.Log (NetworkServer.connections.Count);
-		NetworkServer.SetAllClientsNotReady ();
-		while (_clientFinishedLoading < NetworkServer.connections.Count) {
-			yield return null;
-		}
-		Debug.Log (_clientFinishedLoading);
-		_clientFinishedLoading = 0;
-		_nextLevel.allowSceneActivation = true;
-		NetworkServer.SendToAll (AllowSceneActivationMessage, new EmptyMessage ());
-		while (_clientLevelChanged < NetworkServer.connections.Count) {
-			yield return null;
-		}
-		paused = true;
-		this.currentLevelIndex++;
-		_clientLevelChanged = 0;
-		yield return SceneManager.LoadSceneAsync (this.levels [this.currentLevelIndex].sceneName);
-		NetworkServer.SpawnObjects ();
-		StartLevel ();
-	}
-
-	[Server]
 	IEnumerator DecreaseTime()
 	{
 		while (time > 0)
@@ -202,8 +122,35 @@ public class GameManager : NetworkBehaviour {
 			time--;
 		}
 		if (this.currentLevelIndex + 1 < this.levels.Length) {
-			StartCoroutine (WaitForAllClients());
+			ActivatePreloadedLevel ();
 		}
+	}
+
+	void PreloadNextLevel ()
+	{
+		var nextSceneName = this.levels [this.currentLevelIndex + 1].sceneName;
+		var currentSceneName = this.levels [this.currentLevelIndex].sceneName;
+		_networkSceneManager.PreLoadLevel (nextSceneName, currentSceneName);
+	}
+
+	void ActivatePreloadedLevel ()
+	{
+		_networkSceneManager.ActivatePreloadedLevel ();
+		this.currentLevelIndex++;
+	}
+
+	void LoadNextLevel ()
+	{
+		var nextSceneName = this.levels [this.currentLevelIndex + 1].sceneName;
+		var currentSceneName = this.levels [this.currentLevelIndex].sceneName;
+		_networkSceneManager.LoadLevel (nextSceneName, currentSceneName);
+		this.currentLevelIndex++;
+	}
+
+	[Server]
+	void OnLevelFinishedLoading()
+	{
+		StartLevel ();
 	}
 
 	[Server]

@@ -396,6 +396,55 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 554
       objectReference: {fileID: 0}
+    - target: {fileID: 1407867372666910, guid: d452712503b114cc1a33b1f89fcb7081, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224650563594860126, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 224192745227681026, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 224192745227681026, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 224192745227681026, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224192745227681026, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224192745227681026, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 918.29456
+      objectReference: {fileID: 0}
+    - target: {fileID: 224192745227681026, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 1836.5891
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356444363387264, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224356444363387264, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d452712503b114cc1a33b1f89fcb7081, type: 2}
   m_IsPrefabParent: 0

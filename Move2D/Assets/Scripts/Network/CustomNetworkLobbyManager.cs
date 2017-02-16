@@ -40,7 +40,7 @@ public class CustomNetworkLobbyManager : LobbyManager {
 
 	public override void OnStopServer()
 	{
-		if (!_isMatchmaking) {
+		if (!_isMatchmaking && GameManager.singleton != null) {
 			GameObject.Destroy (GameManager.singleton.gameObject);
 			NetworkServer.Destroy (GameManager.singleton.gameObject);
 			infoPanel.Display ("The server was stopped", "OK", null);
