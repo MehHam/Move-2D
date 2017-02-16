@@ -6,20 +6,39 @@ using ProgressBar;
 [RequireComponent (typeof(ProgressRadialBehaviour))]
 public class MotionCriterion : MonoBehaviour
 {
-	public GameObject pointFollow;
-	public GameObject sphereCDM;
+	private bool _active;
+	private GameObject _pointFollow;
+	private GameObject _sphereCDM;
 
-	void Start ()
+	void OnEnable()
 	{
-		pointFollow = GameObject.FindGameObjectWithTag ("PointFollow");
-		sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
+		GameManager.OnLevelStarted += OnLevelStarted;
+	}
+
+	void OnDisable()
+	{
+		GameManager.OnLevelStarted -= OnLevelStarted;
+	}
+
+	void OnLevelStarted()
+	{
+		_active = (GameManager.singleton.GetCurrentLevel ().gameMode == GameManager.GameMode.MotionPointFollow);
+		if (_active) {
+			this.transform.parent.gameObject.GetComponent<CanvasGroup> ().alpha = 1;
+			_pointFollow = GameObject.FindGameObjectWithTag ("PointFollow");
+			_sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
+		} else {
+			this.transform.parent.gameObject.GetComponent<CanvasGroup> ().alpha = 0;
+		}
 	}
 
 	void Update ()
 	{
-		var progressBar = this.GetComponent<ProgressRadialBehaviour> ();
-		int criterion = (int)xiSquareCriterion (sphereCDM, pointFollow);
-		progressBar.Value = criterion;
+		if (_active)
+		{
+			var criterion = xiSquareCriterion (_sphereCDM, _pointFollow);
+			this.GetComponent<ProgressRadialBehaviour>().Value = criterion;
+		}
 	}
 
 	float xiSquareCriterion (GameObject sphereCDM, GameObject pointFollow)

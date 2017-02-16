@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(NetworkSceneManager))]
 public class GameManager : NetworkBehaviour {
+	public delegate void GameManagerEvent();
+	public static event GameManagerEvent OnLevelStarted;
 	public enum GameMode
 	{
 		Default,
@@ -27,6 +29,7 @@ public class GameManager : NetworkBehaviour {
 	public static GameManager singleton { get; private set; }
 
 	public Slider slider;
+	public GameObject progressBar;
 	public Animator readySetGo;
 
 	public Level[] levels;
@@ -42,13 +45,13 @@ public class GameManager : NetworkBehaviour {
 
 	void OnEnable()
 	{
-		NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
+		SceneManager.sceneLoaded += OnLevelFinishedLoading;
 		ReadySetGo.onAnimationFinished += OnAnimationFinished;
 	}
 
 	void OnDisable()
 	{
-		NetworkSceneManager.OnServerLevelLoaded -= OnLevelFinishedLoading;
+		SceneManager.sceneLoaded -= OnLevelFinishedLoading;
 		ReadySetGo.onAnimationFinished -= OnAnimationFinished;
 	}
 
@@ -67,17 +70,19 @@ public class GameManager : NetworkBehaviour {
 		StartLevel ();
 	}
 
-	[Server]
 	void ImmediateStartLevel ()
 	{
 		if (isServer) {
+			Debug.LogError ("???");
+			Debug.Log ("Start Level");
 			time = levels [currentLevelIndex].time;
 			StartTime ();
 			paused = false;
 		}
+		if (OnLevelStarted != null)
+			OnLevelStarted ();
 	}
-
-	[Server]
+		
 	void StartLevel ()
 	{
 		if (GetCurrentLevel ().readyAnimation) {
@@ -142,17 +147,16 @@ public class GameManager : NetworkBehaviour {
 	}
 	*/
 
+	[Server]
 	void LoadNextLevel ()
 	{
 		var nextSceneName = this.levels [this.currentLevelIndex + 1].sceneName;
+		this.currentLevelIndex++;
 		//var currentSceneName = this.levels [this.currentLevelIndex].sceneName;
 		NetworkManager.singleton.ServerChangeScene (nextSceneName);
-		this.currentLevelIndex++;
-		StartLevel ();
 	}
-
-	[Server]
-	void OnLevelFinishedLoading(string sceneName)
+		
+	void OnLevelFinishedLoading(Scene scene, LoadSceneMode loadSceneMode)
 	{
 		StartLevel ();
 	}
