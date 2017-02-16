@@ -21,6 +21,7 @@ public class GameManager : NetworkBehaviour {
 		public string sceneName;
 		public GameMode gameMode;
 		public MotionPointFollow.MotionMode motionMode;
+		public bool readyAnimation = false;
 	}
 		
 	public static GameManager singleton { get; private set; }
@@ -34,8 +35,6 @@ public class GameManager : NetworkBehaviour {
 	const short LevelChangedMessage = MsgType.Highest + 2;
 	const short AllowSceneActivationMessage = MsgType.Highest + 3;
 
-	private NetworkSceneManager _networkSceneManager;
-
 	[SyncVar] public bool paused = true;
 	[SyncVar] public int currentLevelIndex = 0;
 	[SyncVar] public uint time = 0;
@@ -43,48 +42,50 @@ public class GameManager : NetworkBehaviour {
 
 	void OnEnable()
 	{
-		NetworkSceneManager.OnLevelLoaded += OnLevelFinishedLoading;
+		NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
 		ReadySetGo.onAnimationFinished += OnAnimationFinished;
 	}
 
 	void OnDisable()
 	{
-		NetworkSceneManager.OnLevelLoaded -= OnLevelFinishedLoading;
+		NetworkSceneManager.OnServerLevelLoaded -= OnLevelFinishedLoading;
 		ReadySetGo.onAnimationFinished -= OnAnimationFinished;
 	}
 
 	void Awake()
 	{
-		/*NetworkServer.RegisterHandler (LoadedMessage, OnClientLevelFinishedLoading);
-		NetworkServer.RegisterHandler (LevelChangedMessage, OnClientLevelChanged);
-		if (isClient)
-			CustomNetworkLobbyManager.singleton.client.RegisterHandler (AllowSceneActivationMessage, OnAllowSceneActivation);*/
 		if (GameObject.FindObjectsOfType<GameManager>().Length > 1) {
 			NetworkServer.Destroy (gameObject);
 			return;
 		}
-		_networkSceneManager = this.GetComponent<NetworkSceneManager> ();
 		GameManager.singleton = this;
 		DontDestroyOnLoad (this);
 	}
 
 	void Start()
 	{
-		this.time = levels [currentLevelIndex].time;
-		readySetGo.SetTrigger ("Activation");
+		StartLevel ();
 	}
 
 	[Server]
-	void StartLevel ()
+	void ImmediateStartLevel ()
 	{
 		if (isServer) {
 			time = levels [currentLevelIndex].time;
 			StartTime ();
 			paused = false;
-			if (this.currentLevelIndex + 1 < this.levels.Length) {
-				PreloadNextLevel ();
-			}
 		}
+	}
+
+	[Server]
+	void StartLevel ()
+	{
+		if (GetCurrentLevel ().readyAnimation) {
+			paused = true;
+			readySetGo.SetTrigger ("Activation");
+		}
+		else
+			ImmediateStartLevel ();
 	}
 
 	[Server]
@@ -122,33 +123,36 @@ public class GameManager : NetworkBehaviour {
 			time--;
 		}
 		if (this.currentLevelIndex + 1 < this.levels.Length) {
-			ActivatePreloadedLevel ();
+			LoadNextLevel ();
 		}
 	}
 
+	/*
 	void PreloadNextLevel ()
 	{
 		var nextSceneName = this.levels [this.currentLevelIndex + 1].sceneName;
 		var currentSceneName = this.levels [this.currentLevelIndex].sceneName;
-		_networkSceneManager.PreLoadLevel (nextSceneName, currentSceneName);
+		NetworkSceneManager.singleton.PreLoadLevel (nextSceneName, currentSceneName);
 	}
 
 	void ActivatePreloadedLevel ()
 	{
-		_networkSceneManager.ActivatePreloadedLevel ();
+		NetworkSceneManager.singleton.ActivatePreloadedLevel ();
 		this.currentLevelIndex++;
 	}
+	*/
 
 	void LoadNextLevel ()
 	{
 		var nextSceneName = this.levels [this.currentLevelIndex + 1].sceneName;
-		var currentSceneName = this.levels [this.currentLevelIndex].sceneName;
-		_networkSceneManager.LoadLevel (nextSceneName, currentSceneName);
+		//var currentSceneName = this.levels [this.currentLevelIndex].sceneName;
+		NetworkManager.singleton.ServerChangeScene (nextSceneName);
 		this.currentLevelIndex++;
+		StartLevel ();
 	}
 
 	[Server]
-	void OnLevelFinishedLoading()
+	void OnLevelFinishedLoading(string sceneName)
 	{
 		StartLevel ();
 	}
@@ -183,7 +187,7 @@ public class GameManager : NetworkBehaviour {
 	void OnAnimationFinished()
 	{
 		if (isServer)
-			StartLevel ();
+			ImmediateStartLevel ();
 	}
 
 	public float GetSliderValue()

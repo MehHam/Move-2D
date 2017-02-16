@@ -107,6 +107,8 @@ namespace Prototype.NetworkLobby
             }
             else
             {
+
+				Debug.Log (SceneManager.GetSceneAt (0).name);
                 ChangeTo(null);
 
                 Destroy(GameObject.Find("MainMenuUI(Clone)"));
