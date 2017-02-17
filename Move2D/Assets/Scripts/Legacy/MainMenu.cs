@@ -2,10 +2,11 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
+/*
 public class MainMenu : MonoBehaviour {
 
     public GameObject serverCanvas, clientCanvas;
-    public ClientHUD clientHUDScript;
+//    public ClientHUD clientHUDScript;
 	public ServerHUD serverHUDScript;
 
 	void Start()
@@ -35,3 +36,4 @@ public class MainMenu : MonoBehaviour {
       //  SceneManager.LoadScene("ServerClientMenu");
     }
 }
+*/

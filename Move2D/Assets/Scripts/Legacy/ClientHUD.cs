@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 
+/*
 public class ClientHUD : MonoBehaviour
 {
 
@@ -85,10 +86,10 @@ public class ClientHUD : MonoBehaviour
 		connecting.SetActive(true);
 		ToggleInteraction (false);
 
-		yield return StartCoroutine (Timer(connectingTimer));
+		yield return Timing.RunCoroutine (Timer(connectingTimer));
 		if (!connected) {
 			connectingText.text = "Connection Failed !!";
-			yield return StartCoroutine (Timer (failTimer));
+			yield return Timing.RunCoroutine (Timer (failTimer));
 		}
 		connecting.SetActive (false);
 		ToggleInteraction (true);
@@ -101,7 +102,7 @@ public class ClientHUD : MonoBehaviour
         {
             connected = false;
             disConnectMessage.SetActive(false);
-			StartCoroutine("ConnectionTimer", ConnectionTimer());
+			Timing.RunCoroutine("ConnectionTimer", ConnectionTimer());
             manager.networkAddress = ipText.text;
             manager.networkPort = Convert.ToInt32(portText.text);
             PlayerPrefs.SetString("IPAddressC", ipText.text);//saving the filled in ip.
@@ -150,3 +151,4 @@ public class ClientHUD : MonoBehaviour
         manager.StopClient();
     }
 }
+*/

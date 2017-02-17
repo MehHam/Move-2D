@@ -4,24 +4,16 @@ using UnityEngine;
 using ProgressBar;
 
 [RequireComponent (typeof(ProgressRadialBehaviour))]
-public class MotionCriterion : MonoBehaviour
+public class ProgressBarUI : MonoBehaviour
 {
+	public float fadeInSpeed = 1.0f;
 	private bool _active;
 	private GameObject _pointFollow;
 	private GameObject _sphereCDM;
 
-	void OnEnable()
+	IEnumerator Start()
 	{
-		GameManager.OnLevelStarted += OnLevelStarted;
-	}
-
-	void OnDisable()
-	{
-		GameManager.OnLevelStarted -= OnLevelStarted;
-	}
-
-	void OnLevelStarted()
-	{
+		yield return new WaitForSeconds (0.5f);
 		_active = (GameManager.singleton.GetCurrentLevel ().gameMode == GameManager.GameMode.MotionPointFollow);
 		if (_active) {
 			this.transform.parent.gameObject.GetComponent<CanvasGroup> ().alpha = 1;

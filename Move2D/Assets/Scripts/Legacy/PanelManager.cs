@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
+/*
 public class PanelManager : MonoBehaviour {
 
 	public Animator initiallyOpen;
@@ -67,7 +68,7 @@ public class PanelManager : MonoBehaviour {
 
 		m_Open.SetBool(m_OpenParameterId, false);
 		SetSelected(m_PreviouslySelected);
-		StartCoroutine(DisablePanelDeleyed(m_Open));
+		Timing.RunCoroutine(DisablePanelDeleyed(m_Open));
 		m_Open = null;
 	}
 
@@ -94,3 +95,4 @@ public class PanelManager : MonoBehaviour {
 		EventSystem.current.SetSelectedGameObject(go);
 	}
 }
+*/

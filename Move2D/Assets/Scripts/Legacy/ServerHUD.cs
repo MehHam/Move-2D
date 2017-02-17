@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using System;
 using UnityEngine.SceneManagement;
 
+/*
 public class ServerHUD : MonoBehaviour {
 
     public GameObject stopServer, startServer, resetSettings, getIP, checking, clientsInfo;
@@ -172,7 +173,7 @@ public class ServerHUD : MonoBehaviour {
     public void GetIP()
     {
         getIP.GetComponentInChildren<Text>().text = "If this takes too long\nClick again.";
-        StartCoroutine(GetPublicIP());//start the actual checkking.
+        Timing.RunCoroutine(GetPublicIP());//start the actual checkking.
         checking.SetActive(true);
     }
 
@@ -209,3 +210,4 @@ public class ServerHUD : MonoBehaviour {
         }
     }
 }
+*/

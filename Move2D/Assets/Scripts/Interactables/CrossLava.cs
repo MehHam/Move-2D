@@ -1,17 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using MovementEffects;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class CrossLava : NetworkBehaviour, IInteractable {
 	public float scoreCooldownTime;
 	private bool _cooldown;
+	private CoroutineHandle _coroutineHandle;
+
 	#region IInteractable implementation
 	[Server]
 	public void OnEnterEffect (SphereCDM sphere)
 	{
 		GameManager.singleton.DecreaseScore ();
-		StartCoroutine (ScoreCooldown ());
+		_coroutineHandle = Timing.RunCoroutine (ScoreCooldown ());
 	}
 
 	[Server]
@@ -19,22 +22,23 @@ public class CrossLava : NetworkBehaviour, IInteractable {
 	{
 		if (!_cooldown) {
 			GameManager.singleton.DecreaseScore ();
-			StartCoroutine (ScoreCooldown());
+			Timing.RunCoroutine (ScoreCooldown());
 		}
 	}
 
 	[Server]
 	public void OnExitEffect (SphereCDM sphere)
 	{
-		StopCoroutine ("ScoreCooldown");
+		if (_coroutineHandle != null)
+			Timing.KillCoroutines (_coroutineHandle);
 	}
 	#endregion
 
 	[Server]
-	IEnumerator ScoreCooldown()
+	IEnumerator<float> ScoreCooldown()
 	{
 		_cooldown = true;
-		yield return new WaitForSeconds (scoreCooldownTime);
+		yield return Timing.WaitForSeconds (scoreCooldownTime);
 		_cooldown = false;
 	}
 }

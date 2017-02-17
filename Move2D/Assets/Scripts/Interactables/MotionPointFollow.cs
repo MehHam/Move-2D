@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Collections.Generic;
+using MovementEffects;
 using ProgressBar;
 using UnityEngine.UI;
 
@@ -25,6 +27,7 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 	public Vector2 centrePos = new Vector2(0.0f, 0.0f);
 
 	private bool _cooldown = false;
+	private CoroutineHandle _coroutineHandle;
 	private GameObject _progressBar;
 	private Vector2 _tempPos;
 
@@ -33,7 +36,7 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 	public void OnEnterEffect (SphereCDM sphere)
 	{
 		GameManager.singleton.IncreaseScore ();
-		StartCoroutine (ScoreCooldown ());
+		_coroutineHandle = Timing.RunCoroutine (ScoreCooldown (), Segment.FixedUpdate);
 	}
 
 	[Server]
@@ -41,14 +44,14 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 	{
 		if (!_cooldown) {
 			GameManager.singleton.IncreaseScore ();
-			StartCoroutine (ScoreCooldown());
+			_coroutineHandle = Timing.RunCoroutine (ScoreCooldown(), Segment.FixedUpdate);
 		}
 	}
 
 	[Server]
 	public void OnExitEffect (SphereCDM sphere)
 	{
-		StopCoroutine ("ScoreCooldown");
+		Timing.KillCoroutines (_coroutineHandle);
 	}
 	#endregion
 
@@ -68,19 +71,18 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 	{
 		switch (GameManager.singleton.GetCurrentLevel ().motionMode) {
 			case MotionMode.Random:
-				StartCoroutine (RandomPattern ());
+				Timing.RunCoroutine (RandomPattern (), Segment.FixedUpdate);
 				break;
 			case MotionMode.Cos:
-				StartCoroutine (CosPattern ());
+				Timing.RunCoroutine (CosPattern (), Segment.FixedUpdate);
 				break;
 			case MotionMode.Rotate:
-				StartCoroutine (RotationPattern ());
+				Timing.RunCoroutine (RotationPattern (), Segment.FixedUpdate);
 				break;
 		}
 	}
-
-	[Server]
-	IEnumerator RandomPattern()
+		
+	IEnumerator<float> RandomPattern()
 	{
 		float timeInterval = GameManager.singleton.GetCurrentLevel ().time / randomTransitions;
 		while (true)
@@ -89,37 +91,37 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 				          Random.Range (-randomPositionRange, randomPositionRange));
 			Debug.Log (pos);
 			this.transform.position = pos;
-			yield return new WaitForSeconds (timeInterval);
+			yield return Timing.WaitForSeconds (timeInterval);
 		}
 	}
 
 	[Server]
-	IEnumerator CosPattern()
+	IEnumerator<float> CosPattern()
 	{
 		while (true)
 		{
 			var pos = new Vector2 (0.0f, amplitude * Mathf.Cos (6.24f * Time.fixedTime / velocity));
 			Debug.Log (pos);
 			this.transform.position = pos;
-			yield return new WaitForFixedUpdate ();
+			yield return 0.0f;
 		}
 	}
 
 	[Server]
-	IEnumerator RotationPattern()
+	IEnumerator<float> RotationPattern()
 	{
 		while (true)
 		{
 			this.transform.RotateAround (centrePos, Vector3.forward * 10f, velocity * Time.fixedDeltaTime);
-			yield return new WaitForFixedUpdate ();
+			yield return 0.0f;
 		}
 	}
 
 	[Server]
-	IEnumerator ScoreCooldown()
+	IEnumerator<float> ScoreCooldown()
 	{
 		_cooldown = true;
-		yield return new WaitForSeconds (scoreCooldownTime);
+		yield return Timing.WaitForSeconds (scoreCooldownTime);
 		_cooldown = false;
 	}
 }

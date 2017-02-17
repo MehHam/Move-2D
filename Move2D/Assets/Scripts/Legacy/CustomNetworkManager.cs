@@ -5,6 +5,7 @@ using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.UI;
 using System;
 
+/*
 public class CustomNetworkManager : NetworkManager
 {
 	public class CustomMessageType {
@@ -141,3 +142,4 @@ public class CustomNetworkManager : NetworkManager
 		return Time.time + this._offset;
 	}
 }
+*/

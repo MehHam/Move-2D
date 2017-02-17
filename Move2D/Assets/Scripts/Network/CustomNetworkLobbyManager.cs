@@ -49,6 +49,22 @@ public class CustomNetworkLobbyManager : LobbyManager {
 		base.OnStopServer ();
 	}
 
+	public override void OnServerSceneChanged (string sceneName)
+	{
+		if (!_isMatchmaking && GameManager.singleton != null) {
+			GameManager.singleton.OnServerSceneChanged ();
+		}	
+		base.OnServerSceneChanged (sceneName);
+	}
+
+	public override void OnClientSceneChanged (NetworkConnection conn)
+	{
+		if (!_isMatchmaking && GameManager.singleton != null) {
+			GameManager.singleton.OnClientSceneChanged ();
+		}
+		base.OnClientSceneChanged (conn);
+	}
+
 	public void OnClientDisconnectCustom(NetworkMessage msg)
 	{
 		if (onClientDisconnect != null)
@@ -66,14 +82,7 @@ public class CustomNetworkLobbyManager : LobbyManager {
 		}
 
 		if(allready)
-			StartCoroutine(ServerCountdownPreloadCoroutine());
-	}
-
-	public override void OnClientConnect (NetworkConnection conn)
-	{
-		Debug.LogError ("Client connect");
-		NetworkSceneManager.singleton.RegisterClientMessages ();
-		base.OnClientConnect (conn);
+			Timing.RunCoroutine(ServerCountdownPreloadCoroutine());
 	}
 
 	public IEnumerator ServerCountdownPreloadCoroutine()
