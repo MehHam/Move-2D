@@ -25,6 +25,7 @@ public class CustomNetworkLobbyManager : LobbyManager {
 			GameObject.Destroy (GameManager.singleton.gameObject);
 			NetworkServer.Destroy (GameManager.singleton.gameObject);
 			infoPanel.Display ("The host disconnected", "OK", null);
+			CustomNetworkLobbyManager.networkSceneName = this.onlineScene;
 		}
 		base.OnStopHost ();
 	}
@@ -45,6 +46,7 @@ public class CustomNetworkLobbyManager : LobbyManager {
 			GameObject.Destroy (GameManager.singleton.gameObject);
 			NetworkServer.Destroy (GameManager.singleton.gameObject);
 			infoPanel.Display ("The server was stopped", "OK", null);
+			CustomNetworkLobbyManager.networkSceneName = this.onlineScene;
 		}
 		base.OnStopServer ();
 	}
