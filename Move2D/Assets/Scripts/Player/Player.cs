@@ -8,6 +8,7 @@ public class Player : NetworkBehaviour {
 	[SyncVar] public string playerName;
 	[SyncVar] public float mass = 1.0f;
 	[SyncVar] public Color color;
+	public bool player2;
 
 	void OnEnable()
 	{
