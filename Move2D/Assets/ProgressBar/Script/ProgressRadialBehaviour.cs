@@ -98,7 +98,7 @@ namespace ProgressBar
                         TransitoryValue = m_Value;
                 }
                 //If the difference is negative:
-                //  TransitoryValue needs to be decremented.
+                //  TransitoryValue needs to be decremented.F
                 else if (Dvalue < 0)
                 {
                     TransitoryValue -= ProgressSpeed * Time.deltaTime;
@@ -135,7 +135,7 @@ namespace ProgressBar
         {
             if (m_AttachedText)
                 m_AttachedText.text = Mathf.RoundToInt(fill*100).ToString() + " %";
-
+		
             m_Fill.fillAmount = fill;
         }
 
