@@ -126,10 +126,12 @@ public class GameManager : NetworkBehaviour {
 	// Starts immediately the level, ignore the ready set go animation
 	void ImmediateStartLevel ()
 	{
-		StopTime ();
-		time = levels [currentLevelIndex].time;
-		StartTime ();
-		paused = false;
+		if (isServer) {
+			StopTime ();
+			time = levels [currentLevelIndex].time;
+			StartTime ();
+			paused = false;
+		}
 		if (OnLevelStarted != null)
 			OnLevelStarted ();
 	}
