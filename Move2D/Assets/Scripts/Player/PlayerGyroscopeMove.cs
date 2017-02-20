@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
-
-//Adding this allows us to access members of the UI namespace including Text.
 using UnityEngine.UI;
 
+/// <summary>
+/// A movement module manages the gyroscopic type of movement for the player
+/// </summary>
 [RequireComponent (typeof (Rigidbody2D))]
 class PlayerGyroscopeMove : NetworkBehaviour, IPlayerMotion
 {
@@ -18,6 +19,10 @@ class PlayerGyroscopeMove : NetworkBehaviour, IPlayerMotion
 
 	public void Move ()
 	{
+		// Only the local player should call this method
+		if (!isLocalPlayer)
+			return;
+		// You can only move if the gyroscope is supporter
 		if (SystemInfo.supportsGyroscope)
 		{
 			float radiusR = 15.7f;

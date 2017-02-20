@@ -5,9 +5,18 @@ using UnityEngine.Networking;
 using Prototype.NetworkLobby;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Custom NetworkLobby class
+/// </summary>
 public class CustomNetworkLobbyManager : LobbyManager {
 	public delegate void ClientEvent(NetworkMessage msg);
+	/// <summary>
+	/// Event called whenever a client disconnect
+	/// </summary>
 	public static event ClientEvent onClientDisconnect;
+	/// <summary>
+	/// Event called whenever a client connects
+	/// </summary>
 	public static event ClientEvent onClientConnect;
 
 	public override NetworkClient StartHost()
@@ -18,7 +27,10 @@ public class CustomNetworkLobbyManager : LobbyManager {
 		}
 		return networkClient;
 	}
-		
+
+	/// <summary>
+	/// Called when the host is stopped. Destroy the gameManager, display an error message and reset the default lobby scene
+	/// </summary>
 	public override void OnStopHost()
 	{
 		if (!_isMatchmaking && GameManager.singleton != null) {
@@ -30,16 +42,23 @@ public class CustomNetworkLobbyManager : LobbyManager {
 		base.OnStopHost ();
 	}
 
+	/// <summary>
+	/// Called when the client is stopped. Destroy the gameManager, display an error message and reset the default lobby scene
+	/// </summary>
 	public override void OnStopClient()
 	{
 		if (!_isMatchmaking && GameManager.singleton != null) {
 			GameObject.Destroy (GameManager.singleton.gameObject);
 			NetworkServer.Destroy (GameManager.singleton.gameObject);
 			infoPanel.Display ("You were disconnected from server", "OK", null);
+			CustomNetworkLobbyManager.networkSceneName = this.onlineScene;
 		}
 		base.OnStopClient ();
 	}
 
+	/// <summary>
+	/// Called the server is stopped. Destroy the gameManager, display an error message and reset the default lobby scene
+	/// </summary>
 	public override void OnStopServer()
 	{
 		if (!_isMatchmaking && GameManager.singleton != null) {
@@ -51,6 +70,9 @@ public class CustomNetworkLobbyManager : LobbyManager {
 		base.OnStopServer ();
 	}
 
+	/// <summary>
+	/// Called when the server scene is changed
+	/// </summary>
 	public override void OnServerSceneChanged (string sceneName)
 	{
 		if (!_isMatchmaking && GameManager.singleton != null) {
@@ -59,6 +81,9 @@ public class CustomNetworkLobbyManager : LobbyManager {
 		base.OnServerSceneChanged (sceneName);
 	}
 
+	/// <summary>
+	/// Called when the client scene is changed
+	/// </summary>
 	public override void OnClientSceneChanged (NetworkConnection conn)
 	{
 		if (!_isMatchmaking && GameManager.singleton != null) {

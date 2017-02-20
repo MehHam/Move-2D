@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class that dynamically change a text file to display the time in the current gameManager
+/// </summary>
+[RequireComponent(typeof(Text))]
 public class TimeTextUI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {

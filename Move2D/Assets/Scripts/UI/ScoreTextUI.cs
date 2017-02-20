@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class that dynamically change a text file to display the score in the current gameManager
+/// </summary>
+[RequireComponent(typeof(Text))]
 public class ScoreTextUI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {

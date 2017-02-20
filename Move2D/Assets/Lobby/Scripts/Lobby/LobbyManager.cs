@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 using UnityEngine.Networking.Types;
 using UnityEngine.Networking.Match;
 using System.Collections;
+using System.Net;
+using System.Net.Sockets;
 
 
 namespace Prototype.NetworkLobby
@@ -37,6 +39,7 @@ namespace Prototype.NetworkLobby
 
         public Text statusInfo;
         public Text hostInfo;
+		public Text ipAddressInfo;
 
         //Client numPlayers from NetworkManager is always 0, so we count (throught connect/destroy in LobbyPlayer) the number
         //of players, so that even client know how many player there is.
@@ -155,6 +158,7 @@ namespace Prototype.NetworkLobby
         {
             statusInfo.text = status;
             hostInfo.text = host;
+			ipAddressInfo.text = LocalIPAddress ();
         }
 
 
@@ -419,5 +423,21 @@ namespace Prototype.NetworkLobby
             ChangeTo(mainMenuPanel);
             infoPanel.Display("Cient error : " + (errorCode == 6 ? "timeout" : errorCode.ToString()), "Close", null);
         }
+
+		public string LocalIPAddress()
+		{
+			IPHostEntry host;
+			string localIP = "";
+			host = Dns.GetHostEntry(Dns.GetHostName());
+			foreach (IPAddress ip in host.AddressList)
+			{
+				if (ip.AddressFamily == AddressFamily.InterNetwork)
+				{
+					localIP = ip.ToString();
+					break;
+				}
+			}
+			return localIP;
+		}
     }
 }

@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
-
-//Adding this allows us to access members of the UI namespace including Text.
 using UnityEngine.UI;
 
+/// <summary>
+/// A movement module manages the keyboard type of movement for the player
+/// </summary>
 [RequireComponent (typeof (Rigidbody2D))]
 class PlayerKeyboardMove : NetworkBehaviour, IPlayerMotion
 {
@@ -17,6 +18,9 @@ class PlayerKeyboardMove : NetworkBehaviour, IPlayerMotion
 	}
 
 	public void Move() {
+		// Only the local player should call this method
+		if (!isLocalPlayer)
+			return;
 		//Store the current horizontal input in the float moveHorizontal.
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 

@@ -2,10 +2,11 @@
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
-
-//Adding this allows us to access members of the UI namespace including Text.
 using UnityEngine.UI;
 
+/// <summary>
+/// Class that manages all the possible type of movement for the player and call each of them.
+/// </summary>
 public enum MotionMode
 {
 	Keyboard,
@@ -21,9 +22,11 @@ public class PlayerMoveManager : NetworkBehaviour
 {
 	void FixedUpdate ()
 	{
-		if (!isLocalPlayer || (GameManager.singleton != null && GameManager.singleton.paused))
+		// Only the local player should call this method
+		if (!isLocalPlayer)
 			return;
-		if (GameManager.singleton != null) {
+		// The player can't move if the game is paused
+		if (GameManager.singleton != null && !GameManager.singleton.paused) {
 			foreach (var playerMotion in gameObject.GetComponents<IPlayerMotion>()) {
 				playerMotion.Move ();
 			}

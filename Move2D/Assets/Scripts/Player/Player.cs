@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Class used to keep basic informations about the player and manage its behaviour when it's disconnected
+/// </summary>
 [RequireComponent(typeof(PlayerMoveManager))]
 public class Player : NetworkBehaviour {
 	[SyncVar] public string playerName;

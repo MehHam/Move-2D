@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
+/// <summary>
+/// A movement module manages the accelerometer type of movement for the player
+/// </summary>
 [RequireComponent (typeof (Rigidbody2D))]
 public class PlayerAccelerometerMove : NetworkBehaviour, IPlayerMotion
 {
@@ -16,6 +19,7 @@ public class PlayerAccelerometerMove : NetworkBehaviour, IPlayerMotion
 
 	public void Move ()
 	{
+		// Only the local player should call this method
 		if (!isLocalPlayer)
 			return;
 		if (SystemInfo.supportsGyroscope) {

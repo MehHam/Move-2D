@@ -6,8 +6,18 @@ using MovementEffects;
 using ProgressBar;
 using UnityEngine.UI;
 
+/// <summary>
+/// A special type of interactable object. It moves around the scene with different patterns, give points to the players if the sphere
+/// collides with it.
+/// </summary>
 public class MotionPointFollow : NetworkBehaviour, IInteractable
 {
+	/// <summary>
+	/// All the different types of motion mode
+	/// Random: The motion point appears at random points in the arena
+	/// Cos: The motion point ondulates in the arena
+	/// Rotate: The motion point rotates around a center point.
+	/// </summary>
 	public enum MotionMode 
 	{
 		Random,
@@ -15,15 +25,29 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 		Rotate
 	}
 
-	[SyncVar] private Vector3 _syncposFollow;
-	[SyncVar] private int _syncBarValue;
-	public GameObject sphereCDM;
-
+	/// <summary>
+	/// Amplitude of the cos pattern
+	/// </summary>
 	public int amplitude = 8;
+	/// <summary>
+	/// The speed of the motion point
+	/// </summary>
 	public float velocity = 10.0f;
+	/// <summary>
+	/// The range of the random position in which the motion point can appear
+	/// </summary>
 	public float randomPositionRange = 7.0f;
+	/// <summary>
+	/// Number of time the motion point will change positions during the level
+	/// </summary>
 	public int randomTransitions = 5;
+	/// <summary>
+	/// Interval of time during which the players won't win points when the sphere stays on the collider
+	/// </summary>
 	public float scoreCooldownTime = 0.5f;
+	/// <summary>
+	/// A center point around which the motion point rotates
+	/// </summary>
 	public Vector2 centrePos = new Vector2(0.0f, 0.0f);
 
 	private bool _cooldown = false;
@@ -62,7 +86,6 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 			this.enabled = false;
 			return;
 		}
-		sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
 		StartMovePattern ();
 	}
 

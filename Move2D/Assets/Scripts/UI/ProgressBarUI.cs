@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using ProgressBar;
 
+/// <summary>
+/// Class to be used to compute the distance between the Sphere and the PointFollow into a radial progress
+/// </summary>
 [RequireComponent (typeof(ProgressRadialBehaviour))]
 public class ProgressBarUI : MonoBehaviour
 {
@@ -33,6 +36,7 @@ public class ProgressBarUI : MonoBehaviour
 		}
 	}
 
+	// Computing the distance between the sphere and the point as a purcentage
 	float xiSquareCriterion (GameObject sphereCDM, GameObject pointFollow)
 	{
 		float criterion;

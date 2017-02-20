@@ -2,7 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-// This script allows you to drag this GameObject using any finger, as long it has a collider
+/// <summary>
+/// A movement module manages the drag type of movement for the player
+/// </summary>
 [RequireComponent (typeof (Rigidbody2D))]
 public class PlayerDragMove : NetworkBehaviour, IPlayerMotion
 {
@@ -22,6 +24,7 @@ public class PlayerDragMove : NetworkBehaviour, IPlayerMotion
 		
 	public void Move ()
 	{
+		// Only the local player should call this method
 		if (!isLocalPlayer)
 			return;
 		

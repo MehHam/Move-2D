@@ -3,7 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+/// <summary>
+/// An interactable pickup, gives points to the players when the sphere collides with it
+/// </summary>
 public class Pickup : NetworkBehaviour, IInteractable {
+	/// <summary>
+	/// The number of points given to the players when the sphere collides with the pickup.
+	/// </summary>
 	public int scoreValue = 1;
 	#region IInteractable implementation
 	[Server]
