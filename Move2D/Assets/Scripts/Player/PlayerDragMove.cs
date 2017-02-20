@@ -8,7 +8,10 @@ using UnityEngine.Networking;
 [RequireComponent (typeof (Rigidbody2D))]
 public class PlayerDragMove : NetworkBehaviour, IPlayerMotion
 {
-	// This stores the layers we want the raycast to hit (make sure this GameObject's layer is included!)
+	/// <summary>
+	/// This stores the layers we want the raycast to hit (make sure this GameObject's layer is included!)
+	/// </summary>
+	[Tooltip("This stores the layers we want the raycast to hit (make sure this GameObject's layer is included!)")]
 	public LayerMask LayerMask = UnityEngine.Physics.DefaultRaycastLayers;
 	private int counterFing;
 	private Vector2 frameDelta = Vector2.zero;

@@ -8,9 +8,24 @@ using UnityEngine.Networking;
 /// </summary>
 [RequireComponent(typeof(PlayerMoveManager))]
 public class Player : NetworkBehaviour {
+	/// <summary>
+	/// Name of the player
+	/// </summary>
+	[Tooltip("Name of the player")]
 	[SyncVar] public string playerName;
+	/// <summary>
+	/// Mass of the player, used to compute the sphere position
+	/// </summary>
+	[Tooltip("Mass of the player, used to compute the sphere position")]
 	[SyncVar] public float mass = 1.0f;
+	/// <summary>
+	/// Color of the player
+	/// </summary>
+	[Tooltip("Color of the player")]
 	[SyncVar] public Color color;
+	/// <summary>
+	/// Is this player the second player ?
+	/// </summary>
 	public bool player2;
 
 	void OnEnable()

@@ -11,6 +11,7 @@ public class CrossLava : NetworkBehaviour, IInteractable {
 	/// <summary>
 	/// Interval of time during which the players won't lose points when the sphere stays on the collider
 	/// </summary>
+	[Tooltip("Interval of time during which the players won't lose points when the sphere stays on the collider")]
 	public float scoreCooldownTime;
 
 	private bool _cooldown;

@@ -9,6 +9,10 @@ using UnityEngine.UI;
 [RequireComponent (typeof (Rigidbody2D))]
 class PlayerKeyboardMove : NetworkBehaviour, IPlayerMotion
 {
+	/// <summary>
+	/// The movement speed of the player
+	/// </summary>
+	[Tooltip("The movement speed of the player")]
 	public float speed = 0.0f;
 	public int sliderValue = 0;
 

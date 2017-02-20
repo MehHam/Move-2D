@@ -37,26 +37,32 @@ public class GameManager : NetworkBehaviour {
 		/// <summary>
 		/// Level index
 		/// </summary>
+		[Tooltip("Level index")]
 		public uint index;
 		/// <summary>
 		/// The level duration
 		/// </summary>
+		[Tooltip("Level duration")]
 		public uint time;
 		/// <summary>
 		/// The sceneName in the build, this should never be empty
 		/// </summary>
+		[Tooltip("The scene name in the build, this should never be empty")]
 		public string sceneName;
 		/// <summary>
 		/// The gameMode of this level
 		/// </summary>
+		[Tooltip("The game mode of this level")]
 		public GameMode gameMode;
 		/// <summary>
 		/// If the gameMode is MotionPointFollow, what kind of motion the point has
 		/// </summary>
+		[Tooltip("If the game mode if MotionPointFollow, what kind of motion the point has")]
 		public MotionPointFollow.MotionMode motionMode;
 		/// <summary>
 		/// Whether the ready animation is displayed at the beginning of this level or not.
 		/// </summary>
+		[Tooltip("Whether the ready animation is displayed at the beginning of this level")]
 		public bool readyAnimation = false;
 	}
 
@@ -65,23 +71,27 @@ public class GameManager : NetworkBehaviour {
 	/// <summary>
 	/// Array displaying the data of all the levels that will be played
 	/// </summary>
+	[Tooltip("Array displaying the data of all the levels that will be played")]
 	public Level[] levels;
-
 	/// <summary>
 	/// Whether the game is paused or not
 	/// </summary>
+	[Tooltip("Is the game paused ?")]
 	[SyncVar] public bool paused = true;
 	/// <summary>
 	/// The index of the level that is currently played
 	/// </summary>
+	[Tooltip("Index of the level currently played")]
 	[SyncVar] public int currentLevelIndex = 0;
 	/// <summary>
 	/// How much time is left in the current level
 	/// </summary>
+	[Tooltip("Time left in the current level")]
 	[SyncVar] public uint time = 0;
 	/// <summary>
 	/// The current score of the players
 	/// </summary>
+	[Tooltip("Current score of the player")]
 	[SyncVar] public int score = 0;
 
 	void OnEnable()

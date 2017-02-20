@@ -28,26 +28,32 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 	/// <summary>
 	/// Amplitude of the cos pattern
 	/// </summary>
+	[Tooltip("Amplitude of the cos pattern")]
 	public int amplitude = 8;
 	/// <summary>
 	/// The speed of the motion point
 	/// </summary>
+	[Tooltip("The speed of the motion point")]
 	public float velocity = 10.0f;
 	/// <summary>
 	/// The range of the random position in which the motion point can appear
 	/// </summary>
+	[Tooltip("The range of the random positions in which the motion point can appear")]
 	public float randomPositionRange = 7.0f;
 	/// <summary>
 	/// Number of time the motion point will change positions during the level
 	/// </summary>
+	[Tooltip("Number of time the motion point will change positions during the level")]
 	public int randomTransitions = 5;
 	/// <summary>
 	/// Interval of time during which the players won't win points when the sphere stays on the collider
 	/// </summary>
+	[Tooltip("Interval of time during which the players won't win points when the sphere stays on the collider")]
 	public float scoreCooldownTime = 0.5f;
 	/// <summary>
 	/// A center point around which the motion point rotates
 	/// </summary>
+	[Tooltip("A center point around which the motion point rotates")]
 	public Vector2 centrePos = new Vector2(0.0f, 0.0f);
 
 	private bool _cooldown = false;

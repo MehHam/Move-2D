@@ -9,7 +9,6 @@ using ProgressBar;
 [RequireComponent (typeof(ProgressRadialBehaviour))]
 public class ProgressBarUI : MonoBehaviour
 {
-	public float fadeInSpeed = 1.0f;
 	private bool _active;
 	private GameObject _pointFollow;
 	private GameObject _sphereCDM;

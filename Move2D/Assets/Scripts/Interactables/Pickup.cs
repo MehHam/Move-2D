@@ -10,6 +10,7 @@ public class Pickup : NetworkBehaviour, IInteractable {
 	/// <summary>
 	/// The number of points given to the players when the sphere collides with the pickup.
 	/// </summary>
+	[Tooltip("The number of points given to the players when the sphere collides with the pickup.")]
 	public int scoreValue = 1;
 	#region IInteractable implementation
 	[Server]
