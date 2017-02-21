@@ -18,6 +18,11 @@ public class Pickup : NetworkBehaviour, IInteractable {
 	{
 		this.gameObject.SetActive(false);
 		GameManager.singleton.IncreaseScore (scoreValue);
+		if (GameManager.singleton.GetCurrentLevel ().sphereVisibility == GameManager.SphereVisibility.FadeAfterStartLevel ||
+		    GameManager.singleton.GetCurrentLevel ().sphereVisibility == GameManager.SphereVisibility.Invisible) {
+			sphere.Blink ();
+			sphere.RpcBlink ();
+		}
 		RpcDisable ();
 	}
 

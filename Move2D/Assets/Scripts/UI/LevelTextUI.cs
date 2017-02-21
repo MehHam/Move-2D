@@ -8,6 +8,6 @@ public class LevelTextUI : MonoBehaviour {
 	void Update () {
 		this.GetComponent<Text> ().text =
 			(GameManager.singleton == null) ? "/"
-			: GameManager.singleton.levels [GameManager.singleton.currentLevelIndex].index.ToString();
+			: GameManager.singleton.GetCurrentLevel().index.ToString();
 	}
 }

@@ -28,6 +28,21 @@ public class GameManager : NetworkBehaviour {
 		Default,
 		MotionPointFollow,
 	}
+
+	public enum Difficulty
+	{
+		Beginner,
+		Intermediate,
+		Expert,
+	}
+
+	public enum SphereVisibility
+	{
+		Visible,
+		FadeAfterStartLevel,
+		Invisible,
+	}
+
 	/// <summary>
 	/// The level data
 	/// </summary>
@@ -64,17 +79,45 @@ public class GameManager : NetworkBehaviour {
 		/// </summary>
 		[Tooltip("Whether the ready animation is displayed at the beginning of this level")]
 		public bool readyAnimation = false;
+		/// <summary>
+		/// The behaviour of the sphere during the level
+		/// </summary>
+		[Tooltip("The behaviour of the sphere visibility during the level")]
+		public SphereVisibility sphereVisibility = SphereVisibility.Visible;
+		/// <summary>
+		/// Mass modification enabled
+		/// </summary>
+		[Tooltip("Is mass modification enabled ?")]
+		public bool massModification = true;
 	}
 
 	public static GameManager singleton { get; private set; }
 
 	/// <summary>
-	/// Array displaying the data of all the levels that will be played
+	/// Array displaying the data of all the beginner levels that will be played
 	/// </summary>
-	[Tooltip("Array displaying the data of all the levels that will be played")]
-	public Level[] levels;
+	[Tooltip("Array displaying the data of all the beginner levels that will be played")]
+	public Level[] beginnerLevels;
+
 	/// <summary>
-	/// Whether the game is paused or not
+	/// Array displaying the data of all the intermediate levels that will be played
+	/// </summary>
+	[Tooltip("Array displaying the data of all the intermediate levels that will be played")]
+	public Level[] intermediateLevels;
+
+	/// <summary>
+	/// Array displaying the data of all the expert levels that will be played
+	/// </summary>
+	[Tooltip("Array displaying the data of all the expert levels that will be played")]
+	public Level[] expertLevels;
+
+	/// <summary>
+	/// The difficulty of the game
+	/// </summary>
+	[Tooltip("The difficulty of the game")]
+	[SyncVar] public Difficulty difficulty = Difficulty.Beginner;
+	/// <summary>
+	/// Whether the game is paused or not.
 	/// </summary>
 	[Tooltip("Is the game paused ?")]
 	[SyncVar] public bool paused = true;
@@ -128,11 +171,19 @@ public class GameManager : NetworkBehaviour {
 	{
 		if (isServer) {
 			StopTime ();
-			time = levels [currentLevelIndex].time;
+			time = this.GetCurrentLevels() [currentLevelIndex].time;
 			StartTime ();
 			paused = false;
+			if (OnLevelStarted != null)
+				OnLevelStarted ();
+			RpcLevelStarted ();
 		}
-		if (OnLevelStarted != null)
+	}
+
+	[ClientRpc]
+	void RpcLevelStarted()
+	{
+		if (!isServer && OnLevelStarted != null)
 			OnLevelStarted ();
 	}
 
@@ -141,7 +192,8 @@ public class GameManager : NetworkBehaviour {
 	{
 		var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
 		if (GetCurrentLevel ().readyAnimation && readySetGo != null && readySetGo.GetComponent<Animator>() != null) {
-			paused = true;
+			if (isServer)
+				paused = true;
 			readySetGo.GetComponent<Animator>().SetTrigger ("Activation");
 		}
 		else
@@ -202,32 +254,17 @@ public class GameManager : NetworkBehaviour {
 		}
 		paused = true;
 		// If there's a level next, loads the next level when the time is finished
-		if (this.currentLevelIndex + 1 < this.levels.Length) {
+		if (this.currentLevelIndex + 1 < this.GetCurrentLevels().Length) {
 			LoadNextLevel ();
 		}
 	}
-
-	/*
-	void PreloadNextLevel ()
-	{
-		var nextSceneName = this.levels [this.currentLevelIndex + 1].sceneName;
-		var currentSceneName = this.levels [this.currentLevelIndex].sceneName;
-		NetworkSceneManager.singleton.PreLoadLevel (nextSceneName, currentSceneName);
-	}
-
-	void ActivatePreloadedLevel ()
-	{
-		NetworkSceneManager.singleton.ActivatePreloadedLevel ();
-		this.currentLevelIndex++;
-	}
-	*/
 
 	// Load the next level
 	[Server]
 	void LoadNextLevel ()
 	{
 		this.currentLevelIndex++;
-		var nextSceneName = this.levels [this.currentLevelIndex].sceneName;
+		var nextSceneName = this.GetCurrentLevels() [this.currentLevelIndex].sceneName;
 		CustomNetworkLobbyManager.singleton.ServerChangeScene(nextSceneName);
 	}
 
@@ -255,19 +292,38 @@ public class GameManager : NetworkBehaviour {
 	/// <returns>The current level data</returns>
 	public Level GetCurrentLevel()
 	{
-		return this.levels [this.currentLevelIndex];
+		return this.GetCurrentLevels () [this.currentLevelIndex];
 	}
 
-
+	/// <summary>
+	/// Get the levels for the current difficulty
+	/// </summary>
+	/// <returns>Get the levels for the current difficulty.</returns>
+	public Level[] GetCurrentLevels()
+	{
+		switch (difficulty) {
+		case Difficulty.Beginner:
+			return beginnerLevels;
+		case Difficulty.Intermediate:
+			return intermediateLevels;
+		case Difficulty.Expert:
+			return expertLevels;
+		}
+		return null;
+	}
+		
 	public void OnClientSceneChanged()
 	{
-		if (OnLevelStarted != null)
-			OnLevelStarted ();
+		// Do not start level on the first
+		if (currentLevelIndex != 0)
+			StartLevel ();
 	}
 
 	public void OnServerSceneChanged()
 	{
-		StartLevel ();
+		// Do not start level on the first
+		if (currentLevelIndex != 0)
+			StartLevel ();
 	}
 
 	void OnPlayerDisconnected()
@@ -284,5 +340,10 @@ public class GameManager : NetworkBehaviour {
 	void OnAnimationFinished()
 	{
 		ImmediateStartLevel ();
+	}
+
+	void OnDestroy()
+	{
+		Timing.KillAllCoroutines ();
 	}
 }

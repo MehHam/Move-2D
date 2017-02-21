@@ -7,6 +7,8 @@ using UnityEngine.Networking;
 /// <summary>
 /// Set the player mass and displays it
 /// </summary>
+[RequireComponent(typeof(Slider))]
+[RequireComponent(typeof(CanvasGroup))]
 public class MoveSliderUI : MonoBehaviour {
 	/// <summary>
 	/// Text to display the current slider value
@@ -16,6 +18,7 @@ public class MoveSliderUI : MonoBehaviour {
 	Player _player;
 	IEnumerator Start()
 	{
+		SetVisibility ();
 		do {
 			yield return new WaitForEndOfFrame();
 			_player = FindLocalPlayer ();
@@ -38,8 +41,17 @@ public class MoveSliderUI : MonoBehaviour {
 		return null;
 	}
 
+	void SetVisibility()
+	{
+		var massModification = GameManager.singleton.GetCurrentLevel ().massModification;
+		this.GetComponent<CanvasGroup> ().interactable = massModification;
+		this.GetComponent<CanvasGroup> ().blocksRaycasts = massModification;
+		this.GetComponent<CanvasGroup> ().alpha = massModification ? 1.0f : 0.0f;
+	}
+
 	void Update()
 	{
+		SetVisibility ();
 		text.text = (_player != null) ? "Mass: " + this._player.mass.ToString("0.00") : "";
 	}
 }
