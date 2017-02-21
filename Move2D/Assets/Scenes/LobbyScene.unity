@@ -340,31 +340,7 @@ Prefab:
     - target: {fileID: 114959304339048660, guid: d452712503b114cc1a33b1f89fcb7081,
         type: 2}
       propertyPath: m_Text
-      value: 127.0.0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114664114279869672, guid: d452712503b114cc1a33b1f89fcb7081,
-        type: 2}
-      propertyPath: m_Text
-      value: 127.0.0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1332419831319028, guid: d452712503b114cc1a33b1f89fcb7081, type: 2}
-      propertyPath: m_Name
-      value: 'NetworkIpAddress:'
-      objectReference: {fileID: 0}
-    - target: {fileID: 114177927212397956, guid: d452712503b114cc1a33b1f89fcb7081,
-        type: 2}
-      propertyPath: m_Text
-      value: 'Current Ip Address:'
-      objectReference: {fileID: 0}
-    - target: {fileID: 224064790791708328, guid: d452712503b114cc1a33b1f89fcb7081,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 301
-      objectReference: {fileID: 0}
-    - target: {fileID: 224060788512602342, guid: d452712503b114cc1a33b1f89fcb7081,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 1219.5
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d452712503b114cc1a33b1f89fcb7081, type: 2}
