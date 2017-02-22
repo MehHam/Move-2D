@@ -98,69 +98,21 @@ public class CustomNetworkLobbyManager : LobbyManager {
 			onClientDisconnect (msg);
 	}
 
-	/*
-	public override void OnLobbyServerPlayersReady ()
+	public override bool OnLobbyServerSceneLoadedForPlayer (GameObject lobbyPlayer, GameObject gamePlayer)
 	{
-		bool allready = true;
-		for(int i = 0; i < lobbySlots.Length; ++i)
-		{
-			if(lobbySlots[i] != null)
-				allready &= lobbySlots[i].readyToBegin;
-		}
+		var res = base.OnLobbyServerSceneLoadedForPlayer (lobbyPlayer, gamePlayer);
+		var players = GameObject.FindObjectsOfType<Player> ();
 
-		if(allready)
-			Timing.RunCoroutine(ServerCountdownPreloadCoroutine());
-	}
-
-	public IEnumerator ServerCountdownPreloadCoroutine()
-	{
-		float remainingTime = prematchCountdown;
-		int floorTime = Mathf.FloorToInt(remainingTime);
-
-		NetworkSceneManager.singleton.PreLoadLevel (playScene, SceneManager.GetActiveScene().name);
-
-		while (remainingTime > 0)
-		{
-			yield return null;
-
-			remainingTime -= Time.deltaTime;
-			int newFloorTime = Mathf.FloorToInt(remainingTime);
-
-			if (newFloorTime != floorTime)
-			{//to avoid flooding the network of message, we only send a notice to client when the number of plain seconds change.
-				floorTime = newFloorTime;
-
-				for (int i = 0; i < lobbySlots.Length; ++i)
-				{
-					if (lobbySlots[i] != null)
-					{//there is maxPlayer slots, so some could be == null, need to test it before accessing!
-						Debug.LogError("?");
-						(lobbySlots[i] as LobbyPlayer).RpcUpdateCountdown(floorTime);
-					}
-				}
+		if (players.Length == NetworkServer.connections.Count) {
+			for (int i = 0; i < players.Length; i++) {
+				float slice = 2 * Mathf.PI / players.Length;
+				float angle = slice * i;
+				float x = Mathf.Cos (angle) * 15.0f;
+				float y = Mathf.Sin (angle) * 15.0f;
+				players [i].GetComponent<Rigidbody2D> ().position = new Vector2 (x, y);
+				Debug.Log (players [i].GetComponent<Rigidbody2D> ().position);
 			}
 		}
-
-		for (int i = 0; i < lobbySlots.Length; ++i)
-		{
-			if (lobbySlots[i] != null)
-			{
-				(lobbySlots[i] as LobbyPlayer).RpcUpdateCountdown(0);
-			}
-		}
-		NetworkSceneManager.singleton.ActivatePreloadedLevel ();
+		return res;
 	}
-
-	void OnClientLevelLoaded(string sceneName)
-	{
-		Debug.LogError ("ClientLevelLoaded");
-		OnClientSceneChanged (client.connection);
-	}
-
-	void OnServerLevelLoaded(string sceneName)
-	{
-		Debug.LogError ("Server Level Loaded");
-		OnServerSceneChanged (sceneName);
-	}
-*/
 }

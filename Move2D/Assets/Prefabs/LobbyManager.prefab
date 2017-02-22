@@ -3090,13 +3090,14 @@ MonoBehaviour:
   m_LogLevel: 2
   m_PlayerPrefab: {fileID: 152500, guid: d22ac2d178f5c77479045c14ee50ffbd, type: 2}
   m_AutoCreatePlayer: 1
-  m_PlayerSpawnMethod: 0
+  m_PlayerSpawnMethod: 1
   m_OfflineScene: LobbyScene
   m_OnlineScene: 
   m_SpawnPrefabs:
   - {fileID: 152844, guid: a02cd56951325b645973551f0bae4cc0, type: 2}
   - {fileID: 183040, guid: 8e2fd6ae2a6f8ca4d82ba8f4b11d045d, type: 2}
   - {fileID: 191588, guid: 2695905c03858a142b36e1fe3c406864, type: 2}
+  - {fileID: 1975468176997332, guid: 141870fd06f6544518af4e98304b730b, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -3126,7 +3127,7 @@ MonoBehaviour:
     m_ReactorMaximumReceivedMessages: 1024
     m_ReactorMaximumSentMessages: 1024
     m_MaxPacketSize: 2000
-  m_Channels: 
+  m_Channels: 0500000000000000
   m_UseWebSockets: 0
   m_UseSimulator: 0
   m_SimulatedLatency: 1

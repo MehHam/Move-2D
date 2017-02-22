@@ -137,7 +137,6 @@ public class SphereCDM : NetworkBehaviour
 		while ( (alphaValue >= 0.0f && fadingOut) || (alphaValue <= 1.0f && !fadingOut)) 
 		{
 			alphaValue += Time.deltaTime * fadingOutSpeed;
-			Debug.Log (alphaValue);
 
 			for (int i = 0; i < rendererObjects.Length; i++)
 			{

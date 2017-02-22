@@ -117,7 +117,7 @@ public class GameManager : NetworkBehaviour {
 	/// <value><c>true</c> if invisible sphere; otherwise, <c>false</c>.</value>
 	public bool invisibleSphere { get { return (this.GetCurrentLevel ().sphereVisibility == SphereVisibility.Invisible ||
 		this.GetCurrentLevel ().sphereVisibility == SphereVisibility.FadeAfterStartLevel);
-		} private set { } }
+		} }
 
 	/// <summary>
 	/// The difficulty of the game
