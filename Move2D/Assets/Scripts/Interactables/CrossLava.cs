@@ -23,6 +23,8 @@ public class CrossLava : NetworkBehaviour, IInteractable {
 	{
 		GameManager.singleton.DecreaseScore ();
 		_coroutineHandle = Timing.RunCoroutine (ScoreCooldown ());
+		sphere.DamageAnimation ();
+		sphere.RpcDamageAnimation ();
 	}
 
 	[Server]
@@ -30,7 +32,7 @@ public class CrossLava : NetworkBehaviour, IInteractable {
 	{
 		if (!_cooldown) {
 			GameManager.singleton.DecreaseScore ();
-			Timing.RunCoroutine (ScoreCooldown());
+			Timing.RunCoroutine (ScoreCooldown ());
 		}
 	}
 
@@ -39,6 +41,12 @@ public class CrossLava : NetworkBehaviour, IInteractable {
 	{
 		if (_coroutineHandle != null)
 			Timing.KillCoroutines (_coroutineHandle);
+		sphere.StopDamageAnimation ();
+		sphere.RpcStopDamageAnimation ();
+		if (GameManager.singleton.invisibleSphere) {
+			sphere.FadeOut ();
+			sphere.RpcFadeOut ();
+		}
 	}
 	#endregion
 

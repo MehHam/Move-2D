@@ -318,6 +318,9 @@ GameObject:
   - component: {fileID: 224187362573245966}
   - component: {fileID: 95676476383381422}
   - component: {fileID: 114040118818993942}
+  - component: {fileID: 114167016064413574}
+  - component: {fileID: 114207332056551384}
+  - component: {fileID: 114062043742604820}
   m_Layer: 5
   m_Name: ReadyImages
   m_TagString: Untagged
@@ -557,6 +560,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e545166e15542ce971d0f6a7a85caf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114062043742604820
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1520366417657790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 147
+    i1: 138
+    i2: 33
+    i3: 34
+    i4: 27
+    i5: 31
+    i6: 228
+    i7: 60
+    i8: 185
+    i9: 202
+    i10: 128
+    i11: 229
+    i12: 110
+    i13: 171
+    i14: 10
+    i15: 203
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114063128387709104
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -609,6 +644,57 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 0 %
+--- !u!114 &114167016064413574
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1520366417657790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 147
+    i1: 138
+    i2: 33
+    i3: 34
+    i4: 27
+    i5: 31
+    i6: 228
+    i7: 60
+    i8: 185
+    i9: 202
+    i10: 128
+    i11: 229
+    i12: 110
+    i13: 171
+    i14: 10
+    i15: 203
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &114207332056551384
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1520366417657790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1590678366, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 95676476383381422}
+  m_ParameterSendBits: 1
+  param0: 
+  param1: 
+  param2: 
+  param3: 
+  param4: 
+  param5: 
 --- !u!114 &114208096333567704
 MonoBehaviour:
   m_ObjectHideFlags: 1

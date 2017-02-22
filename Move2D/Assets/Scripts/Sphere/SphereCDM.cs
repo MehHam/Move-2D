@@ -37,6 +37,29 @@ public class SphereCDM : NetworkBehaviour
 
 	// store colors
 	private Color[] _colors;
+	private IEnumerator _routine = null;
+
+
+	// ----------------- Events ------------------
+
+	void OnEnable()
+	{
+		GameManager.OnLevelStarted += OnLevelStarted;
+	}
+
+	void OnDisable()
+	{
+		GameManager.OnLevelStarted -= OnLevelStarted;
+	}
+
+	void OnLevelStarted()
+	{
+		Debug.Log ("OnLevelStartedCalled");
+		SphereVisibility ();
+	}
+
+	// ----------------- Collider Events ------------------
+
 
 	// Called whenever the sphere enters a trigger
 	[ServerCallback]
@@ -61,6 +84,11 @@ public class SphereCDM : NetworkBehaviour
 		if (other.gameObject.GetComponent<IInteractable> () != null)
 			other.gameObject.GetComponent<IInteractable> ().OnExitEffect (this);
 	}
+
+
+
+	// ----------------- Fading ------------------
+		
 
 	// check the alpha value of most opaque object
 	float MaxAlpha()
@@ -101,8 +129,7 @@ public class SphereCDM : NetworkBehaviour
 		{
 			rendererObjects[i].enabled = true;
 		}
-
-
+			
 		// get current max alpha
 		float alphaValue = MaxAlpha();  
 
@@ -136,33 +163,47 @@ public class SphereCDM : NetworkBehaviour
 
 	void FadeIn (float newFadeTime)
 	{
-		StopAllCoroutines ();
-		StartCoroutine(FadeSequence(newFadeTime)); 
+		if (_routine != null)
+			StopCoroutine (_routine);
+		_routine = FadeSequence (newFadeTime);
+		StartCoroutine(_routine); 
 	}
 
-	void FadeIn ()
+	/// <summary>
+	/// Fades the sphere in
+	/// </summary>
+	public void FadeIn ()
 	{
 		FadeIn (fadeInTime);
 	}
 
 	void FadeOut (float newFadeTime)
 	{
-		StopAllCoroutines ();
-		StartCoroutine(FadeSequence(-newFadeTime)); 
+		if (_routine != null)
+			StopCoroutine (_routine);
+		_routine = FadeSequence (-newFadeTime);
+		StartCoroutine (_routine); 
 	}
 
-	void FadeOut ()
+	/// <summary>
+	/// Fades the sphere out
+	/// </summary>
+	public void FadeOut ()
 	{
 		FadeOut (fadeOutTime);
 	}
 
-	[ClientRpc]
-	/// <summary>
-	/// Request to the client to blink this instance
-	/// </summary>
-	public void RpcBlink()
+	IEnumerator PulsateRoutine()
 	{
-		Blink ();
+		var color = this.GetComponent<Renderer> ().material.color;
+		this.GetComponent<Renderer> ().material.color = new Color (color.r, color.g, color.b, 0.5f);
+
+		while (true) {
+			FadeIn (0.5f);
+			yield return new WaitForSeconds (0.25f);
+			FadeOut (0.5f);
+			yield return new WaitForSeconds (0.25f);
+		}
 	}
 
 	/// <summary>
@@ -178,6 +219,24 @@ public class SphereCDM : NetworkBehaviour
 		FadeOut (blinkDuration);
 	}
 
+	/// <summary>
+	/// Start the damage animation
+	/// </summary>
+	public void DamageAnimation()
+	{
+		StartCoroutine (PulsateRoutine());
+	}
+
+	/// <summary>
+	/// Stop the damage animation
+	/// </summary>
+	public void StopDamageAnimation()
+	{
+		StopAllCoroutines ();
+		var color = this.GetComponent<Renderer> ().material.color;
+		this.GetComponent<Renderer> ().material.color = new Color (color.r, color.g, color.b, 1.0f);
+	}
+
 	IEnumerator FadeAtStartLevel()
 	{
 		Debug.Log ("Fade At Start Level");
@@ -185,36 +244,67 @@ public class SphereCDM : NetworkBehaviour
 		FadeOut ();
 	}
 
-	void OnEnable()
-	{
-		GameManager.OnLevelStarted += OnLevelStarted;
-	}
-
-	void OnDisable()
-	{
-		GameManager.OnLevelStarted -= OnLevelStarted;
-	}
-
 	void SphereVisibility()
 	{
 		var color = this.GetComponent<Renderer> ().material.color;
 		switch (GameManager.singleton.GetCurrentLevel ().sphereVisibility) {
-			case GameManager.SphereVisibility.Visible:
-				this.GetComponent<Renderer> ().material.color =
+		case GameManager.SphereVisibility.Visible:
+			this.GetComponent<Renderer> ().material.color =
 				new Vector4 (color.r, color.g, color.b, 1.0f);
-				break;
-			case GameManager.SphereVisibility.FadeAfterStartLevel:
-				StartCoroutine(FadeAtStartLevel ());
-				break;
-			case GameManager.SphereVisibility.Invisible:
-				FadeOut ();
-				break;
+			break;
+		case GameManager.SphereVisibility.FadeAfterStartLevel:
+			StartCoroutine(FadeAtStartLevel ());
+			break;
+		case GameManager.SphereVisibility.Invisible:
+			FadeOut ();
+			break;
 		}
 	}
 
-	void OnLevelStarted()
+	// ----------------- Client RPC ------------------
+
+	[ClientRpc]
+	/// <summary>
+	/// Call to the client to fade the sphere in
+	/// </summary>
+	public void RpcFadeIn()
 	{
-		Debug.Log ("OnLevelStartedCalled");
-		SphereVisibility ();
+		FadeIn ();
+	}
+
+	[ClientRpc]
+	/// <summary>
+	/// Request to the client to stop the damage animation
+	/// </summary>
+	public void RpcStopDamageAnimation()
+	{
+		StopDamageAnimation ();
+	}
+
+	[ClientRpc]
+	/// <summary>
+	/// Request to the client to start the damage animation
+	/// </summary>
+	public void RpcDamageAnimation()
+	{
+		DamageAnimation ();
+	}
+
+	[ClientRpc]
+	/// <summary>
+	/// Request to the client to blink this instance
+	/// </summary>
+	public void RpcBlink()
+	{
+		Blink ();
+	}
+		
+	[ClientRpc]
+	/// <summary>
+	/// Call to the client to fade the sphere out
+	/// </summary>
+	public void RpcFadeOut()
+	{
+		FadeOut ();
 	}
 }

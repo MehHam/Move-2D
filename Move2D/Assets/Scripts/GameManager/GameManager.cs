@@ -112,6 +112,14 @@ public class GameManager : NetworkBehaviour {
 	public Level[] expertLevels;
 
 	/// <summary>
+	/// Gets a value indicating whether this <see cref="GameManager"/> has an invisible sphere.
+	/// </summary>
+	/// <value><c>true</c> if invisible sphere; otherwise, <c>false</c>.</value>
+	public bool invisibleSphere { get { return (this.GetCurrentLevel ().sphereVisibility == SphereVisibility.Invisible ||
+		this.GetCurrentLevel ().sphereVisibility == SphereVisibility.FadeAfterStartLevel);
+		} private set { } }
+
+	/// <summary>
 	/// The difficulty of the game
 	/// </summary>
 	[Tooltip("The difficulty of the game")]
@@ -192,9 +200,9 @@ public class GameManager : NetworkBehaviour {
 	{
 		var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
 		if (GetCurrentLevel ().readyAnimation && readySetGo != null && readySetGo.GetComponent<Animator>() != null) {
-			if (isServer)
-				paused = true;
-			readySetGo.GetComponent<Animator>().SetTrigger ("Activation");
+			paused = true;
+			readySetGo.GetComponent<Animator> ().SetTrigger ("Activation");
+			readySetGo.GetComponent<NetworkAnimator>().SetTrigger ("Activation");
 		}
 		else
 			ImmediateStartLevel ();
@@ -311,17 +319,13 @@ public class GameManager : NetworkBehaviour {
 		}
 		return null;
 	}
-		
+
 	public void OnClientSceneChanged()
 	{
-		// Do not start level on the first
-		if (currentLevelIndex != 0)
-			StartLevel ();
 	}
 
 	public void OnServerSceneChanged()
 	{
-		// Do not start level on the first
 		if (currentLevelIndex != 0)
 			StartLevel ();
 	}

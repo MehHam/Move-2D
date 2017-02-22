@@ -156,9 +156,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitTimeUntilFade: 5
-  fadeInTime: 10
-  fadeOutTime: 10
+  fadeInTime: 0.5
+  fadeOutTime: 5
   blinkDuration: 0.5
+  maxBlinkAlpha: 0.5
 --- !u!212 &212445998365808830
 SpriteRenderer:
   m_ObjectHideFlags: 1
