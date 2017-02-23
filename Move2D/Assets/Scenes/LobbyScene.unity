@@ -342,6 +342,16 @@ Prefab:
       propertyPath: m_Text
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 114634318891947548, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AutoCreatePlayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114634318891947548, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_CustomConfig
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d452712503b114cc1a33b1f89fcb7081, type: 2}
   m_IsPrefabParent: 0

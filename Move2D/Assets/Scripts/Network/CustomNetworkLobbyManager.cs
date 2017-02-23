@@ -10,6 +10,11 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class CustomNetworkLobbyManager : LobbyManager {
 	public delegate void ClientEvent(NetworkMessage msg);
+	public delegate void SceneLoadedEvent(GameObject lobbyPlayer, GameObject gamePlayer);
+	/// <summary>
+	/// Occurs when a  scene loaded.
+	/// </summary>
+	public static event SceneLoadedEvent onClientSceneLoaded;
 	/// <summary>
 	/// Event called whenever a client disconnect
 	/// </summary>
@@ -96,23 +101,5 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	{
 		if (onClientDisconnect != null)
 			onClientDisconnect (msg);
-	}
-
-	public override bool OnLobbyServerSceneLoadedForPlayer (GameObject lobbyPlayer, GameObject gamePlayer)
-	{
-		var res = base.OnLobbyServerSceneLoadedForPlayer (lobbyPlayer, gamePlayer);
-		var players = GameObject.FindObjectsOfType<Player> ();
-
-		if (players.Length == NetworkServer.connections.Count) {
-			for (int i = 0; i < players.Length; i++) {
-				float slice = 2 * Mathf.PI / players.Length;
-				float angle = slice * i;
-				float x = Mathf.Cos (angle) * 15.0f;
-				float y = Mathf.Sin (angle) * 15.0f;
-				players [i].GetComponent<Rigidbody2D> ().position = new Vector2 (x, y);
-				Debug.Log (players [i].GetComponent<Rigidbody2D> ().position);
-			}
-		}
-		return res;
 	}
 }

@@ -119,6 +119,16 @@ public class GameManager : NetworkBehaviour {
 		this.GetCurrentLevel ().sphereVisibility == SphereVisibility.FadeAfterStartLevel);
 		} }
 
+
+	private Player[] _players;
+
+	public const float arenaRadius = 16.0f;
+
+	/// <summary>
+	/// Has the game started or not
+	/// </summary>
+	[Tooltip("Has the game started ?")]
+	[SyncVar] public bool gameStarted = false;
 	/// <summary>
 	/// The difficulty of the game
 	/// </summary>
@@ -147,15 +157,19 @@ public class GameManager : NetworkBehaviour {
 
 	void OnEnable()
 	{
+		Debug.Log ("On enable");
 		//NetworkSceneManager.OnClientLevelLoaded += OnLevelFinishedLoading;
 		//NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
+		CustomNetworkLobbyManager.onClientSceneLoaded += OnClientSceneLoaded;
 		ReadySetGo.onAnimationFinished += OnAnimationFinished;
 	}
 
 	void OnDisable()
 	{
+		Debug.Log ("On disable");
 		//NetworkSceneManager.OnClientLevelLoaded += OnLevelFinishedLoading;
 		//NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
+		CustomNetworkLobbyManager.onClientSceneLoaded -= OnClientSceneLoaded;
 		ReadySetGo.onAnimationFinished -= OnAnimationFinished;
 	}
 
@@ -169,8 +183,10 @@ public class GameManager : NetworkBehaviour {
 		}
 	}
 
+	[Server]
 	void Start()
 	{
+		_players = GameObject.FindObjectsOfType<Player> ();
 		StartLevel ();
 	}
 
@@ -182,6 +198,7 @@ public class GameManager : NetworkBehaviour {
 			time = this.GetCurrentLevels() [currentLevelIndex].time;
 			StartTime ();
 			paused = false;
+			gameStarted = true;
 			if (OnLevelStarted != null)
 				OnLevelStarted ();
 			RpcLevelStarted ();
@@ -273,6 +290,7 @@ public class GameManager : NetworkBehaviour {
 	{
 		this.currentLevelIndex++;
 		var nextSceneName = this.GetCurrentLevels() [this.currentLevelIndex].sceneName;
+		gameStarted = false;
 		CustomNetworkLobbyManager.singleton.ServerChangeScene(nextSceneName);
 	}
 
@@ -349,5 +367,10 @@ public class GameManager : NetworkBehaviour {
 	void OnDestroy()
 	{
 		Timing.KillAllCoroutines ();
+	}
+
+	[Server]
+	void OnClientSceneLoaded(GameObject lobbyPlayer, GameObject gamePlayer)
+	{
 	}
 }

@@ -118,7 +118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   beginnerLevels:
   - index: 1
-    time: 60
+    time: 5
     sceneName: Level0
     gameMode: 0
     motionMode: 0
@@ -159,6 +159,7 @@ MonoBehaviour:
     massModification: 0
   intermediateLevels: []
   expertLevels: []
+  gameStarted: 0
   difficulty: 0
   paused: 1
   currentLevelIndex: 0
