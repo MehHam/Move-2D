@@ -35,11 +35,26 @@ public class Player : NetworkBehaviour {
 	void OnEnable()
 	{
 		CustomNetworkLobbyManager.onClientDisconnect += OnClientDisconnect;
+		GameManager.onClientSceneChanged += OnClientSceneChanged;
 	}
 
 	void OnDisable()
 	{
 		CustomNetworkLobbyManager.onClientDisconnect -= OnClientDisconnect;
+		GameManager.onClientSceneChanged -= OnClientSceneChanged;
+	}
+		
+	void OnClientSceneChanged (NetworkConnection conn)
+	{
+		if (isLocalPlayer)
+			CmdRespawn ();
+	}
+
+	[ClientRpc]
+	public void RpcSetPosition(Vector2 position)
+	{
+		Debug.Log ("RpcSetPosition called : " + position);
+		this.GetComponent<Rigidbody2D> ().position = position;
 	}
 
 	/// <summary>
@@ -52,10 +67,21 @@ public class Player : NetworkBehaviour {
 		mass = value;
 	}
 
+	[Command]
+	public void CmdRespawn(){
+		var transform = NetworkManager.singleton.GetStartPosition ();
+		var spawnPoint = transform == null ?
+			new Vector3 (DynamicStartPositions.spawnRadius, DynamicStartPositions.spawnRadius) :
+			transform.position;
+		var player = (GameObject)Instantiate (CustomNetworkLobbyManager.singleton.playerPrefab, spawnPoint, Quaternion.identity);
+		NetworkServer.Destroy (this.gameObject);
+		NetworkServer.ReplacePlayerForConnection (this.connectionToClient, player, this.playerControllerId);
+	}
+
 	// Use this for initialization
 	void Start () {
 		this.GetComponent<Renderer> ().material.color = color;
-		DontDestroyOnLoad (this);
+		//DontDestroyOnLoad (this.gameObject);
 	}
 
 	void Update() {

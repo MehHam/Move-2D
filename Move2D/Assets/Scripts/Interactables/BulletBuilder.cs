@@ -32,12 +32,12 @@ public class BulletBuilder: NetworkBehaviour
 
 	void OnEnable()
 	{
-		GameManager.OnLevelStarted += OnLevelStarted;
+		GameManager.onLevelStarted += OnLevelStarted;
 	}
 
 	void OnDisable()
 	{
-		GameManager.OnLevelStarted -= OnLevelStarted;
+		GameManager.onLevelStarted -= OnLevelStarted;
 	}
 
 	IEnumerator<float> RandomPattern()

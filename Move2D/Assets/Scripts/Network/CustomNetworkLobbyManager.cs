@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Prototype.NetworkLobby;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking.NetworkSystem;
 
 /// <summary>
 /// Custom NetworkLobby class
@@ -80,9 +81,23 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	/// </summary>
 	public override void OnServerSceneChanged (string sceneName)
 	{
-		if (!_isMatchmaking && GameManager.singleton != null) {
+		if (!_isMatchmaking && GameManager.singleton != null && GameManager.singleton.currentLevelIndex != 0) {
 			GameManager.singleton.OnServerSceneChanged ();
-		}	
+			Debug.LogError ("ON SERVER SCENE CHANGED");
+			foreach (var playerInfo in this.transform.GetComponentsInChildren<LobbyPlayer>()) {
+				Debug.LogError ("ON SERVER SCENE CHANGED");
+				playerInfo.enabled = true;
+				var startPos = GetStartPosition ();
+				GameObject gamePlayer;
+				if (startPos != null)
+					gamePlayer = (GameObject)Instantiate (gamePlayerPrefab, startPos.position, startPos.rotation);
+				else
+					gamePlayer = (GameObject)Instantiate (gamePlayerPrefab, Vector3.zero, Quaternion.identity);
+				OnLobbyServerSceneLoadedForPlayer (playerInfo.gameObject, gamePlayer);
+				NetworkServer.ReplacePlayerForConnection (playerInfo.connectionToClient, gamePlayer, playerInfo.playerControllerId);
+				playerInfo.enabled = false;
+			}
+		}
 		base.OnServerSceneChanged (sceneName);
 	}
 
@@ -92,9 +107,23 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	public override void OnClientSceneChanged (NetworkConnection conn)
 	{
 		if (!_isMatchmaking && GameManager.singleton != null) {
-			GameManager.singleton.OnClientSceneChanged ();
+			GameManager.singleton.OnClientSceneChanged (conn);
+			/*
+			foreach (var playerController in conn.playerControllers) {
+				Debug.Log (playerController);
+				if (playerController != null) {
+					this.client.Send (MsgType.LobbySceneLoaded, new IntegerMessage (playerController.playerControllerId));
+				}
+			}*/
 		}
 		base.OnClientSceneChanged (conn);
+	}
+
+	public override bool OnLobbyServerSceneLoadedForPlayer (GameObject lobbyPlayer, GameObject gamePlayer)
+	{
+		gamePlayer.GetComponent<Renderer>().material.color = lobbyPlayer.GetComponent<LobbyPlayer> ().playerColor;
+		gamePlayer.GetComponent<Player> ().color = lobbyPlayer.GetComponent<LobbyPlayer> ().playerColor;
+		return true;
 	}
 
 	public void OnClientDisconnectCustom(NetworkMessage msg)

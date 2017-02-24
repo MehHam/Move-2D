@@ -12,11 +12,14 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameManager : NetworkBehaviour {
 	public delegate void GameManagerEvent();
+	public delegate void ClientEvent(NetworkConnection conn);
+
+	public static event ClientEvent onClientSceneChanged;
 
 	/// <summary>
 	/// Event called whenever the level started
 	/// </summary>
-	public static event GameManagerEvent OnLevelStarted;
+	public static event GameManagerEvent onLevelStarted;
 
 	/// <summary>
 	/// All the type of gameMode:
@@ -118,10 +121,7 @@ public class GameManager : NetworkBehaviour {
 	public bool invisibleSphere { get { return (this.GetCurrentLevel ().sphereVisibility == SphereVisibility.Invisible ||
 		this.GetCurrentLevel ().sphereVisibility == SphereVisibility.FadeAfterStartLevel);
 		} }
-
-
-	private Player[] _players;
-
+	
 	public const float arenaRadius = 16.0f;
 
 	/// <summary>
@@ -186,7 +186,6 @@ public class GameManager : NetworkBehaviour {
 	[Server]
 	void Start()
 	{
-		_players = GameObject.FindObjectsOfType<Player> ();
 		StartLevel ();
 	}
 
@@ -199,8 +198,8 @@ public class GameManager : NetworkBehaviour {
 			StartTime ();
 			paused = false;
 			gameStarted = true;
-			if (OnLevelStarted != null)
-				OnLevelStarted ();
+			if (onLevelStarted != null)
+				onLevelStarted ();
 			RpcLevelStarted ();
 		}
 	}
@@ -208,8 +207,8 @@ public class GameManager : NetworkBehaviour {
 	[ClientRpc]
 	void RpcLevelStarted()
 	{
-		if (!isServer && OnLevelStarted != null)
-			OnLevelStarted ();
+		if (!isServer && onLevelStarted != null)
+			onLevelStarted ();
 	}
 
 	// Starts the level
@@ -338,14 +337,19 @@ public class GameManager : NetworkBehaviour {
 		return null;
 	}
 
-	public void OnClientSceneChanged()
+	public void OnClientSceneChanged(NetworkConnection conn)
 	{
+		if (currentLevelIndex != 0 && onClientSceneChanged != null) {
+			onClientSceneChanged (conn);
+		}
 	}
 
 	public void OnServerSceneChanged()
 	{
-		if (currentLevelIndex != 0)
+		if (currentLevelIndex != 0) {
+			FindObjectOfType<DynamicStartPositions> ().SetAllPlayerPositions ();
 			StartLevel ();
+		}
 	}
 
 	void OnPlayerDisconnected()
