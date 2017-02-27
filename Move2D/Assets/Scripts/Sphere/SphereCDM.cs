@@ -44,12 +44,12 @@ public class SphereCDM : NetworkBehaviour
 
 	void OnEnable()
 	{
-		GameManager.OnLevelStarted += OnLevelStarted;
+		GameManager.onLevelStarted += OnLevelStarted;
 	}
 
 	void OnDisable()
 	{
-		GameManager.OnLevelStarted -= OnLevelStarted;
+		GameManager.onLevelStarted -= OnLevelStarted;
 	}
 
 	void OnLevelStarted()

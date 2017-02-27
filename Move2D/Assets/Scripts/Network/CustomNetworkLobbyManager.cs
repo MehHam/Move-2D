@@ -4,27 +4,38 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Prototype.NetworkLobby;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking.NetworkSystem;
 
 /// <summary>
 /// Custom NetworkLobby class
 /// </summary>
 public class CustomNetworkLobbyManager : LobbyManager {
-	public delegate void ClientEvent(NetworkMessage msg);
+	public delegate void NetworkEvent(NetworkConnection conn);
+	public delegate void SceneLoadedEvent(GameObject lobbyPlayer, GameObject gamePlayer);
 	/// <summary>
-	/// Event called whenever a client disconnect
+	/// Occurs when a  scene loaded.
 	/// </summary>
-	public static event ClientEvent onClientDisconnect;
+	public static event SceneLoadedEvent onClientSceneLoaded;
 	/// <summary>
-	/// Event called whenever a client connects
+	/// Event called on client when a client disconnect
 	/// </summary>
-	public static event ClientEvent onClientConnect;
+	public static event NetworkEvent onClientDisconnect;
+	/// <summary>
+	/// Event called on server when a client disconnect
+	/// </summary>
+	public static event NetworkEvent onServerDisconnect;
+	/// <summary>
+	/// Event called on client when a client connects
+	/// </summary>
+	public static event NetworkEvent onClientConnect;
+	/// <summary>
+	/// Event called on server when a client connects
+	/// </summary>
+	public static event NetworkEvent onServerConnect;
 
 	public override NetworkClient StartHost()
 	{
 		var networkClient = base.StartHost ();
-		if (networkClient != null) {
-			networkClient.RegisterHandler (MsgType.Disconnect, OnClientDisconnectCustom);
-		}
 		return networkClient;
 	}
 
@@ -57,13 +68,17 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	}
 
 	/// <summary>
-	/// Called the server is stopped. Destroy the gameManager, display an error message and reset the default lobby scene
+	/// Called when the server is stopped. Destroy the gameManager, display an error message and reset the default lobby scene
 	/// </summary>
 	public override void OnStopServer()
 	{
 		if (!_isMatchmaking && GameManager.singleton != null) {
 			GameObject.Destroy (GameManager.singleton.gameObject);
 			NetworkServer.Destroy (GameManager.singleton.gameObject);
+			// LobbyManager bug fix
+			foreach (var playerInfo in GameObject.FindObjectsOfType<LobbyPlayer> ()) {
+				GameObject.Destroy (playerInfo.gameObject);
+			}
 			infoPanel.Display ("The server was stopped", "OK", null);
 			CustomNetworkLobbyManager.networkSceneName = this.onlineScene;
 		}
@@ -75,10 +90,10 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	/// </summary>
 	public override void OnServerSceneChanged (string sceneName)
 	{
-		if (!_isMatchmaking && GameManager.singleton != null) {
-			GameManager.singleton.OnServerSceneChanged ();
-		}	
 		base.OnServerSceneChanged (sceneName);
+		if (!_isMatchmaking && GameManager.singleton != null && GameManager.singleton.currentLevelIndex != 0) {
+			GameManager.singleton.OnServerSceneChanged ();
+		}
 	}
 
 	/// <summary>
@@ -86,33 +101,46 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	/// </summary>
 	public override void OnClientSceneChanged (NetworkConnection conn)
 	{
-		if (!_isMatchmaking && GameManager.singleton != null) {
-			GameManager.singleton.OnClientSceneChanged ();
-		}
 		base.OnClientSceneChanged (conn);
-	}
-
-	public void OnClientDisconnectCustom(NetworkMessage msg)
-	{
-		if (onClientDisconnect != null)
-			onClientDisconnect (msg);
+		if (!_isMatchmaking && GameManager.singleton != null) {
+			GameManager.singleton.OnClientSceneChanged (conn);
+		}
 	}
 
 	public override bool OnLobbyServerSceneLoadedForPlayer (GameObject lobbyPlayer, GameObject gamePlayer)
 	{
-		var res = base.OnLobbyServerSceneLoadedForPlayer (lobbyPlayer, gamePlayer);
-		var players = GameObject.FindObjectsOfType<Player> ();
+		gamePlayer.GetComponent<Renderer>().material.color = lobbyPlayer.GetComponent<LobbyPlayer> ().playerColor;
+		gamePlayer.GetComponent<Player> ().playerName = lobbyPlayer.GetComponent<LobbyPlayer> ().playerName;
+		gamePlayer.GetComponent<Player> ().color = lobbyPlayer.GetComponent<LobbyPlayer> ().playerColor;
+		gamePlayer.GetComponent<Player> ().playerInfo.playerControllerId = lobbyPlayer.GetComponent<LobbyPlayer> ().playerControllerId;
+		return true;
+	}
 
-		if (players.Length == NetworkServer.connections.Count) {
-			for (int i = 0; i < players.Length; i++) {
-				float slice = 2 * Mathf.PI / players.Length;
-				float angle = slice * i;
-				float x = Mathf.Cos (angle) * 15.0f;
-				float y = Mathf.Sin (angle) * 15.0f;
-				players [i].GetComponent<Rigidbody2D> ().position = new Vector2 (x, y);
-				Debug.Log (players [i].GetComponent<Rigidbody2D> ().position);
-			}
-		}
-		return res;
+	public override void OnServerDisconnect (NetworkConnection conn)
+	{
+		base.OnServerDisconnect (conn);
+		if (onServerDisconnect != null)
+			onServerDisconnect (conn);
+	}
+
+	public override void OnServerConnect (NetworkConnection conn)
+	{
+		base.OnServerConnect (conn);
+		if (onServerConnect != null)
+			onServerConnect (conn);
+	}
+
+	public override void OnClientDisconnect (NetworkConnection conn)
+	{
+		base.OnClientDisconnect (conn);
+		if (onClientDisconnect != null)
+			onClientDisconnect (conn);
+	}
+
+	public override void OnClientConnect (NetworkConnection conn)
+	{
+		base.OnClientConnect (conn);
+		if (onClientConnect != null)
+			onClientConnect (conn);
 	}
 }
