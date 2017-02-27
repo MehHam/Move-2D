@@ -9,9 +9,27 @@ using UnityEngine.Networking;
 [System.Serializable]
 public struct PlayerInfo
 {
-	[SyncVar] public string name;
+	/// <summary>
+	/// Name of the player
+	/// </summary>
+	[Tooltip("Name of the player")]
+	public string name;
+	/// <summary>
+	/// Mass of the player, used to compute the sphere position
+	/// </summary>
+	[Tooltip("Mass of the player, used to compute the sphere position")]
 	[SyncVar] public Color color;
+	/// <summary>
+	/// Color of the player
+	/// </summary>
+	[Tooltip("Color of the player")]
 	[SyncVar] public float mass;
+
+	/// <summary>
+	/// The player controller identifier.
+	/// </summary>
+	[HideInInspector]
+	public short playerControllerId;
 }
 
 /// <summary>
@@ -19,27 +37,33 @@ public struct PlayerInfo
 /// </summary>
 [RequireComponent(typeof(PlayerMoveManager))]
 public class Player : NetworkBehaviour {
-	
-	[SyncVar]
 	/// <summary>
 	/// All the informations about this player
 	/// </summary>
-	public PlayerInfo playerInfo;
+	[SyncVar] public PlayerInfo playerInfo = new PlayerInfo();
+
 	/// <summary>
 	/// Name of the player
 	/// </summary>
-	[Tooltip("Name of the player")]
-	[SyncVar] public string playerName;
+	public string playerName {
+		get { return playerInfo.name; }
+		set { playerInfo.name = value; }
+	}
 	/// <summary>
 	/// Mass of the player, used to compute the sphere position
 	/// </summary>
-	[Tooltip("Mass of the player, used to compute the sphere position")]
-	[SyncVar] public float mass = 1.0f;
+	public float mass {
+		get { return playerInfo.mass; }
+		set { playerInfo.mass = value; }
+	}
+
 	/// <summary>
 	/// Color of the player
 	/// </summary>
-	[Tooltip("Color of the player")]
-	[SyncVar] public Color color;
+	public Color color {
+		get { return playerInfo.color; }
+		set { playerInfo.color = value; }
+	}
 	/// <summary>
 	/// Is this player the second player ?
 	/// </summary>
@@ -59,6 +83,10 @@ public class Player : NetworkBehaviour {
 		
 	void OnClientSceneChanged (NetworkConnection conn)
 	{
+	}
+
+	void Awake() {
+		playerInfo.mass = 1.0f;
 	}
 
 	[ClientRpc]
@@ -106,7 +134,8 @@ public class Player : NetworkBehaviour {
 		this.GetComponent<Renderer> ().material.color = color;
 	}
 
-	void OnClientDisconnect(NetworkMessage msg) {
-		NetworkServer.Destroy (gameObject);
+	void OnClientDisconnect(NetworkConnection conn) {
+		if (conn == this.connectionToClient)
+			NetworkServer.Destroy (gameObject);
 	}
 }

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.SceneManagement;
+using Prototype.NetworkLobby;
 
 /// <summary>
 /// Class that manages the current state of the game
@@ -93,10 +94,30 @@ public class GameManager : NetworkBehaviour {
 		[Tooltip("Is mass modification enabled ?")]
 		public bool massModification = true;
 	}
+	/// <summary>
+	/// Player information relative to a networkConnection
+	/// </summary>
+	public struct NetworkPlayerInfo
+	{
+		/// <summary>
+		/// Information about a player
+		/// </summary>
+		public PlayerInfo playerInfo;
+		/// <summary>
+		/// A network connection
+		/// </summary>
+		public NetworkConnection networkConnection;
+
+		public NetworkPlayerInfo(PlayerInfo playerInfo, NetworkConnection networkConnection)
+		{
+			this.playerInfo = playerInfo;
+			this.networkConnection = networkConnection;
+		}
+	}
 
 	public static GameManager singleton { get; private set; }
 
-	public List<PlayerInfo> playerInfos;
+	public List<NetworkPlayerInfo> networkPlayersInfo;
 
 	/// <summary>
 	/// Array displaying the data of all the beginner levels that will be played
@@ -162,6 +183,8 @@ public class GameManager : NetworkBehaviour {
 		Debug.Log ("On enable");
 		//NetworkSceneManager.OnClientLevelLoaded += OnLevelFinishedLoading;
 		//NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
+		CustomNetworkLobbyManager.onServerDisconnect += OnServerDisconnect;
+		CustomNetworkLobbyManager.onServerConnect += OnServerConnect;
 		CustomNetworkLobbyManager.onClientSceneLoaded += OnClientSceneLoaded;
 		ReadySetGo.onAnimationFinished += OnAnimationFinished;
 	}
@@ -171,6 +194,8 @@ public class GameManager : NetworkBehaviour {
 		Debug.Log ("On disable");
 		//NetworkSceneManager.OnClientLevelLoaded += OnLevelFinishedLoading;
 		//NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
+		CustomNetworkLobbyManager.onServerConnect -= OnServerConnect;
+		CustomNetworkLobbyManager.onServerDisconnect -= OnServerDisconnect;
 		CustomNetworkLobbyManager.onClientSceneLoaded -= OnClientSceneLoaded;
 		ReadySetGo.onAnimationFinished -= OnAnimationFinished;
 	}
@@ -189,17 +214,15 @@ public class GameManager : NetworkBehaviour {
 	void Start()
 	{
 		StartLevel ();
-		InitPlayerInfo ();
 	}
 
 	void InitPlayerInfo() {
-		playerInfos = new List<PlayerInfo> ();
-		foreach (var player in GameObject.FindGameObjectsWithTag("player")) {
-			var playerInfo = new PlayerInfo ();
-			playerInfo.name = player.GetComponent<Player> ().playerName;
-			playerInfo.mass = player.GetComponent<Player> ().mass;
-			playerInfo.color = player.GetComponent<Player> ().color;
-			playerInfos.Add (playerInfo);
+		networkPlayersInfo = new List<NetworkPlayerInfo> ();
+		foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
+			networkPlayersInfo.Add (
+				new NetworkPlayerInfo(player.GetComponent<Player>().playerInfo,
+				player.GetComponent<Player>().connectionToClient)
+			);
 		}
 	}
 
@@ -207,6 +230,7 @@ public class GameManager : NetworkBehaviour {
 	void ImmediateStartLevel ()
 	{
 		if (isServer) {
+			InitPlayerInfo ();
 			StopTime ();
 			time = this.GetCurrentLevels() [currentLevelIndex].time;
 			StartTime ();
@@ -361,14 +385,39 @@ public class GameManager : NetworkBehaviour {
 	public void OnServerSceneChanged()
 	{
 		if (currentLevelIndex != 0) {
-			FindObjectOfType<DynamicStartPositions> ().SetAllPlayerPositions ();
-			StartLevel ();
+			foreach (var networkPlayerInfo in networkPlayersInfo) {
+				var startPos = NetworkManager.singleton.GetStartPosition ();
+				GameObject gamePlayer;
+				if (startPos != null)
+					gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
+						startPos.position,
+						startPos.rotation);
+				else
+					gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
+						Vector3.zero,
+						Quaternion.identity);
+				Debug.Log (NetworkServer.ReplacePlayerForConnection (networkPlayerInfo.networkConnection,
+					gamePlayer,
+					networkPlayerInfo.playerInfo.playerControllerId));
+				gamePlayer.GetComponent<Player> ().playerInfo = networkPlayerInfo.playerInfo;
+				StartLevel ();
+			}
 		}
 	}
 
-	void OnPlayerDisconnected()
+	void OnServerDisconnect(NetworkConnection conn)
 	{
-		StopTime ();
+		Debug.Log ("On Server Disconnect called");
+		for (int i = networkPlayersInfo.Count - 1; i >= 0; i--) {
+			if (networkPlayersInfo [i].networkConnection == conn)
+				networkPlayersInfo.RemoveAt (i);
+		}
+	}
+
+	void OnServerConnect(NetworkConnection conn)
+	{
+		Debug.Log ("On Server Connect called");
+		InitPlayerInfo ();
 	}
 
 	void OnDisconnectedFromServer()

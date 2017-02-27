@@ -10,27 +10,32 @@ using UnityEngine.Networking.NetworkSystem;
 /// Custom NetworkLobby class
 /// </summary>
 public class CustomNetworkLobbyManager : LobbyManager {
-	public delegate void ClientEvent(NetworkMessage msg);
+	public delegate void NetworkEvent(NetworkConnection conn);
 	public delegate void SceneLoadedEvent(GameObject lobbyPlayer, GameObject gamePlayer);
 	/// <summary>
 	/// Occurs when a  scene loaded.
 	/// </summary>
 	public static event SceneLoadedEvent onClientSceneLoaded;
 	/// <summary>
-	/// Event called whenever a client disconnect
+	/// Event called on client when a client disconnect
 	/// </summary>
-	public static event ClientEvent onClientDisconnect;
+	public static event NetworkEvent onClientDisconnect;
 	/// <summary>
-	/// Event called whenever a client connects
+	/// Event called on server when a client disconnect
 	/// </summary>
-	public static event ClientEvent onClientConnect;
+	public static event NetworkEvent onServerDisconnect;
+	/// <summary>
+	/// Event called on client when a client connects
+	/// </summary>
+	public static event NetworkEvent onClientConnect;
+	/// <summary>
+	/// Event called on server when a client connects
+	/// </summary>
+	public static event NetworkEvent onServerConnect;
 
 	public override NetworkClient StartHost()
 	{
 		var networkClient = base.StartHost ();
-		if (networkClient != null) {
-			networkClient.RegisterHandler (MsgType.Disconnect, OnClientDisconnectCustom);
-		}
 		return networkClient;
 	}
 
@@ -72,7 +77,7 @@ public class CustomNetworkLobbyManager : LobbyManager {
 			NetworkServer.Destroy (GameManager.singleton.gameObject);
 			// LobbyManager bug fix
 			foreach (var playerInfo in GameObject.FindObjectsOfType<LobbyPlayer> ()) {
-				GameObject.Destroy (playerInfo);
+				GameObject.Destroy (playerInfo.gameObject);
 			}
 			infoPanel.Display ("The server was stopped", "OK", null);
 			CustomNetworkLobbyManager.networkSceneName = this.onlineScene;
@@ -88,25 +93,6 @@ public class CustomNetworkLobbyManager : LobbyManager {
 		base.OnServerSceneChanged (sceneName);
 		if (!_isMatchmaking && GameManager.singleton != null && GameManager.singleton.currentLevelIndex != 0) {
 			GameManager.singleton.OnServerSceneChanged ();
-			var playersInfo = GameObject.FindObjectsOfType<LobbyPlayer> ();
-			// When the server is also a client, the Lobby Players are disabled and children of the LobbyManager
-			if (playersInfo.Length == 0)
-				playersInfo = this.transform.GetComponentsInChildren<LobbyPlayer> (true);
-			foreach (var playerInfo in playersInfo) {
-				var playerInfoPreviousState = playerInfo.enabled;
-				// We enable the playerInfo if it wasn't enabled
-				playerInfo.enabled = true;
-				var startPos = GetStartPosition ();
-				GameObject gamePlayer;
-				if (startPos != null)
-					gamePlayer = (GameObject)Instantiate (gamePlayerPrefab, startPos.position, startPos.rotation);
-				else
-					gamePlayer = (GameObject)Instantiate (gamePlayerPrefab, Vector3.zero, Quaternion.identity);
-				Debug.Log(NetworkServer.ReplacePlayerForConnection (playerInfo.connectionToClient, gamePlayer, playerInfo.playerControllerId));
-				OnLobbyServerSceneLoadedForPlayer (playerInfo.gameObject, gamePlayer);
-				// The playerInfo returns to its previous state
-				playerInfo.enabled = playerInfoPreviousState;
-			}
 		}
 	}
 
@@ -126,12 +112,35 @@ public class CustomNetworkLobbyManager : LobbyManager {
 		gamePlayer.GetComponent<Renderer>().material.color = lobbyPlayer.GetComponent<LobbyPlayer> ().playerColor;
 		gamePlayer.GetComponent<Player> ().playerName = lobbyPlayer.GetComponent<LobbyPlayer> ().playerName;
 		gamePlayer.GetComponent<Player> ().color = lobbyPlayer.GetComponent<LobbyPlayer> ().playerColor;
+		gamePlayer.GetComponent<Player> ().playerInfo.playerControllerId = lobbyPlayer.GetComponent<LobbyPlayer> ().playerControllerId;
 		return true;
 	}
 
-	public void OnClientDisconnectCustom(NetworkMessage msg)
+	public override void OnServerDisconnect (NetworkConnection conn)
 	{
+		base.OnServerDisconnect (conn);
+		if (onServerDisconnect != null)
+			onServerDisconnect (conn);
+	}
+
+	public override void OnServerConnect (NetworkConnection conn)
+	{
+		base.OnServerConnect (conn);
+		if (onServerConnect != null)
+			onServerConnect (conn);
+	}
+
+	public override void OnClientDisconnect (NetworkConnection conn)
+	{
+		base.OnClientDisconnect (conn);
 		if (onClientDisconnect != null)
-			onClientDisconnect (msg);
+			onClientDisconnect (conn);
+	}
+
+	public override void OnClientConnect (NetworkConnection conn)
+	{
+		base.OnClientConnect (conn);
+		if (onClientConnect != null)
+			onClientConnect (conn);
 	}
 }

@@ -21,26 +21,4 @@ public class DynamicStartPositions : NetworkBehaviour
 			NetworkServer.Spawn (go);
 		}
 	}
-
-	[Server]
-	/// <summary>
-	/// Sets the positions of all players
-	/// </summary>
-	public void SetAllPlayerPositions()
-	{
-		/*
-		foreach (var connection in NetworkServer.connections) {
-			if (connection != null)
-			{
-				foreach (var player in connection.playerControllers) {
-					var transform = NetworkLobbyManager.singleton.GetStartPosition ();
-					if (transform != null) {
-						Debug.Log ("GetStartPosition");
-						player.gameObject.GetComponent<Player> ().RpcSetPosition (transform.position);
-					}
-				}
-			}
-		}
-		*/
-	}
 }
