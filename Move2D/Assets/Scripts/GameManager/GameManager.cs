@@ -96,6 +96,8 @@ public class GameManager : NetworkBehaviour {
 
 	public static GameManager singleton { get; private set; }
 
+	public List<PlayerInfo> playerInfos;
+
 	/// <summary>
 	/// Array displaying the data of all the beginner levels that will be played
 	/// </summary>
@@ -187,6 +189,18 @@ public class GameManager : NetworkBehaviour {
 	void Start()
 	{
 		StartLevel ();
+		InitPlayerInfo ();
+	}
+
+	void InitPlayerInfo() {
+		playerInfos = new List<PlayerInfo> ();
+		foreach (var player in GameObject.FindGameObjectsWithTag("player")) {
+			var playerInfo = new PlayerInfo ();
+			playerInfo.name = player.GetComponent<Player> ().playerName;
+			playerInfo.mass = player.GetComponent<Player> ().mass;
+			playerInfo.color = player.GetComponent<Player> ().color;
+			playerInfos.Add (playerInfo);
+		}
 	}
 
 	// Starts immediately the level, ignore the ready set go animation

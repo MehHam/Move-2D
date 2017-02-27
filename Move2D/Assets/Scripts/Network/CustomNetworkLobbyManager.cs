@@ -63,13 +63,17 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	}
 
 	/// <summary>
-	/// Called the server is stopped. Destroy the gameManager, display an error message and reset the default lobby scene
+	/// Called when the server is stopped. Destroy the gameManager, display an error message and reset the default lobby scene
 	/// </summary>
 	public override void OnStopServer()
 	{
 		if (!_isMatchmaking && GameManager.singleton != null) {
 			GameObject.Destroy (GameManager.singleton.gameObject);
 			NetworkServer.Destroy (GameManager.singleton.gameObject);
+			// LobbyManager bug fix
+			foreach (var playerInfo in GameObject.FindObjectsOfType<LobbyPlayer> ()) {
+				GameObject.Destroy (playerInfo);
+			}
 			infoPanel.Display ("The server was stopped", "OK", null);
 			CustomNetworkLobbyManager.networkSceneName = this.onlineScene;
 		}
@@ -81,11 +85,16 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	/// </summary>
 	public override void OnServerSceneChanged (string sceneName)
 	{
+		base.OnServerSceneChanged (sceneName);
 		if (!_isMatchmaking && GameManager.singleton != null && GameManager.singleton.currentLevelIndex != 0) {
 			GameManager.singleton.OnServerSceneChanged ();
-			Debug.LogError ("ON SERVER SCENE CHANGED");
-			foreach (var playerInfo in this.transform.GetComponentsInChildren<LobbyPlayer>()) {
-				Debug.LogError ("ON SERVER SCENE CHANGED");
+			var playersInfo = GameObject.FindObjectsOfType<LobbyPlayer> ();
+			// When the server is also a client, the Lobby Players are disabled and children of the LobbyManager
+			if (playersInfo.Length == 0)
+				playersInfo = this.transform.GetComponentsInChildren<LobbyPlayer> (true);
+			foreach (var playerInfo in playersInfo) {
+				var playerInfoPreviousState = playerInfo.enabled;
+				// We enable the playerInfo if it wasn't enabled
 				playerInfo.enabled = true;
 				var startPos = GetStartPosition ();
 				GameObject gamePlayer;
@@ -93,12 +102,12 @@ public class CustomNetworkLobbyManager : LobbyManager {
 					gamePlayer = (GameObject)Instantiate (gamePlayerPrefab, startPos.position, startPos.rotation);
 				else
 					gamePlayer = (GameObject)Instantiate (gamePlayerPrefab, Vector3.zero, Quaternion.identity);
+				Debug.Log(NetworkServer.ReplacePlayerForConnection (playerInfo.connectionToClient, gamePlayer, playerInfo.playerControllerId));
 				OnLobbyServerSceneLoadedForPlayer (playerInfo.gameObject, gamePlayer);
-				NetworkServer.ReplacePlayerForConnection (playerInfo.connectionToClient, gamePlayer, playerInfo.playerControllerId);
-				playerInfo.enabled = false;
+				// The playerInfo returns to its previous state
+				playerInfo.enabled = playerInfoPreviousState;
 			}
 		}
-		base.OnServerSceneChanged (sceneName);
 	}
 
 	/// <summary>
@@ -106,22 +115,16 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	/// </summary>
 	public override void OnClientSceneChanged (NetworkConnection conn)
 	{
+		base.OnClientSceneChanged (conn);
 		if (!_isMatchmaking && GameManager.singleton != null) {
 			GameManager.singleton.OnClientSceneChanged (conn);
-			/*
-			foreach (var playerController in conn.playerControllers) {
-				Debug.Log (playerController);
-				if (playerController != null) {
-					this.client.Send (MsgType.LobbySceneLoaded, new IntegerMessage (playerController.playerControllerId));
-				}
-			}*/
 		}
-		base.OnClientSceneChanged (conn);
 	}
 
 	public override bool OnLobbyServerSceneLoadedForPlayer (GameObject lobbyPlayer, GameObject gamePlayer)
 	{
 		gamePlayer.GetComponent<Renderer>().material.color = lobbyPlayer.GetComponent<LobbyPlayer> ().playerColor;
+		gamePlayer.GetComponent<Player> ().playerName = lobbyPlayer.GetComponent<LobbyPlayer> ().playerName;
 		gamePlayer.GetComponent<Player> ().color = lobbyPlayer.GetComponent<LobbyPlayer> ().playerColor;
 		return true;
 	}

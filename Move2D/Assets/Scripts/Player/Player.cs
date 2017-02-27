@@ -4,10 +4,27 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 /// <summary>
+/// All the informations about a Player
+/// </summary>
+[System.Serializable]
+public struct PlayerInfo
+{
+	[SyncVar] public string name;
+	[SyncVar] public Color color;
+	[SyncVar] public float mass;
+}
+
+/// <summary>
 /// Class used to keep basic informations about the player and manage its behaviour when it's disconnected
 /// </summary>
 [RequireComponent(typeof(PlayerMoveManager))]
 public class Player : NetworkBehaviour {
+	
+	[SyncVar]
+	/// <summary>
+	/// All the informations about this player
+	/// </summary>
+	public PlayerInfo playerInfo;
 	/// <summary>
 	/// Name of the player
 	/// </summary>
@@ -23,10 +40,6 @@ public class Player : NetworkBehaviour {
 	/// </summary>
 	[Tooltip("Color of the player")]
 	[SyncVar] public Color color;
-	/// <summary>
-	/// Am I the local player ?
-	/// </summary>
-	public bool localPlayer = false;
 	/// <summary>
 	/// Is this player the second player ?
 	/// </summary>
@@ -46,8 +59,6 @@ public class Player : NetworkBehaviour {
 		
 	void OnClientSceneChanged (NetworkConnection conn)
 	{
-		if (isLocalPlayer)
-			CmdRespawn ();
 	}
 
 	[ClientRpc]
@@ -68,12 +79,18 @@ public class Player : NetworkBehaviour {
 	}
 
 	[Command]
+	/// <summary>
+	/// Call the server to respawn the player
+	/// </summary>
 	public void CmdRespawn(){
 		var transform = NetworkManager.singleton.GetStartPosition ();
 		var spawnPoint = transform == null ?
 			new Vector3 (DynamicStartPositions.spawnRadius, DynamicStartPositions.spawnRadius) :
 			transform.position;
 		var player = (GameObject)Instantiate (CustomNetworkLobbyManager.singleton.playerPrefab, spawnPoint, Quaternion.identity);
+		player.GetComponent<Player> ().playerName = this.playerName;
+		player.GetComponent<Player> ().mass = this.mass;
+		player.GetComponent<Player> ().color = this.color;
 		NetworkServer.Destroy (this.gameObject);
 		NetworkServer.ReplacePlayerForConnection (this.connectionToClient, player, this.playerControllerId);
 	}
@@ -86,6 +103,7 @@ public class Player : NetworkBehaviour {
 
 	void Update() {
 		this.transform.localScale = new Vector3 (mass, mass, mass);
+		this.GetComponent<Renderer> ().material.color = color;
 	}
 
 	void OnClientDisconnect(NetworkMessage msg) {
