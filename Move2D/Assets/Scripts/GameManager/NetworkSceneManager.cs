@@ -58,7 +58,7 @@ public class NetworkSceneManager : NetworkBehaviour {
 	public void ClientLoadLevelHandler (NetworkMessage netMsg) {
 		Debug.LogError ("Client Loading Next Level");
 		var msg = netMsg.ReadMessage<SceneMessage>();
-		Timing.RunCoroutine (ClientLoadLevelCoroutine (msg.sceneToLoad, msg.sceneToUnload, msg.allowSceneActivation));
+		StartCoroutine (ClientLoadLevelCoroutine (msg.sceneToLoad, msg.sceneToUnload, msg.allowSceneActivation));
 	}
 
 	public void ClientAllowSceneActivationHandler(NetworkMessage msg)
@@ -67,13 +67,13 @@ public class NetworkSceneManager : NetworkBehaviour {
 		_nextLevel.allowSceneActivation = true;
 	}
 
-	public IEnumerator<float> ClientLoadLevelCoroutine (string sceneToLoad, string sceneToUnload, bool allowSceneActivation = true) {
+	public IEnumerator ClientLoadLevelCoroutine (string sceneToLoad, string sceneToUnload, bool allowSceneActivation = true) {
 		if (isServer)
 			yield break;
 		_nextLevel = SceneManager.LoadSceneAsync (sceneToLoad, LoadSceneMode.Additive);
 		_nextLevel.allowSceneActivation = allowSceneActivation;
 		while (!_nextLevel.isDone)
-			yield return 0.0f;
+			yield return null;
 
 		_nextLevel = null;
 
@@ -94,14 +94,14 @@ public class NetworkSceneManager : NetworkBehaviour {
 			OnClientLevelLoaded (sceneToLoad);
 	}
 
-	public IEnumerator<float> ServerLoadLevel (string sceneToLoad, string sceneToUnload, bool allowSceneActivation = true) {
+	public IEnumerator ServerLoadLevel (string sceneToLoad, string sceneToUnload, bool allowSceneActivation = true) {
 		if (allowSceneActivation)
 			NetworkServer.SetAllClientsNotReady ();
 
 		_nextLevel = SceneManager.LoadSceneAsync (sceneToLoad, LoadSceneMode.Additive);
 		_nextLevel.allowSceneActivation =  allowSceneActivation;
 		while (!_nextLevel.isDone)
-			yield return 0.0f;
+			yield return null;
 
 		_nextLevel = null;
 
@@ -110,7 +110,7 @@ public class NetworkSceneManager : NetworkBehaviour {
 		if (sceneToUnload != null) {
 			var async = SceneManager.UnloadSceneAsync (sceneToUnload);
 			while (!async.isDone)
-				yield return 0.0f;
+				yield return null;
 		}
 		if (OnServerLevelLoaded != null)
 			OnServerLevelLoaded (sceneToLoad);
@@ -139,7 +139,7 @@ public class NetworkSceneManager : NetworkBehaviour {
 		msg.sceneToUnload = sceneToUnload;
 		msg.allowSceneActivation = allowSceneActivation;
 		NetworkServer.SendToAll (CustomMsgType.LoadLevel, msg);
-		Timing.RunCoroutine (ServerLoadLevel (sceneToLoad, sceneToUnload, allowSceneActivation));
+		StartCoroutine (ServerLoadLevel (sceneToLoad, sceneToUnload, allowSceneActivation));
 	}
 
 

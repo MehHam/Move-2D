@@ -236,7 +236,7 @@ public class SphereCDM : NetworkBehaviour
 
 	IEnumerator FadeAtStartLevel()
 	{
-		yield return Timing.WaitForSeconds (waitTimeUntilFade);
+		yield return new WaitForSeconds (waitTimeUntilFade);
 		FadeOut ();
 	}
 

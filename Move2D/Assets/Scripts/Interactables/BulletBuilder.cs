@@ -40,17 +40,17 @@ public class BulletBuilder: NetworkBehaviour
 		GameManager.onLevelStarted -= OnLevelStarted;
 	}
 
-	IEnumerator<float> RandomPattern()
+	IEnumerator RandomPattern()
 	{
 		while (true) {
 			SpawnRandom ();
-			yield return Timing.WaitForSeconds (cooldownTime);
+			yield return new WaitForSeconds (cooldownTime);
 		}
 	}
 
 	void OnLevelStarted()
 	{
-		Timing.RunCoroutine (RandomPattern());
+		StartCoroutine (RandomPattern ());
 	}
 
 	void Start()
@@ -81,7 +81,7 @@ public class BulletBuilder: NetworkBehaviour
 	void Spawn(Vector3 position)
 	{
 		var bullet = Instantiate (bulletPrefab, position, Quaternion.identity);
-		bullet.GetComponent<Bullet>().direction = GetDirectionVector (_sphereCDM.transform.position, bullet.transform.position);
+		bullet.GetComponent<Bullet> ().direction = GetDirectionVector (_sphereCDM.transform.position, bullet.transform.position);
 		NetworkServer.Spawn (bullet.gameObject);
 	}
 }

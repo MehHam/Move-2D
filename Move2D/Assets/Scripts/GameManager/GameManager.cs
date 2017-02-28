@@ -119,12 +119,14 @@ public class GameManager : NetworkBehaviour {
 	}
 
 	bool _isReadyToBegin;
+	int _playerReadyToStart = 0;
 
 	public static GameManager singleton { get; private set; }
 
 	public List<NetworkPlayerInfo> networkPlayersInfo = new List<NetworkPlayerInfo>();
 
 	const short MyBeginMsg = MsgType.Highest + 1;
+	const short MyStartMsg = MsgType.Highest + 2;
 
 	/// <summary>
 	/// Array displaying the data of all the beginner levels that will be played
@@ -217,14 +219,15 @@ public class GameManager : NetworkBehaviour {
 		} else {
 			GameManager.singleton = this;
 			DontDestroyOnLoad (this.gameObject);
-			NetworkServer.RegisterHandler (MyBeginMsg, OnServerReadyToBeginMessage);
+			NetworkServer.RegisterHandler (MyBeginMsg, OnServerStartLevelMessage);
+			NetworkServer.RegisterHandler (MyStartMsg, OnServerStartGameMessage);
 		}
 	}
 
-	[Server]
+	[Client]
 	void Start()
 	{
-		StartLevel ();
+		CustomNetworkLobbyManager.singleton.client.Send (MyStartMsg, new EmptyMessage ());
 	}
 
 	void InitPlayerInfo() {
@@ -349,13 +352,11 @@ public class GameManager : NetworkBehaviour {
 	// Wait for all players to be ready, kick all the players that aren't after the timeout
 	IEnumerator WaitForAllPlayersReady(float timeOut)
 	{
-		Debug.Log ("Wait for all players ready");
 		var time = Time.time;
 		// Wait until timeout OR both the players and the server are ready
 		while ((Time.time < time + timeOut) && !AllPlayersReady()) {
 			yield return null;
 		}
-		Debug.Log ("Players are ready");
 		var players = FindObjectsOfType<Player> ();
 		// Kick all players that aren't ready if timeout
 		for (int i = networkPlayersInfo.Count - 1; i >= 0; i--) {
@@ -441,10 +442,21 @@ public class GameManager : NetworkBehaviour {
 	}
 
 	/// <summary>
+	/// Message handler called on the server when a client is ready to start the game
+	/// </summary>
+	/// <param name="netMsg">Net message.</param>
+	public void OnServerStartGameMessage(NetworkMessage netMsg)
+	{
+		this._playerReadyToStart++;
+		if (this._playerReadyToStart == NetworkServer.connections.Count)
+			StartLevel ();
+	}
+
+	/// <summary>
 	/// Message handler called when a client is ready to begin the level
 	/// </summary>
 	/// <param name="netMsg">Network message.</param>
-	public void OnServerReadyToBeginMessage(NetworkMessage netMsg)
+	public void OnServerStartLevelMessage(NetworkMessage netMsg)
 	{
 		for (int i = 0; i < networkPlayersInfo.Count; i++) {
 			if (networkPlayersInfo [i].networkConnection == netMsg.conn)
