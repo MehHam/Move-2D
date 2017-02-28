@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 /// All the informations about a Player
 /// </summary>
 [System.Serializable]
-public struct PlayerInfo
+public class PlayerInfo
 {
 	/// <summary>
 	/// Name of the player
@@ -126,7 +126,6 @@ public class Player : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 		this.GetComponent<Renderer> ().material.color = color;
-		//DontDestroyOnLoad (this.gameObject);
 	}
 
 	void Update() {

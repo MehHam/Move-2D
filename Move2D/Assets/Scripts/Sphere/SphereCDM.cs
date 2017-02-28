@@ -105,7 +105,6 @@ public class SphereCDM : NetworkBehaviour
 	// fade sequence
 	IEnumerator FadeSequence (float fadingOutTime)
 	{
-		Debug.Log ("FadeSequenceStarted");
 		// log fading direction, then precalculate fading speed as a multiplier
 		bool fadingOut = (fadingOutTime < 0.0f);
 		float fadingOutSpeed = 1.0f / fadingOutTime; 
@@ -157,7 +156,6 @@ public class SphereCDM : NetworkBehaviour
 				rendererObjects[i].enabled = false; 
 			}
 		}
-		Debug.Log ("fade sequence end : " + fadingOut);
 	}
 
 	void FadeIn (float newFadeTime)
@@ -238,7 +236,6 @@ public class SphereCDM : NetworkBehaviour
 
 	IEnumerator FadeAtStartLevel()
 	{
-		Debug.Log ("Fade At Start Level");
 		yield return Timing.WaitForSeconds (waitTimeUntilFade);
 		FadeOut ();
 	}

@@ -97,7 +97,7 @@ public class GameManager : NetworkBehaviour {
 	/// <summary>
 	/// Player information relative to a networkConnection
 	/// </summary>
-	public struct NetworkPlayerInfo
+	public class NetworkPlayerInfo
 	{
 		/// <summary>
 		/// Information about a player
@@ -112,12 +112,19 @@ public class GameManager : NetworkBehaviour {
 		{
 			this.playerInfo = playerInfo;
 			this.networkConnection = networkConnection;
+			this.readyToBegin = false;
 		}
+
+		public bool readyToBegin;
 	}
+
+	bool _isReadyToBegin;
 
 	public static GameManager singleton { get; private set; }
 
-	public List<NetworkPlayerInfo> networkPlayersInfo;
+	public List<NetworkPlayerInfo> networkPlayersInfo = new List<NetworkPlayerInfo>();
+
+	const short MyBeginMsg = MsgType.Highest + 1;
 
 	/// <summary>
 	/// Array displaying the data of all the beginner levels that will be played
@@ -146,6 +153,11 @@ public class GameManager : NetworkBehaviour {
 		} }
 	
 	public const float arenaRadius = 16.0f;
+
+	/// <summary>
+	/// After this timeout the server will start the game and kick all clients that didn't send their ready to begin message
+	/// </summary>
+	public float timeOut = 10.0f;
 
 	/// <summary>
 	/// Has the game started or not
@@ -180,7 +192,6 @@ public class GameManager : NetworkBehaviour {
 
 	void OnEnable()
 	{
-		Debug.Log ("On enable");
 		//NetworkSceneManager.OnClientLevelLoaded += OnLevelFinishedLoading;
 		//NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
 		CustomNetworkLobbyManager.onServerDisconnect += OnServerDisconnect;
@@ -191,7 +202,6 @@ public class GameManager : NetworkBehaviour {
 
 	void OnDisable()
 	{
-		Debug.Log ("On disable");
 		//NetworkSceneManager.OnClientLevelLoaded += OnLevelFinishedLoading;
 		//NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
 		CustomNetworkLobbyManager.onServerConnect -= OnServerConnect;
@@ -207,6 +217,7 @@ public class GameManager : NetworkBehaviour {
 		} else {
 			GameManager.singleton = this;
 			DontDestroyOnLoad (this.gameObject);
+			NetworkServer.RegisterHandler (MyBeginMsg, OnServerReadyToBeginMessage);
 		}
 	}
 
@@ -307,11 +318,11 @@ public class GameManager : NetworkBehaviour {
 
 	// The time countdown
 	[Server]
-	IEnumerator<float> DecreaseTime()
+	IEnumerator DecreaseTime()
 	{
 		while (time > 0)
 		{
-			yield return Timing.WaitForSeconds (1);
+			yield return new WaitForSeconds (1.0f);
 			time--;
 		}
 		paused = true;
@@ -321,14 +332,57 @@ public class GameManager : NetworkBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Returns true if the variable readyToBegin is true for all network player info
+	/// </summary>
+	/// <returns><c>true</c>, if players are ready, <c>false</c> otherwise.</returns>
+	bool AllPlayersReady()
+	{
+		foreach (var networkPlayerInfo in networkPlayersInfo)
+		{
+			if (!networkPlayerInfo.readyToBegin)
+				return false;
+		}
+		return _isReadyToBegin;
+	}
+
+	// Wait for all players to be ready, kick all the players that aren't after the timeout
+	IEnumerator WaitForAllPlayersReady(float timeOut)
+	{
+		Debug.Log ("Wait for all players ready");
+		var time = Time.time;
+		// Wait until timeout OR both the players and the server are ready
+		while ((Time.time < time + timeOut) && !AllPlayersReady()) {
+			yield return null;
+		}
+		Debug.Log ("Players are ready");
+		var players = FindObjectsOfType<Player> ();
+		// Kick all players that aren't ready if timeout
+		for (int i = networkPlayersInfo.Count - 1; i >= 0; i--) {
+			if (!networkPlayersInfo [i].readyToBegin) {
+				foreach (var player in players) {
+					if (player.playerControllerId == networkPlayersInfo [i].playerInfo.playerControllerId)
+						player.connectionToClient.Disconnect ();
+				}
+				networkPlayersInfo.RemoveAt (i);
+			} else {
+				// Then we set the player as not ready to begin for the next time a level is loaded
+				networkPlayersInfo [i].readyToBegin = false;
+			}
+		}
+		StartLevel ();
+	}
+
 	// Load the next level
 	[Server]
 	void LoadNextLevel ()
 	{
 		this.currentLevelIndex++;
+		Debug.Log ("current level index = " + this.currentLevelIndex);
 		var nextSceneName = this.GetCurrentLevels() [this.currentLevelIndex].sceneName;
 		gameStarted = false;
 		CustomNetworkLobbyManager.singleton.ServerChangeScene(nextSceneName);
+		StartCoroutine (WaitForAllPlayersReady (this.timeOut));
 	}
 
 	/// <summary>
@@ -337,7 +391,7 @@ public class GameManager : NetworkBehaviour {
 	[Server]
 	public void StartTime()
 	{
-		Timing.RunCoroutine (DecreaseTime());
+		StartCoroutine(DecreaseTime());
 	}
 
 	/// <summary>
@@ -375,17 +429,37 @@ public class GameManager : NetworkBehaviour {
 		return null;
 	}
 
+	/// <summary>
+	/// Event handler called on the client when its scene changed
+	/// </summary>
+	/// <param name="conn">The network connection of the client</param>
 	public void OnClientSceneChanged(NetworkConnection conn)
 	{
-		if (currentLevelIndex != 0 && onClientSceneChanged != null) {
-			onClientSceneChanged (conn);
+		if (onClientSceneChanged != null)
+				onClientSceneChanged (conn);
+		conn.Send (MyBeginMsg, new EmptyMessage ());
+	}
+
+	/// <summary>
+	/// Message handler called when a client is ready to begin the level
+	/// </summary>
+	/// <param name="netMsg">Network message.</param>
+	public void OnServerReadyToBeginMessage(NetworkMessage netMsg)
+	{
+		for (int i = 0; i < networkPlayersInfo.Count; i++) {
+			if (networkPlayersInfo [i].networkConnection == netMsg.conn)
+				networkPlayersInfo [i].readyToBegin = true;
 		}
 	}
 
+	/// <summary>
+	/// Event handler called when the scene is changed for the server
+	/// </summary>
 	public void OnServerSceneChanged()
 	{
 		if (currentLevelIndex != 0) {
 			foreach (var networkPlayerInfo in networkPlayersInfo) {
+				Debug.Log ("Respawn Player");
 				var startPos = NetworkManager.singleton.GetStartPosition ();
 				GameObject gamePlayer;
 				if (startPos != null)
@@ -400,11 +474,15 @@ public class GameManager : NetworkBehaviour {
 					gamePlayer,
 					networkPlayerInfo.playerInfo.playerControllerId));
 				gamePlayer.GetComponent<Player> ().playerInfo = networkPlayerInfo.playerInfo;
-				StartLevel ();
+				_isReadyToBegin = true;
 			}
 		}
 	}
 
+	/// <summary>
+	/// Event handler called on the server when a client disconnects
+	/// </summary>
+	/// <param name="conn">The network connection of the client.</param>
 	void OnServerDisconnect(NetworkConnection conn)
 	{
 		Debug.Log ("On Server Disconnect called");
@@ -414,12 +492,16 @@ public class GameManager : NetworkBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Event handler called on the server when a client connects
+	/// </summary>
+	/// <param name="conn">The network conneciton of the client.</param>
 	void OnServerConnect(NetworkConnection conn)
 	{
 		Debug.Log ("On Server Connect called");
 		InitPlayerInfo ();
 	}
-
+		
 	void OnDisconnectedFromServer()
 	{
 		Destroy (gameObject);
@@ -433,7 +515,7 @@ public class GameManager : NetworkBehaviour {
 
 	void OnDestroy()
 	{
-		Timing.KillAllCoroutines ();
+		StopAllCoroutines ();
 	}
 
 	[Server]
