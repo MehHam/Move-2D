@@ -267,6 +267,9 @@ public class GameManager : NetworkBehaviour {
 	void StartLevel ()
 	{
 		var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
+		var waitingForPlayers = GameObject.FindObjectOfType<UIEllipsisText> ();
+		if (waitingForPlayers != null)
+			waitingForPlayers.Deactivate ();
 		if (GetCurrentLevel ().readyAnimation && readySetGo != null && readySetGo.GetComponent<Animator>() != null) {
 			paused = true;
 			readySetGo.GetComponent<Animator> ().SetTrigger ("Activation");
