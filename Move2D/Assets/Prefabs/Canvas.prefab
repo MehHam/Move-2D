@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 114204826656582056}
   - component: {fileID: 114045447631748214}
   - component: {fileID: 225211448065870920}
-  - component: {fileID: 114549679291679330}
+  - component: {fileID: 114536090841562528}
   m_Layer: 5
   m_Name: WaitingForPlayerText
   m_TagString: Untagged
@@ -1034,6 +1034,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 00
+--- !u!114 &114536090841562528
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1123280236674876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8713f26c140d24f50aaf78c5f9680469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldownTime: 0.5
 --- !u!114 &114540531007410638
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1067,18 +1079,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Mass: 0'
---- !u!114 &114549679291679330
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1123280236674876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a605c7c60392c48e7afa004e4eaacd3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cooldownTime: 0.5
 --- !u!114 &114568855392833638
 MonoBehaviour:
   m_ObjectHideFlags: 1

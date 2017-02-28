@@ -648,7 +648,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1534148017749772
 GameObject:
   m_ObjectHideFlags: 1
@@ -3262,7 +3262,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CANCEL
+  m_Text: OK
 --- !u!114 &114651084828100890
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3552,7 +3552,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: CONNECTING...
+  m_Text: You were disconnected from server
 --- !u!114 &114701847764645100
 MonoBehaviour:
   m_ObjectHideFlags: 1

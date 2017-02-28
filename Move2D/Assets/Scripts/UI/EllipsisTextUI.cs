@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIEllipsisText : MonoBehaviour {
+public class EllipsisTextUI : MonoBehaviour {
 	string _baseText;
 	public float cooldownTime = 0.5f;
 

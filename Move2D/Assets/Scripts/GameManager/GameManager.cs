@@ -259,17 +259,31 @@ public class GameManager : NetworkBehaviour {
 	[ClientRpc]
 	void RpcLevelStarted()
 	{
-		if (!isServer && onLevelStarted != null)
-			onLevelStarted ();
+		if (!isServer) {
+			if (onLevelStarted != null)
+				onLevelStarted ();
+		}
+	}
+
+	[ClientRpc]
+	void RpcReadyToBegin()
+	{
+		DeactivateWaitingForPlayersUI ();
+	}
+
+	void DeactivateWaitingForPlayersUI()
+	{
+		var waitingForPlayers = GameObject.FindObjectOfType<EllipsisTextUI> ();
+		if (waitingForPlayers != null)
+			waitingForPlayers.Deactivate ();
 	}
 
 	// Starts the level
 	void StartLevel ()
 	{
 		var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
-		var waitingForPlayers = GameObject.FindObjectOfType<UIEllipsisText> ();
-		if (waitingForPlayers != null)
-			waitingForPlayers.Deactivate ();
+		DeactivateWaitingForPlayersUI ();
+		RpcReadyToBegin ();
 		if (GetCurrentLevel ().readyAnimation && readySetGo != null && readySetGo.GetComponent<Animator>() != null) {
 			paused = true;
 			readySetGo.GetComponent<Animator> ().SetTrigger ("Activation");
