@@ -9,13 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d4bbf88bba444e4387aa78bd5bd04fe, type: 3}
-  m_Name: BeginnerLevel03
+  m_Name: Level1-05
   m_EditorClassIdentifier: 
-  index: 3
+  index: 5
   time: 30
-  sceneName: Level1
-  gameMode: 0
-  motionMode: 0
+  sceneName: Level4
+  gameMode: 1
+  motionMode: 1
   readyAnimation: 1
   sphereVisibility: 0
   massModification: 0

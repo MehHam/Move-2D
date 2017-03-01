@@ -91,7 +91,7 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	public override void OnServerSceneChanged (string sceneName)
 	{
 		base.OnServerSceneChanged (sceneName);
-		if (!_isMatchmaking && GameManager.singleton != null && GameManager.singleton.currentLevelIndex != 0) {
+		if (!_isMatchmaking && GameManager.singleton != null) {
 			GameManager.singleton.OnServerSceneChanged ();
 		}
 	}

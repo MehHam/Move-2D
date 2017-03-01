@@ -41,7 +41,7 @@ public class Bullet: NetworkBehaviour, IInteractable
 		this.velocity = 0.0f;
 		if (GameManager.singleton.invisibleSphere)
 			sphere.Damage ();
-		this.GetComponent<Animator> ().SetTrigger ("Destroy");
+		NetworkManager.Destroy (this.gameObject);
 	}
 
 	[Server]

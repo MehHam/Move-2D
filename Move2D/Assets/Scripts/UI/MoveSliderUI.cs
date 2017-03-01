@@ -51,6 +51,7 @@ public class MoveSliderUI : MonoBehaviour {
 
 	void Update()
 	{
+		this.GetComponent<Slider> ().interactable = !GameManager.singleton.paused;
 		SetVisibility ();
 		text.text = (_player != null) ? "Mass: " + this._player.mass.ToString("0.00") : "";
 	}

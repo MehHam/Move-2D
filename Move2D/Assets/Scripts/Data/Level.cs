@@ -40,7 +40,7 @@ public class Level : ScriptableObject
 	/// The level duration
 	/// </summary>
 	[Tooltip("Level duration")]
-	public uint time;
+	public uint time = 60;
 	/// <summary>
 	/// The sceneName in the build, this should never be empty
 	/// </summary>
@@ -60,7 +60,7 @@ public class Level : ScriptableObject
 	/// Whether the ready animation is displayed at the beginning of this level or not.
 	/// </summary>
 	[Tooltip("Whether the ready animation is displayed at the beginning of this level")]
-	public bool readyAnimation = false;
+	public bool readyAnimation = true;
 	/// <summary>
 	/// The behaviour of the sphere during the level
 	/// </summary>

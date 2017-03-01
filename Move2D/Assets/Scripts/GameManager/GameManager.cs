@@ -7,27 +7,7 @@ using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.SceneManagement;
 using Prototype.NetworkLobby;
-
-public static class Extensions
-{
-	public static string ToString(this GameManager.Difficulty difficulty)
-	{
-		string res = "";
-
-		switch (difficulty) {
-		case GameManager.Difficulty.Beginner:
-			res = "Beginner";
-			break;
-		case GameManager.Difficulty.Intermediate:
-			res = "Intermediate";
-			break;
-		case GameManager.Difficulty.Expert:
-			res = "Expert";
-			break;
-		}
-		return res;
-	}
-}
+using System;
 
 /// <summary>
 /// Class that manages the current state of the game
@@ -277,7 +257,7 @@ public class GameManager : NetworkBehaviour {
 	[Server]
 	public void IncreaseScore(int value)
 	{
-		this.score += value * (networkPlayersInfo.Count - 1);
+		this.score += value * Math.Max(1, (networkPlayersInfo.Count - 1));
 	}
 
 	/// <summary>
@@ -314,7 +294,8 @@ public class GameManager : NetworkBehaviour {
 		paused = true;
 		// If there's a level next, loads the next level when the time is finished
 		if (this.currentLevelIndex + 1 < this.GetCurrentLevels().Length) {
-			LoadNextLevel ();
+			this.currentLevelIndex++;
+			LoadLevel ();
 		}
 	}
 
@@ -359,12 +340,12 @@ public class GameManager : NetworkBehaviour {
 
 	// Load the next level
 	[Server]
-	void LoadNextLevel ()
+	void LoadLevel ()
 	{
-		this.currentLevelIndex++;
-		Debug.Log ("current level index = " + this.currentLevelIndex);
 		var nextSceneName = this.GetCurrentLevels() [this.currentLevelIndex].sceneName;
-		gameStarted = false;
+		this.time = this.GetCurrentLevel ().time;
+		this.paused = true;
+		Debug.Log (nextSceneName);
 		CustomNetworkLobbyManager.singleton.ServerChangeScene(nextSceneName);
 		StartCoroutine (WaitForAllPlayersReady (this.timeOut));
 	}
@@ -413,6 +394,20 @@ public class GameManager : NetworkBehaviour {
 		return null;
 	}
 
+	[Server]
+	/// <summary>
+	/// Change the difficulty of the game. The first level of that difficulty setting is automatically started.
+	/// </summary>
+	/// <param name="difficulty">The new difficulty.</param>
+	public void ChangeDifficulty(Difficulty difficulty)
+	{
+		StopAllCoroutines ();
+		this.score = 0;
+		this.difficulty = difficulty;
+		this.currentLevelIndex = 0;
+		LoadLevel ();
+	}
+
 	/// <summary>
 	/// Event handler called on the client when its scene changed
 	/// </summary>
@@ -421,7 +416,8 @@ public class GameManager : NetworkBehaviour {
 	{
 		if (onClientSceneChanged != null)
 				onClientSceneChanged (conn);
-		conn.Send (MyBeginMsg, new EmptyMessage ());
+		if (gameStarted)
+			conn.Send (MyBeginMsg, new EmptyMessage ());
 	}
 
 	/// <summary>
@@ -460,7 +456,9 @@ public class GameManager : NetworkBehaviour {
 	/// </summary>
 	public void OnServerSceneChanged()
 	{
-		if (currentLevelIndex != 0) {
+		Debug.Log ("OnServerSceneChanged");
+		// Call this only if this isn't the first time the scene changed
+		if (gameStarted) {
 			foreach (var networkPlayerInfo in networkPlayersInfo) {
 				Debug.Log ("Respawn Player");
 				var startPos = NetworkManager.singleton.GetStartPosition ();

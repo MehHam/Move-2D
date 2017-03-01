@@ -7,7 +7,8 @@ public class EnemyStat : ScriptableObject {
 	public enum MovementType {
 		Lerp,
 		Linear,
-		Teleport
+		Teleport,
+		Follow
 	}
 	/// <summary>
 	/// The enemy name
@@ -19,6 +20,7 @@ public class EnemyStat : ScriptableObject {
 	/// Lerp = The enemy does a lerp movement
 	/// Linear = The enemy moves linearly from one point to another
 	/// Teleport = The enemy teleports from one point to another
+	/// Follow = Follow the sphere CDM
 	/// </summary>
 	[Tooltip("How the enemy moves")]
 	public MovementType movementType;

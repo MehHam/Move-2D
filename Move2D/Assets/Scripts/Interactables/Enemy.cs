@@ -57,6 +57,7 @@ public class Enemy : NetworkBehaviour, IInteractable {
 	private int _currentDestinationIndex = 0;
 	private float _startTime;
 	private float _journeyLength;
+	private Transform _sphereCDM;
 
 	void Start()
 	{
@@ -64,6 +65,7 @@ public class Enemy : NetworkBehaviour, IInteractable {
 			_currentDestinationIndex = 0;
 			_startTime = Time.time;
 			_journeyLength = Vector3.Distance (this.transform.position, path [_currentDestinationIndex].position);
+			_sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM").transform;
 		}
 	}
 
@@ -115,6 +117,11 @@ public class Enemy : NetworkBehaviour, IInteractable {
 		}
 	}
 
+	void MoveFollow()
+	{
+		this.transform.position = Vector3.MoveTowards (this.transform.position, _sphereCDM.position, speed * Time.deltaTime);
+	}
+
 	void Move()
 	{
 		switch (movementType) {
@@ -126,6 +133,9 @@ public class Enemy : NetworkBehaviour, IInteractable {
 				break;
 			case EnemyStat.MovementType.Teleport:
 				MoveTeleport ();
+				break;
+			case EnemyStat.MovementType.Follow:
+				MoveFollow ();
 				break;
 		}
 		if (this.transform.position == Destination()) {
@@ -171,7 +181,7 @@ public class Enemy : NetworkBehaviour, IInteractable {
 		GameManager.singleton.DecreaseScore ();
 		sphere.Damage ();
 		if (this.isDestroyedOnHit)
-			Network.Destroy (this.gameObject);
+			NetworkServer.Destroy (this.gameObject);
 		else {
 			Blink ();
 		}
