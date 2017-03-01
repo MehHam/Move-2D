@@ -88,7 +88,7 @@ public class MotionPointFollow : NetworkBehaviour, IInteractable
 	[ServerCallback]
 	void Start ()
 	{
-		if (GameManager.singleton.GetCurrentLevel ().gameMode != GameManager.GameMode.MotionPointFollow) {
+		if (GameManager.singleton.GetCurrentLevel ().gameMode != Level.GameMode.MotionPointFollow) {
 			this.enabled = false;
 			return;
 		}

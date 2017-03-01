@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 095f52bd309804d78a3eac53cfd46ada, type: 3}
+  m_Name: LevelList
+  m_EditorClassIdentifier: 
+  beginnerLevels:
+  - {fileID: 11400000, guid: fd0acc6a6ccbd4e53871331bb564e729, type: 2}
+  - {fileID: 11400000, guid: 2f82cca2d9a7e4780b0145235a1476ac, type: 2}
+  - {fileID: 11400000, guid: 989f393ca792c4b46b813a4993a2cb17, type: 2}
+  - {fileID: 11400000, guid: 130b906397947495a8960fc80242e963, type: 2}
+  - {fileID: 11400000, guid: 4780a00dcc40b4754932dea1cd5d461d, type: 2}
+  intermediateLevels: []
+  expertLevels: []

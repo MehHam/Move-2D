@@ -6,30 +6,54 @@ using UnityEngine.Networking;
 /// <summary>
 /// An Interactable Enemy. He goes from one point to another and ignore the sphere position completely
 /// </summary>
+[RequireComponent(typeof(Blinker))]
 public class Enemy : NetworkBehaviour, IInteractable {
-	public enum MovementType {
-		Lerp,
-		Linear,
-		Teleport
-	}
+	public EnemyStat stats;
+
+
 	/// <summary>
 	/// The enemy speed. If the movement type is teleport, the speed is the cooldown time between each teleport
 	/// </summary>
-	[Tooltip("The enemy speed")]
-	public float speed = 1.0f;
-	/// <summary>
-	/// The enemy path. Those are all children gameObjects with the tag "path".
-	/// He goes from one point to another in the order defined in the inspector.
-	/// </summary>
-	[Tooltip("The enemy path. The enemy goes from one point to another in the same order as the list")]
-	public List<Transform> path = new List<Transform>();
+	public float speed {
+		get { return stats.speed; }
+	}
 	/// <summary>
 	/// How the enemy moves.
 	/// Lerp = The enemy does a lerp movement
 	/// Linear = The enemy moves linearly from one point to another
 	/// Teleport = The enemy teleports from one point to another
 	/// </summary>
-	public MovementType movementType;
+	public EnemyStat.MovementType movementType {
+		get { return stats.movementType; }
+	}
+	/// <summary>
+	/// The number of points the player loses when 
+	/// </summary>
+	public int scoreValue {
+		get { return stats.scoreValue; }
+	}
+	/// <summary>
+	/// Is the enemy destroyed when the sphere touches it ?
+	/// </summary>
+	public bool isDestroyedOnHit {
+		get { return stats.isDestroyedOnHit; }
+	}
+	/// <summary>
+	/// Gets the duration of the blink animation.
+	/// </summary>
+	/// <value>The duration of the blink animation.</value>
+	public float blinkDuration {
+		get { return stats.blinkDuration; }
+	}
+	/// <summary>
+	/// The enemy path. Those are all children gameObjects with the tag "path".
+	/// He goes from one point to another in the order defined in the inspector.
+	/// </summary>
+	[Tooltip("The enemy path. The enemy goes from one point to another in the same order as the list")]
+	public List<Transform> path = new List<Transform>();
+
+	private const float _blinkTime = 0.25f;
+	private bool _damaged = false;
 	private int _currentDestinationIndex = 0;
 	private float _startTime;
 	private float _journeyLength;
@@ -94,13 +118,13 @@ public class Enemy : NetworkBehaviour, IInteractable {
 	void Move()
 	{
 		switch (movementType) {
-			case MovementType.Lerp:
+			case EnemyStat.MovementType.Lerp:
 				MoveLerp ();
 				break;
-			case MovementType.Linear:
+			case EnemyStat.MovementType.Linear:
 				MoveLinear ();
 				break;
-			case MovementType.Teleport:
+			case EnemyStat.MovementType.Teleport:
 				MoveTeleport ();
 				break;
 		}
@@ -110,8 +134,7 @@ public class Enemy : NetworkBehaviour, IInteractable {
 			_journeyLength = Vector3.Distance (this.transform.position, path [_currentDestinationIndex].position);
 		}
 	}
-
-	[Server]
+		
 	void Update()
 	{
 		if (path.Count != 0 && GameManager.singleton != null && !GameManager.singleton.paused) {
@@ -119,18 +142,46 @@ public class Enemy : NetworkBehaviour, IInteractable {
 		}
 	}
 
+	[ClientRpc]
+	void RpcBlink()
+	{
+		StartCoroutine (BlinkRoutine (this.blinkDuration));
+	}
+
+	void Blink()
+	{
+		if (isServer)
+			RpcBlink ();
+		StartCoroutine (BlinkRoutine (this.blinkDuration));
+	}
+
+	IEnumerator BlinkRoutine(float blinkDuration)
+	{
+		this._damaged = true;
+		this.GetComponent<Blinker> ().DamageAnimation ();
+		yield return new WaitForSeconds (blinkDuration);
+		this.GetComponent<Blinker> ().StopDamageAnimation ();
+		this._damaged = false;
+	}
+
 	public void OnEnterEffect (SphereCDM sphere)
 	{
-		throw new System.NotImplementedException ();
+		if (_damaged)
+			return;
+		GameManager.singleton.DecreaseScore ();
+		sphere.Damage ();
+		if (this.isDestroyedOnHit)
+			Network.Destroy (this.gameObject);
+		else {
+			Blink ();
+		}
 	}
 
 	public void OnStayEffect (SphereCDM sphere)
 	{
-		throw new System.NotImplementedException ();
 	}
 
 	public void OnExitEffect (SphereCDM sphere)
 	{
-		throw new System.NotImplementedException ();
 	}
 }

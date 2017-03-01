@@ -8,6 +8,27 @@ using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.SceneManagement;
 using Prototype.NetworkLobby;
 
+public static class Extensions
+{
+	public static string ToString(this GameManager.Difficulty difficulty)
+	{
+		string res = "";
+
+		switch (difficulty) {
+		case GameManager.Difficulty.Beginner:
+			res = "Beginner";
+			break;
+		case GameManager.Difficulty.Intermediate:
+			res = "Intermediate";
+			break;
+		case GameManager.Difficulty.Expert:
+			res = "Expert";
+			break;
+		}
+		return res;
+	}
+}
+
 /// <summary>
 /// Class that manages the current state of the game
 /// </summary>
@@ -22,17 +43,6 @@ public class GameManager : NetworkBehaviour {
 	/// </summary>
 	public static event GameManagerEvent onLevelStarted;
 
-	/// <summary>
-	/// All the type of gameMode:
-	/// Default: Move the sphere around to get the pickups
-	/// MotionPointFollow: Move the sphere to get it the closest to the motion point
-	/// </summary>
-	public enum GameMode
-	{
-		Default,
-		MotionPointFollow,
-	}
-
 	public enum Difficulty
 	{
 		Beginner,
@@ -40,60 +50,6 @@ public class GameManager : NetworkBehaviour {
 		Expert,
 	}
 
-	public enum SphereVisibility
-	{
-		Visible,
-		FadeAfterStartLevel,
-		Invisible,
-	}
-
-	/// <summary>
-	/// The level data
-	/// </summary>
-	[System.Serializable]
-	public class Level
-	{
-		/// <summary>
-		/// Level index
-		/// </summary>
-		[Tooltip("Level index")]
-		public uint index;
-		/// <summary>
-		/// The level duration
-		/// </summary>
-		[Tooltip("Level duration")]
-		public uint time;
-		/// <summary>
-		/// The sceneName in the build, this should never be empty
-		/// </summary>
-		[Tooltip("The scene name in the build, this should never be empty")]
-		public string sceneName;
-		/// <summary>
-		/// The gameMode of this level
-		/// </summary>
-		[Tooltip("The game mode of this level")]
-		public GameMode gameMode;
-		/// <summary>
-		/// If the gameMode is MotionPointFollow, what kind of motion the point has
-		/// </summary>
-		[Tooltip("If the game mode if MotionPointFollow, what kind of motion the point has")]
-		public MotionPointFollow.MotionMode motionMode;
-		/// <summary>
-		/// Whether the ready animation is displayed at the beginning of this level or not.
-		/// </summary>
-		[Tooltip("Whether the ready animation is displayed at the beginning of this level")]
-		public bool readyAnimation = false;
-		/// <summary>
-		/// The behaviour of the sphere during the level
-		/// </summary>
-		[Tooltip("The behaviour of the sphere visibility during the level")]
-		public SphereVisibility sphereVisibility = SphereVisibility.Visible;
-		/// <summary>
-		/// Mass modification enabled
-		/// </summary>
-		[Tooltip("Is mass modification enabled ?")]
-		public bool massModification = true;
-	}
 	/// <summary>
 	/// Player information relative to a networkConnection
 	/// </summary>
@@ -128,30 +84,41 @@ public class GameManager : NetworkBehaviour {
 	const short MyBeginMsg = MsgType.Highest + 1;
 	const short MyStartMsg = MsgType.Highest + 2;
 
+	public LevelList levelList;
+
 	/// <summary>
 	/// Array displaying the data of all the beginner levels that will be played
 	/// </summary>
-	[Tooltip("Array displaying the data of all the beginner levels that will be played")]
-	public Level[] beginnerLevels;
+	public Level[] beginnerLevels {
+		get {
+			return levelList.beginnerLevels;
+		}
+	}
 
 	/// <summary>
 	/// Array displaying the data of all the intermediate levels that will be played
 	/// </summary>
-	[Tooltip("Array displaying the data of all the intermediate levels that will be played")]
-	public Level[] intermediateLevels;
+	public Level[] intermediateLevels {
+		get {
+			return levelList.intermediateLevels;
+		}
+	}
 
 	/// <summary>
 	/// Array displaying the data of all the expert levels that will be played
 	/// </summary>
-	[Tooltip("Array displaying the data of all the expert levels that will be played")]
-	public Level[] expertLevels;
+	public Level[] expertLevels {
+		get {
+			return levelList.expertLevels;
+		}
+	}
 
 	/// <summary>
 	/// Gets a value indicating whether this <see cref="GameManager"/> has an invisible sphere.
 	/// </summary>
 	/// <value><c>true</c> if invisible sphere; otherwise, <c>false</c>.</value>
-	public bool invisibleSphere { get { return (this.GetCurrentLevel ().sphereVisibility == SphereVisibility.Invisible ||
-		this.GetCurrentLevel ().sphereVisibility == SphereVisibility.FadeAfterStartLevel);
+	public bool invisibleSphere { get { return (this.GetCurrentLevel ().sphereVisibility == Level.SphereVisibility.Invisible ||
+		this.GetCurrentLevel ().sphereVisibility == Level.SphereVisibility.FadeAfterStartLevel);
 		} }
 	
 	public const float arenaRadius = 16.0f;
@@ -310,7 +277,7 @@ public class GameManager : NetworkBehaviour {
 	[Server]
 	public void IncreaseScore(int value)
 	{
-		this.score += value * networkPlayersInfo.Count;
+		this.score += value * (networkPlayersInfo.Count - 1);
 	}
 
 	/// <summary>

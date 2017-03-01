@@ -8,8 +8,13 @@ using UnityEngine.UI;
 /// </summary>
 [RequireComponent(typeof(Text))]
 public class ScoreTextUI : MonoBehaviour {
+	/// <summary>
+	/// The base text to be displayed
+	/// </summary>
+	[Tooltip("The base text to be displayed")]
+	public string baseText = "Score:";
 	// Update is called once per frame
 	void Update () {
-		this.GetComponent<Text> ().text = (GameManager.singleton == null) ? "/" : GameManager.singleton.score.ToString();
+		this.GetComponent<Text> ().text = baseText + " " + ((GameManager.singleton == null) ? "/" : GameManager.singleton.score.ToString());
 	}
 }

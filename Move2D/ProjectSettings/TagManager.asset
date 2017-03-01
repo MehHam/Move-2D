@@ -9,6 +9,7 @@ TagManager:
   - Lab
   - SphereCDM
   - PointFollow
+  - Path
   layers:
   - Default
   - TransparentFX

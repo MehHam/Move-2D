@@ -269,6 +269,12 @@ Prefab:
       propertyPath: m_AttachedText
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 114135214025442948, guid: a982ffb879803451f9db8583132b0ea6,
+        type: 2}
+      propertyPath: levelList
+      value: 
+      objectReference: {fileID: 11400000, guid: a370ec100d33d4abdb3373b78f393217,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a982ffb879803451f9db8583132b0ea6, type: 2}
   m_IsPrefabParent: 0

@@ -16,7 +16,7 @@ public class ProgressBarUI : MonoBehaviour
 	IEnumerator Start()
 	{
 		yield return new WaitForSeconds (0.5f);
-		_active = (GameManager.singleton.GetCurrentLevel ().gameMode == GameManager.GameMode.MotionPointFollow);
+		_active = (GameManager.singleton.GetCurrentLevel ().gameMode == Level.GameMode.MotionPointFollow);
 		if (_active) {
 			this.transform.parent.gameObject.GetComponent<CanvasGroup> ().alpha = 1;
 			_pointFollow = GameObject.FindGameObjectWithTag ("PointFollow");

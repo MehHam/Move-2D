@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 114424921309173602}
   - component: {fileID: 114003466200835296}
   - component: {fileID: 212445998365808830}
+  - component: {fileID: 114862821110090508}
   m_Layer: 0
   m_Name: SphereCDM
   m_TagString: SphereCDM
@@ -156,7 +157,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitTimeUntilFade: 5
-  fadeInTime: 0.5
+  damageDuration: 2
+--- !u!114 &114862821110090508
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83eef7eac8ff642f2adf6619f541cca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeInTime: 5
   fadeOutTime: 5
   blinkDuration: 0.5
   maxBlinkAlpha: 0.5

@@ -116,49 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb491130bc417425c94a1a0121d58e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beginnerLevels:
-  - index: 1
-    time: 120
-    sceneName: Level0
-    gameMode: 0
-    motionMode: 0
-    readyAnimation: 1
-    sphereVisibility: 1
-    massModification: 0
-  - index: 2
-    time: 30
-    sceneName: Level1
-    gameMode: 1
-    motionMode: 2
-    readyAnimation: 1
-    sphereVisibility: 0
-    massModification: 0
-  - index: 3
-    time: 30
-    sceneName: Level2
-    gameMode: 1
-    motionMode: 0
-    readyAnimation: 1
-    sphereVisibility: 0
-    massModification: 0
-  - index: 4
-    time: 75
-    sceneName: Level3
-    gameMode: 0
-    motionMode: 0
-    readyAnimation: 1
-    sphereVisibility: 0
-    massModification: 0
-  - index: 5
-    time: 90
-    sceneName: Level4
-    gameMode: 1
-    motionMode: 0
-    readyAnimation: 1
-    sphereVisibility: 0
-    massModification: 0
-  intermediateLevels: []
-  expertLevels: []
+  levelList: {fileID: 11400000, guid: a370ec100d33d4abdb3373b78f393217, type: 2}
   timeOut: 10
   gameStarted: 0
   difficulty: 0

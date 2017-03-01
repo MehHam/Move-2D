@@ -40,7 +40,7 @@ public class Bullet: NetworkBehaviour, IInteractable
 		GameManager.singleton.DecreaseScore (1);
 		this.velocity = 0.0f;
 		if (GameManager.singleton.invisibleSphere)
-			sphere.Blink ();
+			sphere.Damage ();
 		this.GetComponent<Animator> ().SetTrigger ("Destroy");
 	}
 
