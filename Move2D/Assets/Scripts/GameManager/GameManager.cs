@@ -303,15 +303,14 @@ public class GameManager : NetworkBehaviour {
 	}
 
 	/// <summary>
-	/// Increase the score by a value
+	/// Increase the score by a value.
+	/// The more player there is, the more points you get
 	/// </summary>
 	/// <param name="value">The value by which the score will be increased.</param>
 	[Server]
 	public void IncreaseScore(int value)
 	{
-		if (paused)
-			return;
-		this.score += value;
+		this.score += value * networkPlayersInfo.Count;
 	}
 
 	/// <summary>
@@ -465,7 +464,15 @@ public class GameManager : NetworkBehaviour {
 	public void OnServerStartGameMessage(NetworkMessage netMsg)
 	{
 		this._playerReadyToStart++;
-		if (this._playerReadyToStart == NetworkServer.connections.Count)
+		Debug.LogError (this._playerReadyToStart);
+		int count = 0;
+		// Some connections can be null for some reason, so we have to do the count by ourself
+		foreach (var connection in NetworkServer.connections) {
+			if (connection != null)
+				count++;
+		}
+		// If all clients are ready we can start the level
+		if (count == this._playerReadyToStart)
 			StartLevel ();
 	}
 

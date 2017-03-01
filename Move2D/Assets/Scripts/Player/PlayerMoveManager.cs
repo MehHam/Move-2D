@@ -31,5 +31,6 @@ public class PlayerMoveManager : NetworkBehaviour
 				playerMotion.Move ();
 			}
 		}
+		this.GetComponent<Rigidbody2D> ().isKinematic = (GameManager.singleton != null && GameManager.singleton.paused);
 	}
 }
