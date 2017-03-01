@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb491130bc417425c94a1a0121d58e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  motionPointFollow: {fileID: 191588, guid: 2695905c03858a142b36e1fe3c406864, type: 2}
   levelList: {fileID: 11400000, guid: a370ec100d33d4abdb3373b78f393217, type: 2}
   timeOut: 10
   gameStarted: 0

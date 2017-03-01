@@ -13,9 +13,18 @@ public class ProgressBarUI : MonoBehaviour
 	private GameObject _pointFollow;
 	private GameObject _sphereCDM;
 
-	IEnumerator Start()
+	void OnEnable()
 	{
-		yield return new WaitForSeconds (0.5f);
+		GameManager.onLevelStarted += OnLevelStarted;
+	}
+
+	void OnDisable()
+	{
+		GameManager.onLevelStarted -= OnLevelStarted;
+	}
+
+	void OnLevelStarted ()
+	{
 		_active = (GameManager.singleton.GetCurrentLevel ().gameMode == Level.GameMode.MotionPointFollow
 			&& GameManager.singleton.GetCurrentLevel ().sphereVisibility == Level.SphereVisibility.Visible);
 		if (_active) {

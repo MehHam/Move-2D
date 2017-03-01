@@ -54,6 +54,8 @@ public class GameManager : NetworkBehaviour {
 		public bool readyToBegin;
 	}
 
+	public GameObject motionPointFollow;
+
 	bool _isReadyToBegin;
 	int _playerReadyToStart = 0;
 
@@ -197,6 +199,10 @@ public class GameManager : NetworkBehaviour {
 			StartTime ();
 			paused = false;
 			gameStarted = true;
+			if (this.GetCurrentLevel ().gameMode == Level.GameMode.MotionPointFollow) {
+				var go = GameObject.Instantiate (motionPointFollow, new Vector3(0, 4, 0), Quaternion.identity);
+				NetworkServer.Spawn (go);
+			}
 			if (onLevelStarted != null)
 				onLevelStarted ();
 			RpcLevelStarted ();
