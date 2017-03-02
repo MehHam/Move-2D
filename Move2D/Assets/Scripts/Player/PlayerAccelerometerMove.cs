@@ -23,9 +23,10 @@ public class PlayerAccelerometerMove : NetworkBehaviour, IPlayerMotion
 		if (!isLocalPlayer)
 			return;
 		if (SystemInfo.supportsGyroscope) {
-			gyro = Input.gyro;
-			gyro.enabled = true;
-			this.GetComponent<Rigidbody2D>().AddForce (gyROT, ForceMode2D.Force);
+
+			// gyro = Input.gyro;
+			//gyro.enabled = true;
+			// this.GetComponent<Rigidbody2D>().AddForce (gyROT, ForceMode2D.Force);
 		}
 	}		
 }

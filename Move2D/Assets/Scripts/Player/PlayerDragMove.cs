@@ -1,13 +1,22 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// A movement module manages the drag type of movement for the player
 /// </summary>
 [RequireComponent (typeof (Rigidbody2D))]
-public class PlayerDragMove : NetworkBehaviour, IPlayerMotion
+public class PlayerDragMove : NetworkBehaviour, IPlayerMotion, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+	public static GameObject DraggedInstance;
+
+	Vector3 _startPosition;
+	Vector3 _offset;
+	float _zDistanceToCamera;
+
+
+	/*
 	/// <summary>
 	/// This stores the layers we want the raycast to hit (make sure this GameObject's layer is included!)
 	/// </summary>
@@ -36,9 +45,7 @@ public class PlayerDragMove : NetworkBehaviour, IPlayerMotion
 		if (_draggingFinger != null && counterFing < 10) {
 
 			isTouch = true;
-			if (!isLocalPlayer)
-				return;
-				
+
 			//CmdMotion();
 			frameDelta = _draggingFinger.DeltaScreenPosition;
 			CmdMotion (frameDelta);
@@ -104,7 +111,7 @@ public class PlayerDragMove : NetworkBehaviour, IPlayerMotion
 			_draggingFinger = finger;
 		}
 
-		/*// Was this finger pressed down on a collider?
+		// Was this finger pressed down on a collider?
 		if (Physics.Raycast(ray, out hit, float.PositiveInfinity, LayerMask) == true)
 		{
 			// Was that collider this one?
@@ -113,7 +120,7 @@ public class PlayerDragMove : NetworkBehaviour, IPlayerMotion
 				// Set the current finger to this one
 				draggingFinger = finger;
 			}
-		}*/
+		}
 	}
 
 	void OnFingerUp (Lean.LeanFinger finger)
@@ -125,4 +132,67 @@ public class PlayerDragMove : NetworkBehaviour, IPlayerMotion
 			_draggingFinger = null;
 		}
 	}
+*/
+
+	Vector3 GetDragPosition(float zDistanceToCamera)
+	{
+		return new Vector3 (Input.mousePosition.x, Input.mousePosition.y, zDistanceToCamera);
+	}
+
+	#region IBeginDragHandler implementation
+
+	public void OnBeginDrag (PointerEventData eventData)
+	{
+		Debug.Log ("OnBeginDragCalled");
+		if (!isLocalPlayer)
+			return;
+		Debug.Log ("IsLocalPLayer");
+		DraggedInstance = this.gameObject;
+		_startPosition = this.GetComponent<Rigidbody2D> ().position;
+		_zDistanceToCamera = Mathf.Abs (_startPosition.z - Camera.main.transform.position.z);
+		_offset = _startPosition - Camera.main.ScreenToWorldPoint (GetDragPosition (this._zDistanceToCamera));
+	}
+
+	#endregion
+
+	#region IDragHandler implementation
+
+	public void OnDrag (PointerEventData eventData)
+	{
+		Debug.Log ("OnDragCalled");
+		if (!isLocalPlayer)
+			return;
+		Debug.Log ("IsLocalPlayer");
+		this.GetComponent<Rigidbody2D> ().MovePosition (Camera.main.ScreenToWorldPoint (
+				GetDragPosition (this._zDistanceToCamera)
+			) + _offset);
+	}
+
+	#endregion
+
+	#region IEndDragHandler implementation
+
+	public void OnEndDrag (PointerEventData eventData)
+	{
+		if (!isLocalPlayer)
+			return;
+		DraggedInstance = null;
+		_offset = Vector3.zero;
+	}
+
+	#endregion
+
+	#region IPlayerMotion implementation
+
+	public void Move ()
+	{
+		
+	}
+
+	public bool IsActivated (int sliderValue)
+	{
+		return true;
+	}
+
+	#endregion
 }
