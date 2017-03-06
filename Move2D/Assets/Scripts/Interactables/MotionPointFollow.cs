@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// A special type of interactable object. It moves around the scene with different patterns, give points to the players if the sphere
 /// collides with it.
 /// </summary>
-public class MotionPointFollow : NetworkBehaviour, IInteractable
+public class MotionPointFollow : NetworkBehaviour, IEnterInteractable, IStayInteractable, IExitInteractable
 {
 	/// <summary>
 	/// All the different types of motion mode

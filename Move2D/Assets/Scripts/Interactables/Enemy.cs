@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 /// An Interactable Enemy. He goes from one point to another and ignore the sphere position completely
 /// </summary>
 [RequireComponent(typeof(Blinker))]
-public class Enemy : NetworkBehaviour, IInteractable {
+public class Enemy : NetworkBehaviour, IEnterInteractable {
 	public EnemyStat stats;
 
 
@@ -185,13 +185,5 @@ public class Enemy : NetworkBehaviour, IInteractable {
 		else {
 			Blink ();
 		}
-	}
-
-	public void OnStayEffect (SphereCDM sphere)
-	{
-	}
-
-	public void OnExitEffect (SphereCDM sphere)
-	{
 	}
 }

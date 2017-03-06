@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: LevelList
   m_EditorClassIdentifier: 
   beginnerLevels:
+  - {fileID: 11400000, guid: 83fe2252ebffc4493b28b2e8e879c172, type: 2}
   - {fileID: 11400000, guid: fd0acc6a6ccbd4e53871331bb564e729, type: 2}
   - {fileID: 11400000, guid: 2f82cca2d9a7e4780b0145235a1476ac, type: 2}
   - {fileID: 11400000, guid: 989f393ca792c4b46b813a4993a2cb17, type: 2}

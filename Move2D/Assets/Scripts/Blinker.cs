@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Script that makes the gameObject attached to fade in, fade out and blink at command
+/// </summary>
 public class Blinker : NetworkBehaviour {
 	/// <summary>
 	/// How many seconds the sphere takes to fade in

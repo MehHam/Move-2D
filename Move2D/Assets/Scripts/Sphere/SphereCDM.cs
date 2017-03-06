@@ -46,24 +46,24 @@ public class SphereCDM : NetworkBehaviour
 	[ServerCallback]
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		if (other.gameObject.GetComponent<IInteractable> () != null)
-			other.gameObject.GetComponent<IInteractable> ().OnEnterEffect (this);
+		if (other.gameObject.GetComponent<IEnterInteractable> () != null)
+			other.gameObject.GetComponent<IEnterInteractable> ().OnEnterEffect (this);
 	}
 
 	// Called each frame the sphere is inside a trigger
 	[ServerCallback]
 	void OnTriggerStay2D (Collider2D other)
 	{
-		if (other.gameObject.GetComponent<IInteractable> () != null)
-			other.gameObject.GetComponent<IInteractable> ().OnStayEffect (this);
+		if (other.gameObject.GetComponent<IStayInteractable> () != null)
+			other.gameObject.GetComponent<IStayInteractable> ().OnStayEffect (this);
 	}
 
 	// Called whenever the sphere exits a trigger
 	[ServerCallback]
 	void OnTriggerExit2D (Collider2D other)
 	{
-		if (other.gameObject.GetComponent<IInteractable> () != null)
-			other.gameObject.GetComponent<IInteractable> ().OnExitEffect (this);
+		if (other.gameObject.GetComponent<IExitInteractable> () != null)
+			other.gameObject.GetComponent<IExitInteractable> ().OnExitEffect (this);
 	}
 		
 	IEnumerator FadeAtStartLevel()

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using MovementEffects;
 
-public class Bullet: NetworkBehaviour, IInteractable
+public class Bullet: NetworkBehaviour, IEnterInteractable
 {
 	/// <summary>
 	/// The number of points the players loses when the sphere collides with the pickup.
@@ -42,18 +42,6 @@ public class Bullet: NetworkBehaviour, IInteractable
 		if (GameManager.singleton.invisibleSphere)
 			sphere.Damage ();
 		NetworkManager.Destroy (this.gameObject);
-	}
-
-	[Server]
-	public void OnStayEffect (SphereCDM sphere)
-	{
-		
-	}
-
-	[Server]
-	public void OnExitEffect (SphereCDM sphere)
-	{
-		
 	}
 	#endregion
 

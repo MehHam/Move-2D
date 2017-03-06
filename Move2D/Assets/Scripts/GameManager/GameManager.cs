@@ -58,6 +58,7 @@ public class GameManager : NetworkBehaviour {
 
 	bool _isReadyToBegin;
 	int _playerReadyToStart = 0;
+	Coroutine _timeCoroutine;
 
 	public static GameManager singleton { get; private set; }
 
@@ -297,11 +298,9 @@ public class GameManager : NetworkBehaviour {
 			yield return new WaitForSeconds (1.0f);
 			time--;
 		}
-		paused = true;
 		// If there's a level next, loads the next level when the time is finished
 		if (this.currentLevelIndex + 1 < this.GetCurrentLevels().Length) {
-			this.currentLevelIndex++;
-			LoadLevel ();
+			LoadNextLevel ();
 		}
 	}
 
@@ -344,16 +343,40 @@ public class GameManager : NetworkBehaviour {
 		StartLevel ();
 	}
 
-	// Load the next level
+	[Server]
+	void LoadNextLevel ()
+	{
+		this.currentLevelIndex++;
+		LoadLevel ();
+	}
+
+	// Load the level
 	[Server]
 	void LoadLevel ()
 	{
 		var nextSceneName = this.GetCurrentLevels() [this.currentLevelIndex].sceneName;
+		StopTime ();
 		this.time = this.GetCurrentLevel ().time;
-		this.paused = true;
 		Debug.Log (nextSceneName);
 		CustomNetworkLobbyManager.singleton.ServerChangeScene(nextSceneName);
 		StartCoroutine (WaitForAllPlayersReady (this.timeOut));
+	}
+
+	IEnumerator ConvertTimeToScore()
+	{
+		while (this.time > 0) {
+			this.time--;
+			this.score++;
+			yield return null;
+		}
+		LoadNextLevel ();
+	}
+
+	[Server]
+	public void ExitLevel()
+	{
+		StopTime ();
+		StartCoroutine (ConvertTimeToScore());
 	}
 
 	/// <summary>
@@ -362,7 +385,8 @@ public class GameManager : NetworkBehaviour {
 	[Server]
 	public void StartTime()
 	{
-		StartCoroutine(DecreaseTime());
+		this._timeCoroutine = StartCoroutine(DecreaseTime());
+		this.paused = false;
 	}
 
 	/// <summary>
@@ -371,7 +395,9 @@ public class GameManager : NetworkBehaviour {
 	[Server]
 	public void StopTime()
 	{
-		StopAllCoroutines ();
+		if (this._timeCoroutine != null)
+			StopCoroutine (this._timeCoroutine);
+		this.paused = true;
 	}
 
 	/// <summary>

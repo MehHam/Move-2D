@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 /// <summary>
 /// An interactable zone that makes the players lose point if the sphere collides with it
 /// </summary>
-public class CrossLava : NetworkBehaviour, IInteractable {
+public class CrossLava : NetworkBehaviour, IEnterInteractable, IStayInteractable, IExitInteractable {
 	/// <summary>
 	/// Interval of time during which the players won't lose points when the sphere stays on the collider
 	/// </summary>

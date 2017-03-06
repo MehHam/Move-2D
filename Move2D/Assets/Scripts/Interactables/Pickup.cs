@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 /// <summary>
 /// An interactable pickup, gives points to the players when the sphere collides with it
 /// </summary>
-public class Pickup : NetworkBehaviour, IInteractable {
+public class Pickup : NetworkBehaviour, IEnterInteractable {
 	/// <summary>
 	/// The number of points given to the players when the sphere collides with the pickup.
 	/// </summary>
@@ -23,16 +23,6 @@ public class Pickup : NetworkBehaviour, IInteractable {
 			sphere.Blink ();
 		}
 		RpcDisable ();
-	}
-
-	[Server]
-	public void OnStayEffect (SphereCDM sphere)
-	{
-	}
-
-	[Server]
-	public void OnExitEffect (SphereCDM sphere)
-	{
 	}
 	#endregion
 
