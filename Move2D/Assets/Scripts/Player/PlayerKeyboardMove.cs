@@ -35,8 +35,7 @@ class PlayerKeyboardMove : NetworkBehaviour, IPlayerMotion
 		//Vector3 movement = new Vector3 (moveHorizontal, moveVertical,0);
 		//Debug.Log(movement);
 		//Call the AddForce function of our Rigidbody2D rb2d supplying movement multiplied by speed to move our player.
-		this.transform.RotateAround(Vector3.zero, movement, speed * Time.deltaTime);
-		//this.GetComponent<Rigidbody2D>().AddForce (movement * speed);
+		this.GetComponent<Rigidbody2D>().AddForce (movement * speed);
 	}
 }
 

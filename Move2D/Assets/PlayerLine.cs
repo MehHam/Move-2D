@@ -33,6 +33,7 @@ public class PlayerLine : MonoBehaviour {
 		var endColor = player2.GetComponent<Player> ().color;
 		_lineRenderer.startColor = new Color (startColor.r, startColor.g, startColor.b, Input.GetKey (KeyCode.Tab) ? alpha : 0.0f);
 		_lineRenderer.endColor = new Color (endColor.r, endColor.g, endColor.b, Input.GetKey (KeyCode.Tab) ? alpha : 0.0f);
+		_lineRenderer.material.mainTextureOffset = new Vector2 (Time.time, 0.0f);
 	}
 
 	void SetPositions()
