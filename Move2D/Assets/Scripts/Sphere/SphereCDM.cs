@@ -35,7 +35,6 @@ public class SphereCDM : NetworkBehaviour
 
 	void OnLevelStarted()
 	{
-		Debug.Log ("OnLevelStartedCalled");
 		SphereVisibility ();
 	}
 

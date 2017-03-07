@@ -55,6 +55,7 @@ public class GameManager : NetworkBehaviour {
 	}
 
 	public GameObject motionPointFollow;
+	public GameObject sphereCDM;
 
 	bool _isReadyToBegin;
 	int _playerReadyToStart = 0;
@@ -112,7 +113,7 @@ public class GameManager : NetworkBehaviour {
 	public float timeOut = 10.0f;
 
 	/// <summary>
-	/// Has the game started or not
+	/// Has the game started or not. Becomes true the first time the time on a level is started.
 	/// </summary>
 	[Tooltip("Has the game started ?")]
 	[SyncVar] public bool gameStarted = false;
@@ -148,7 +149,7 @@ public class GameManager : NetworkBehaviour {
 		//NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
 		CustomNetworkLobbyManager.onServerDisconnect += OnServerDisconnect;
 		CustomNetworkLobbyManager.onServerConnect += OnServerConnect;
-		CustomNetworkLobbyManager.onClientSceneLoaded += OnClientSceneLoaded;
+		//CustomNetworkLobbyManager.onClientSceneLoaded += OnClientSceneLoaded;
 		ReadySetGo.onAnimationFinished += OnAnimationFinished;
 	}
 
@@ -158,7 +159,7 @@ public class GameManager : NetworkBehaviour {
 		//NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
 		CustomNetworkLobbyManager.onServerConnect -= OnServerConnect;
 		CustomNetworkLobbyManager.onServerDisconnect -= OnServerDisconnect;
-		CustomNetworkLobbyManager.onClientSceneLoaded -= OnClientSceneLoaded;
+		//CustomNetworkLobbyManager.onClientSceneLoaded -= OnClientSceneLoaded;
 		ReadySetGo.onAnimationFinished -= OnAnimationFinished;
 	}
 
@@ -174,12 +175,6 @@ public class GameManager : NetworkBehaviour {
 		}
 	}
 
-	[Client]
-	void Start()
-	{
-		CustomNetworkLobbyManager.singleton.client.Send (MyStartMsg, new EmptyMessage ());
-	}
-
 	void InitPlayerInfo() {
 		networkPlayersInfo = new List<NetworkPlayerInfo> ();
 		foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
@@ -190,41 +185,6 @@ public class GameManager : NetworkBehaviour {
 		}
 	}
 
-	// Starts immediately the level, ignore the ready set go animation
-	void ImmediateStartLevel ()
-	{
-		if (isServer) {
-			InitPlayerInfo ();
-			StopTime ();
-			time = this.GetCurrentLevels() [currentLevelIndex].time;
-			StartTime ();
-			paused = false;
-			gameStarted = true;
-			if (this.GetCurrentLevel ().gameMode == Level.GameMode.MotionPointFollow) {
-				var go = GameObject.Instantiate (motionPointFollow, new Vector3(0, 4, 0), Quaternion.identity);
-				NetworkServer.Spawn (go);
-			}
-			if (onLevelStarted != null)
-				onLevelStarted ();
-			RpcLevelStarted ();
-		}
-	}
-
-	[ClientRpc]
-	void RpcLevelStarted()
-	{
-		if (!isServer) {
-			if (onLevelStarted != null)
-				onLevelStarted ();
-		}
-	}
-
-	[ClientRpc]
-	void RpcReadyToBegin()
-	{
-		DeactivateWaitingForPlayersUI ();
-	}
-
 	void DeactivateWaitingForPlayersUI()
 	{
 		var waitingForPlayers = GameObject.FindObjectOfType<EllipsisTextUI> ();
@@ -232,7 +192,147 @@ public class GameManager : NetworkBehaviour {
 			waitingForPlayers.Deactivate ();
 	}
 
+	/// <summary>
+	/// Returns true if the variable readyToBegin is true for all network player info
+	/// </summary>
+	/// <returns><c>true</c>, if players are ready, <c>false</c> otherwise.</returns>
+	bool AllPlayersReady()
+	{
+		foreach (var networkPlayerInfo in networkPlayersInfo)
+		{
+			if (!networkPlayerInfo.readyToBegin)
+				return false;
+		}
+		return _isReadyToBegin;
+	}
+
+	/// <summary>
+	/// Get the current level data
+	/// </summary>
+	/// <returns>The current level data</returns>
+	public Level GetCurrentLevel()
+	{
+		return this.GetCurrentLevels () [this.currentLevelIndex];
+	}
+
+	/// <summary>
+	/// Get the levels for the current difficulty
+	/// </summary>
+	/// <returns>Get the levels for the current difficulty.</returns>
+	public Level[] GetCurrentLevels()
+	{
+		switch (difficulty) {
+		case Difficulty.Beginner:
+			return beginnerLevels;
+		case Difficulty.Intermediate:
+			return intermediateLevels;
+		case Difficulty.Expert:
+			return expertLevels;
+		}
+		return null;
+	}
+		
+	void OnDisconnectedFromServer()
+	{
+		Destroy (gameObject);
+	}
+
+	// Called when the ready set go animation is finished
+	void OnAnimationFinished()
+	{
+		ImmediateStartLevel ();
+	}
+
+	void OnDestroy()
+	{
+		StopAllCoroutines ();
+	}
+
+
+
+	// ----------------- IEnumerator ------------------
+
+
+	/// <summary>
+	/// Waits for all players to be ready, kicks all the clients that aren't after the timeout.
+	/// </summary>
+	/// <param name="timeOut">The time out time.</param>
+	IEnumerator WaitForAllPlayersReady(float timeOut)
+	{
+		var time = Time.time;
+		// Wait until timeout OR both the players and the server are ready
+		while ((Time.time < time + timeOut) && !AllPlayersReady()) {
+			yield return null;
+		}
+		var players = FindObjectsOfType<Player> ();
+		// Kick all players that aren't ready if timeout
+		for (int i = networkPlayersInfo.Count - 1; i >= 0; i--) {
+			if (!networkPlayersInfo [i].readyToBegin) {
+				foreach (var player in players) {
+					if (player.playerControllerId == networkPlayersInfo [i].playerInfo.playerControllerId)
+						player.connectionToClient.Disconnect ();
+				}
+				networkPlayersInfo.RemoveAt (i);
+			} else {
+				// Then we set the player as not ready to begin for the next time a level is loaded
+				networkPlayersInfo [i].readyToBegin = false;
+			}
+		}
+		StartLevel ();
+	}
+		
+	/// <summary>
+	/// Converts the time to a score.
+	/// </summary>
+	IEnumerator ConvertTimeToScore()
+	{
+		while (this.time > 0) {
+			this.time--;
+			this.score++;
+			yield return null;
+		}
+		LoadNextLevel ();
+	}
+
+	// The time countdown
+	[Server]
+	IEnumerator DecreaseTime()
+	{
+		while (time > 0)
+		{
+			yield return new WaitForSeconds (1.0f);
+			time--;
+		}
+		// If there's a level next, loads the next level when the time is finished
+		if (this.currentLevelIndex + 1 < this.GetCurrentLevels().Length) {
+			LoadNextLevel ();
+		}
+	}
+
+
+	// ----------------- Server ------------------
+
+	// Starts immediately the level, ignore the ready set go animation
+	[Server]
+	void ImmediateStartLevel ()
+	{
+		InitPlayerInfo ();
+		StopTime ();
+		time = this.GetCurrentLevels() [currentLevelIndex].time;
+		StartTime ();
+		if (this.GetCurrentLevel ().gameMode == Level.GameMode.MotionPointFollow) {
+			var motionPointFollow = GameObject.Instantiate (this.motionPointFollow, new Vector3 (0, 4, 0), Quaternion.identity);
+			NetworkServer.Spawn (motionPointFollow);
+		}
+		var sphereCDM = GameObject.Instantiate (this.sphereCDM, Vector3.zero, Quaternion.identity);
+		NetworkServer.Spawn (sphereCDM);
+		if (onLevelStarted != null)
+			onLevelStarted ();
+		RpcLevelStarted ();
+	}
+
 	// Starts the level
+	[Server]
 	void StartLevel ()
 	{
 		var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
@@ -289,60 +389,10 @@ public class GameManager : NetworkBehaviour {
 		this.score = Mathf.Max (this.score, 0);
 	}
 
-	// The time countdown
-	[Server]
-	IEnumerator DecreaseTime()
-	{
-		while (time > 0)
-		{
-			yield return new WaitForSeconds (1.0f);
-			time--;
-		}
-		// If there's a level next, loads the next level when the time is finished
-		if (this.currentLevelIndex + 1 < this.GetCurrentLevels().Length) {
-			LoadNextLevel ();
-		}
-	}
 
 	/// <summary>
-	/// Returns true if the variable readyToBegin is true for all network player info
+	/// Loads the next level.
 	/// </summary>
-	/// <returns><c>true</c>, if players are ready, <c>false</c> otherwise.</returns>
-	bool AllPlayersReady()
-	{
-		foreach (var networkPlayerInfo in networkPlayersInfo)
-		{
-			if (!networkPlayerInfo.readyToBegin)
-				return false;
-		}
-		return _isReadyToBegin;
-	}
-
-	// Wait for all players to be ready, kick all the players that aren't after the timeout
-	IEnumerator WaitForAllPlayersReady(float timeOut)
-	{
-		var time = Time.time;
-		// Wait until timeout OR both the players and the server are ready
-		while ((Time.time < time + timeOut) && !AllPlayersReady()) {
-			yield return null;
-		}
-		var players = FindObjectsOfType<Player> ();
-		// Kick all players that aren't ready if timeout
-		for (int i = networkPlayersInfo.Count - 1; i >= 0; i--) {
-			if (!networkPlayersInfo [i].readyToBegin) {
-				foreach (var player in players) {
-					if (player.playerControllerId == networkPlayersInfo [i].playerInfo.playerControllerId)
-						player.connectionToClient.Disconnect ();
-				}
-				networkPlayersInfo.RemoveAt (i);
-			} else {
-				// Then we set the player as not ready to begin for the next time a level is loaded
-				networkPlayersInfo [i].readyToBegin = false;
-			}
-		}
-		StartLevel ();
-	}
-
 	[Server]
 	void LoadNextLevel ()
 	{
@@ -350,80 +400,17 @@ public class GameManager : NetworkBehaviour {
 		LoadLevel ();
 	}
 
-	// Load the level
+	/// <summary>
+	/// Loads the level.
+	/// </summary>
 	[Server]
 	void LoadLevel ()
 	{
 		var nextSceneName = this.GetCurrentLevels() [this.currentLevelIndex].sceneName;
 		StopTime ();
 		this.time = this.GetCurrentLevel ().time;
-		Debug.Log (nextSceneName);
 		CustomNetworkLobbyManager.singleton.ServerChangeScene(nextSceneName);
 		StartCoroutine (WaitForAllPlayersReady (this.timeOut));
-	}
-
-	IEnumerator ConvertTimeToScore()
-	{
-		while (this.time > 0) {
-			this.time--;
-			this.score++;
-			yield return null;
-		}
-		LoadNextLevel ();
-	}
-
-	[Server]
-	public void ExitLevel()
-	{
-		StopTime ();
-		StartCoroutine (ConvertTimeToScore());
-	}
-
-	/// <summary>
-	/// Starts the time countdown
-	/// </summary>
-	[Server]
-	public void StartTime()
-	{
-		this._timeCoroutine = StartCoroutine(DecreaseTime());
-		this.paused = false;
-	}
-
-	/// <summary>
-	/// Stops the time countdown
-	/// </summary>
-	[Server]
-	public void StopTime()
-	{
-		if (this._timeCoroutine != null)
-			StopCoroutine (this._timeCoroutine);
-		this.paused = true;
-	}
-
-	/// <summary>
-	/// Get the current level data
-	/// </summary>
-	/// <returns>The current level data</returns>
-	public Level GetCurrentLevel()
-	{
-		return this.GetCurrentLevels () [this.currentLevelIndex];
-	}
-
-	/// <summary>
-	/// Get the levels for the current difficulty
-	/// </summary>
-	/// <returns>Get the levels for the current difficulty.</returns>
-	public Level[] GetCurrentLevels()
-	{
-		switch (difficulty) {
-		case Difficulty.Beginner:
-			return beginnerLevels;
-		case Difficulty.Intermediate:
-			return intermediateLevels;
-		case Difficulty.Expert:
-			return expertLevels;
-		}
-		return null;
 	}
 
 	[Server]
@@ -441,25 +428,74 @@ public class GameManager : NetworkBehaviour {
 	}
 
 	/// <summary>
-	/// Event handler called on the client when its scene changed
+	/// Event handler called on the server when a client disconnects
 	/// </summary>
-	/// <param name="conn">The network connection of the client</param>
-	public void OnClientSceneChanged(NetworkConnection conn)
+	/// <param name="conn">The network connection of the client.</param>
+	[Server]
+	void OnServerDisconnect(NetworkConnection conn)
 	{
-		if (onClientSceneChanged != null)
-				onClientSceneChanged (conn);
-		if (gameStarted)
-			conn.Send (MyBeginMsg, new EmptyMessage ());
+		for (int i = networkPlayersInfo.Count - 1; i >= 0; i--) {
+			if (networkPlayersInfo [i].networkConnection == conn)
+				networkPlayersInfo.RemoveAt (i);
+		}
+	}
+
+	/// <summary>
+	/// Event handler called on the server when a client connects
+	/// </summary>
+	/// <param name="conn">The network conneciton of the client.</param>
+	[Server]
+	void OnServerConnect(NetworkConnection conn)
+	{
+		InitPlayerInfo ();
+	}
+
+	/// <summary>
+	/// Event handler called when the scene is changed for the server
+	/// </summary>
+	[Server]
+	public void OnServerSceneChanged()
+	{
+		// Call this only if this isn't the first time the scene changed
+		if (gameStarted) {
+			foreach (var networkPlayerInfo in networkPlayersInfo) {
+				var startPos = NetworkManager.singleton.GetStartPosition ();
+				GameObject gamePlayer;
+				if (startPos != null)
+					gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
+						startPos.position,
+						startPos.rotation);
+				else
+					gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
+						Vector3.zero,
+						Quaternion.identity);
+				gamePlayer.GetComponent<Player> ().playerInfo = networkPlayerInfo.playerInfo;
+				_isReadyToBegin = true;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Message handler called when a client is ready to begin the level
+	/// </summary>
+	/// <param name="netMsg">Network message.</param>
+	[Server]
+	public void OnServerStartLevelMessage(NetworkMessage netMsg)
+	{
+		for (int i = 0; i < networkPlayersInfo.Count; i++) {
+			if (networkPlayersInfo [i].networkConnection == netMsg.conn)
+				networkPlayersInfo [i].readyToBegin = true;
+		}
 	}
 
 	/// <summary>
 	/// Message handler called on the server when a client is ready to start the game
 	/// </summary>
 	/// <param name="netMsg">Net message.</param>
+	[Server]
 	public void OnServerStartGameMessage(NetworkMessage netMsg)
 	{
 		this._playerReadyToStart++;
-		Debug.LogError (this._playerReadyToStart);
 		int count = 0;
 		// Some connections can be null for some reason, so we have to do the count by ourself
 		foreach (var connection in NetworkServer.connections) {
@@ -471,88 +507,77 @@ public class GameManager : NetworkBehaviour {
 			StartLevel ();
 	}
 
-	/// <summary>
-	/// Message handler called when a client is ready to begin the level
-	/// </summary>
-	/// <param name="netMsg">Network message.</param>
-	public void OnServerStartLevelMessage(NetworkMessage netMsg)
-	{
-		for (int i = 0; i < networkPlayersInfo.Count; i++) {
-			if (networkPlayersInfo [i].networkConnection == netMsg.conn)
-				networkPlayersInfo [i].readyToBegin = true;
-		}
-	}
-
-	/// <summary>
-	/// Event handler called when the scene is changed for the server
-	/// </summary>
-	public void OnServerSceneChanged()
-	{
-		Debug.Log ("OnServerSceneChanged");
-		// Call this only if this isn't the first time the scene changed
-		if (gameStarted) {
-			foreach (var networkPlayerInfo in networkPlayersInfo) {
-				Debug.Log ("Respawn Player");
-				var startPos = NetworkManager.singleton.GetStartPosition ();
-				GameObject gamePlayer;
-				if (startPos != null)
-					gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
-						startPos.position,
-						startPos.rotation);
-				else
-					gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
-						Vector3.zero,
-						Quaternion.identity);
-				Debug.Log (NetworkServer.ReplacePlayerForConnection (networkPlayerInfo.networkConnection,
-					gamePlayer,
-					networkPlayerInfo.playerInfo.playerControllerId));
-				gamePlayer.GetComponent<Player> ().playerInfo = networkPlayerInfo.playerInfo;
-				_isReadyToBegin = true;
-			}
-		}
-	}
-
-	/// <summary>
-	/// Event handler called on the server when a client disconnects
-	/// </summary>
-	/// <param name="conn">The network connection of the client.</param>
-	void OnServerDisconnect(NetworkConnection conn)
-	{
-		Debug.Log ("On Server Disconnect called");
-		for (int i = networkPlayersInfo.Count - 1; i >= 0; i--) {
-			if (networkPlayersInfo [i].networkConnection == conn)
-				networkPlayersInfo.RemoveAt (i);
-		}
-	}
-
-	/// <summary>
-	/// Event handler called on the server when a client connects
-	/// </summary>
-	/// <param name="conn">The network conneciton of the client.</param>
-	void OnServerConnect(NetworkConnection conn)
-	{
-		Debug.Log ("On Server Connect called");
-		InitPlayerInfo ();
-	}
-		
-	void OnDisconnectedFromServer()
-	{
-		Destroy (gameObject);
-	}
-
-	// Called when the ready set go animation is finished
-	void OnAnimationFinished()
-	{
-		ImmediateStartLevel ();
-	}
-
-	void OnDestroy()
-	{
-		StopAllCoroutines ();
-	}
-
 	[Server]
-	void OnClientSceneLoaded(GameObject lobbyPlayer, GameObject gamePlayer)
+	public void ExitLevel()
 	{
+		StopTime ();
+		StartCoroutine (ConvertTimeToScore());
+	}
+
+	/// <summary>
+	/// Starts the time countdown
+	/// </summary>
+	[Server]
+	public void StartTime()
+	{
+		this._timeCoroutine = StartCoroutine(DecreaseTime());
+		this.paused = false;
+		// If we start the time, it means that the game was started at least once
+		gameStarted = true;
+	}
+
+	/// <summary>
+	/// Stops the time countdown
+	/// </summary>
+	[Server]
+	public void StopTime()
+	{
+		if (this._timeCoroutine != null)
+			StopCoroutine (this._timeCoroutine);
+		this.paused = true;
+	}
+
+
+
+	// ----------------- Client ------------------
+
+
+	[Client]
+	void Start()
+	{
+		CustomNetworkLobbyManager.singleton.client.Send (MyStartMsg, new EmptyMessage ());
+	}
+
+	/// <summary>
+	/// Event handler called on the client when its scene changed
+	/// </summary>
+	/// <param name="conn">The network connection of the client</param>
+	public void OnClientSceneChanged(NetworkConnection conn)
+	{
+		if (onClientSceneChanged != null)
+			onClientSceneChanged (conn);
+		if (gameStarted)
+			conn.Send (MyBeginMsg, new EmptyMessage ());
+	}
+
+	/// <summary>
+	/// Requests the client to start the level.
+	/// </summary>
+	[ClientRpc]
+	void RpcLevelStarted()
+	{
+		if (!isServer) {
+			if (onLevelStarted != null)
+				onLevelStarted ();
+		}
+	}
+
+	[ClientRpc]
+	/// <summary>
+	/// Request on the client when the server is ready to begin.
+	/// </summary>
+	void RpcReadyToBegin()
+	{
+		DeactivateWaitingForPlayersUI ();
 	}
 }

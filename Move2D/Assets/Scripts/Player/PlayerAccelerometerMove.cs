@@ -5,7 +5,6 @@ using UnityEngine.Networking;
 /// <summary>
 /// A movement module manages the accelerometer type of movement for the player
 /// </summary>
-[RequireComponent (typeof (Rigidbody2D))]
 public class PlayerAccelerometerMove : NetworkBehaviour, IPlayerMotion
 {
 	private Vector2 gyROT = new Vector2 (0, 0);

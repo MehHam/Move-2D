@@ -59,13 +59,27 @@ public class Enemy : NetworkBehaviour, IEnterInteractable {
 	private float _journeyLength;
 	private Transform _sphereCDM;
 
+	void OnEnable()
+	{
+		GameManager.onLevelStarted += OnLevelStarted;
+	}
+		
+	void OnDisable()
+	{
+		GameManager.onLevelStarted -= OnLevelStarted;
+	}
+
+	void OnLevelStarted ()
+	{
+		_sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM").transform;
+	}
+
 	void Start()
 	{
 		if (path.Count != 0) {
 			_currentDestinationIndex = 0;
 			_startTime = Time.time;
 			_journeyLength = Vector3.Distance (this.transform.position, path [_currentDestinationIndex].position);
-			_sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM").transform;
 		}
 	}
 
@@ -119,7 +133,8 @@ public class Enemy : NetworkBehaviour, IEnterInteractable {
 
 	void MoveFollow()
 	{
-		this.transform.position = Vector3.MoveTowards (this.transform.position, _sphereCDM.position, speed * Time.deltaTime);
+		if (_sphereCDM != null)
+			this.transform.position = Vector3.MoveTowards (this.transform.position, _sphereCDM.position, speed * Time.deltaTime);
 	}
 
 	void Move()
@@ -165,15 +180,6 @@ public class Enemy : NetworkBehaviour, IEnterInteractable {
 		StartCoroutine (BlinkRoutine (this.blinkDuration));
 	}
 
-	IEnumerator BlinkRoutine(float blinkDuration)
-	{
-		this._damaged = true;
-		this.GetComponent<Blinker> ().DamageAnimation ();
-		yield return new WaitForSeconds (blinkDuration);
-		this.GetComponent<Blinker> ().StopDamageAnimation ();
-		this._damaged = false;
-	}
-
 	public void OnEnterEffect (SphereCDM sphere)
 	{
 		if (_damaged)
@@ -185,5 +191,15 @@ public class Enemy : NetworkBehaviour, IEnterInteractable {
 		else {
 			Blink ();
 		}
+	}
+
+// ------------------------------------------- Coroutines 
+	IEnumerator BlinkRoutine(float blinkDuration)
+	{
+		this._damaged = true;
+		this.GetComponent<Blinker> ().DamageAnimation ();
+		yield return new WaitForSeconds (blinkDuration);
+		this.GetComponent<Blinker> ().StopDamageAnimation ();
+		this._damaged = false;
 	}
 }

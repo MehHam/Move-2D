@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   motionPointFollow: {fileID: 191588, guid: 2695905c03858a142b36e1fe3c406864, type: 2}
+  sphereCDM: {fileID: 183040, guid: 8e2fd6ae2a6f8ca4d82ba8f4b11d045d, type: 2}
   levelList: {fileID: 11400000, guid: a370ec100d33d4abdb3373b78f393217, type: 2}
   timeOut: 10
   gameStarted: 0

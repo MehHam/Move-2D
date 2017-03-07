@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// A movement module manages the drag type of movement for the player
 /// </summary>
-[RequireComponent (typeof (Rigidbody2D))]
 public class PlayerDragMove : NetworkBehaviour, IPlayerMotion, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 	public static GameObject DraggedInstance;

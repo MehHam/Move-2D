@@ -6,7 +6,6 @@ using UnityEngine.UI;
 /// <summary>
 /// A movement module manages the gyroscopic type of movement for the player
 /// </summary>
-[RequireComponent (typeof (Rigidbody2D))]
 class PlayerGyroscopeMove : NetworkBehaviour, IPlayerMotion
 {
 	public Gyroscope gyro;

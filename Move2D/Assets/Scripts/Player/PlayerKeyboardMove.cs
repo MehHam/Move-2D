@@ -6,7 +6,6 @@ using UnityEngine.UI;
 /// <summary>
 /// A movement module manages the keyboard type of movement for the player
 /// </summary>
-[RequireComponent (typeof (Rigidbody2D))]
 class PlayerKeyboardMove : NetworkBehaviour, IPlayerMotion
 {
 	/// <summary>
@@ -36,7 +35,8 @@ class PlayerKeyboardMove : NetworkBehaviour, IPlayerMotion
 		//Vector3 movement = new Vector3 (moveHorizontal, moveVertical,0);
 		//Debug.Log(movement);
 		//Call the AddForce function of our Rigidbody2D rb2d supplying movement multiplied by speed to move our player.
-		this.GetComponent<Rigidbody2D>().AddForce (movement * speed);
+		this.transform.RotateAround(Vector3.zero, movement, speed * Time.deltaTime);
+		//this.GetComponent<Rigidbody2D>().AddForce (movement * speed);
 	}
 }
 

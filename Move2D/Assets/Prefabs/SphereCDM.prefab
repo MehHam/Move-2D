@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 114003466200835296}
   - component: {fileID: 212445998365808830}
   - component: {fileID: 114862821110090508}
+  - component: {fileID: 114363858803713878}
   m_Layer: 0
   m_Name: SphereCDM
   m_TagString: SphereCDM
@@ -145,6 +146,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   players: []
+--- !u!114 &114363858803713878
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 657f74d28a4334b4e86f8ff66935cc16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  linePrefab: {fileID: 114984759723951976, guid: 811988556a36d4eb79384d3cc9372286,
+    type: 2}
 --- !u!114 &114424921309173602
 MonoBehaviour:
   m_ObjectHideFlags: 1

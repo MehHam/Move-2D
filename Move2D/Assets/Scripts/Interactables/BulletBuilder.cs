@@ -50,21 +50,17 @@ public class BulletBuilder: NetworkBehaviour
 
 	void OnLevelStarted()
 	{
+		this._sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
 		StartCoroutine (RandomPattern ());
-	}
-
-	void Start()
-	{
-		_sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
 	}
 
 	void SpawnRandom()
 	{
-		float sphereAngle = Vector3.Angle (Vector3.down, GetDirectionVector(_sphereCDM.transform.position, spawnCenter)) * Mathf.Deg2Rad;
+		float sphereAngle = Vector3.Angle (Vector3.down, GetDirectionVector(this._sphereCDM.transform.position, this.spawnCenter)) * Mathf.Deg2Rad;
 		float angle = Random.Range (sphereAngle + Mathf.PI * 0.5f, sphereAngle + Mathf.PI * 1.5f);
-		float x = Mathf.Cos (angle) * spawnRadius;
-		float y = Mathf.Sin (angle) * spawnRadius;
-		Spawn (new Vector3 (x + spawnCenter.x, y + spawnCenter.y, 0.0f + spawnCenter.z));
+		float x = Mathf.Cos (angle) * this.spawnRadius;
+		float y = Mathf.Sin (angle) * this.spawnRadius;
+		Spawn (new Vector3 (x + this.spawnCenter.x, y + this.spawnCenter.y, 0.0f + this.spawnCenter.z));
 	}
 
 	/// <summary>
@@ -80,8 +76,8 @@ public class BulletBuilder: NetworkBehaviour
 
 	void Spawn(Vector3 position)
 	{
-		var bullet = Instantiate (bulletPrefab, position, Quaternion.identity);
-		bullet.GetComponent<Bullet> ().direction = GetDirectionVector (_sphereCDM.transform.position, bullet.transform.position);
+		var bullet = Instantiate (this.bulletPrefab, position, Quaternion.identity);
+		bullet.GetComponent<Bullet> ().direction = GetDirectionVector (this._sphereCDM.transform.position, bullet.transform.position);
 		NetworkServer.Spawn (bullet.gameObject);
 	}
 }

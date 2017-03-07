@@ -14,7 +14,7 @@ MonoBehaviour:
   index: 3
   time: 30
   sceneName: Level1
-  gameMode: 0
+  gameMode: 1
   motionMode: 0
   readyAnimation: 1
   sphereVisibility: 0
