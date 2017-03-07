@@ -469,6 +469,9 @@ public class GameManager : NetworkBehaviour {
 					gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
 						Vector3.zero,
 						Quaternion.identity);
+				NetworkServer.ReplacePlayerForConnection (networkPlayerInfo.networkConnection,
+					gamePlayer,
+					networkPlayerInfo.playerInfo.playerControllerId);
 				gamePlayer.GetComponent<Player> ().playerInfo = networkPlayerInfo.playerInfo;
 				_isReadyToBegin = true;
 			}
@@ -572,10 +575,10 @@ public class GameManager : NetworkBehaviour {
 		}
 	}
 
-	[ClientRpc]
 	/// <summary>
 	/// Request on the client when the server is ready to begin.
-	/// </summary>
+	/// </summary> 
+	[ClientRpc]
 	void RpcReadyToBegin()
 	{
 		DeactivateWaitingForPlayersUI ();
