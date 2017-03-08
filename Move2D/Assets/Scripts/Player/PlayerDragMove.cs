@@ -15,6 +15,14 @@ public class PlayerDragMove : NetworkBehaviour, IPlayerMotion, IBeginDragHandler
 	Vector3 _startPosition;
 	Vector3 _offset;
 	float _zDistanceToCamera;
+	float _moveHorizontal;
+
+	public override void OnStartLocalPlayer ()
+	{
+		var dir = Vector2.zero - (Vector2)this.transform.position;
+		float angle = Mathf.Atan2 (dir.y, dir.x) * Mathf.Rad2Deg;
+		_moveHorizontal = angle;
+	}
 
 	Vector3 GetDragPosition(float zDistanceToCamera)
 	{
@@ -25,14 +33,13 @@ public class PlayerDragMove : NetworkBehaviour, IPlayerMotion, IBeginDragHandler
 
 	public void OnBeginDrag (PointerEventData eventData)
 	{
-		Debug.Log ("OnBeginDragCalled");
 		if (!isLocalPlayer)
 			return;
-		Debug.Log ("IsLocalPLayer");
 		DraggedInstance = this.gameObject;
-		_startPosition = this.GetComponent<Rigidbody2D> ().position;
+		_startPosition = this.transform.position;
 		_zDistanceToCamera = Mathf.Abs (_startPosition.z - Camera.main.transform.position.z);
 		_offset = _startPosition - Camera.main.ScreenToWorldPoint (GetDragPosition (this._zDistanceToCamera));
+		this.GetComponent<PlayerMoveManager>().enabl
 	}
 
 	#endregion
@@ -41,19 +48,15 @@ public class PlayerDragMove : NetworkBehaviour, IPlayerMotion, IBeginDragHandler
 
 	public void OnDrag (PointerEventData eventData)
 	{
-		Debug.Log ("OnDragCalled");
 		if (!isLocalPlayer)
 			return;
-		Debug.Log ("IsLocalPlayer");
-		this.GetComponent<Rigidbody2D> ().MovePosition (
-			Vector3.MoveTowards(
-				this.GetComponent<Rigidbody2D>().position,
-				Camera.main.ScreenToWorldPoint (
-				GetDragPosition (this._zDistanceToCamera)
-				) + _offset,
-				speed * Time.deltaTime
-			)
-		);
+		var dragPosition = Camera.main.ScreenToWorldPoint (GetDragPosition (this._zDistanceToCamera)) + _offset;
+		_moveHorizontal -= Input.GetAxis("Mouse X") * speed * 0.02f;
+
+		Quaternion rotation = Quaternion.Euler(_moveHorizontal, 270.0f, 0.0f);
+		var position = rotation * new Vector3 (0.0f, 0.0f, 16.0f);
+
+		this.transform.position = position;
 	}
 
 	#endregion

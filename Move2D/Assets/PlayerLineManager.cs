@@ -46,7 +46,7 @@ public class PlayerLineManager : MonoBehaviour {
 		var players = GameObject.FindGameObjectsWithTag ("Player");
 		for (int i = 0; i < players.Length; i++) {
 			for (int j = i + 1; j < players.Length; j++) {
-				var line = Instantiate (linePrefab);
+				var line = Instantiate (linePrefab, new Vector3(0, 0, -20.0f), Quaternion.identity);
 				line.GetComponent<PlayerLine> ().player1 = players [i];
 				line.GetComponent<PlayerLine> ().player2 = players [j];
 				_lines.Add (line);

@@ -14,12 +14,20 @@ public enum MotionMode
 	Gyroscope,
 	Drag,
 }
-[RequireComponent(typeof(PlayerKeyboardMove))]
-[RequireComponent(typeof(PlayerDragMove))]
-[RequireComponent(typeof(PlayerAccelerometerMove))]
-[RequireComponent(typeof(PlayerGyroscopeMove))]
 public class PlayerMoveManager : NetworkBehaviour
 {
+	public float positionUpdateRate = 0.2f;
+	public float smoothRatio = 15.0f;
+	public bool sendPosition = true;
+
+	Vector3 _playerPosition;
+
+	public override void OnStartLocalPlayer ()
+	{
+		StartCoroutine (UpdatePosition());
+		base.OnStartLocalPlayer ();
+	}
+
 	void FixedUpdate ()
 	{
 		// Only the local player should call this method
@@ -31,6 +39,37 @@ public class PlayerMoveManager : NetworkBehaviour
 				playerMotion.Move ();
 			}
 		}
-		this.GetComponent<Rigidbody2D> ().isKinematic = (GameManager.singleton != null && GameManager.singleton.paused);
+		//this.GetComponent<Rigidbody2D> ().isKinematic = (GameManager.singleton != null && GameManager.singleton.paused);
 	}
+
+	void Update()
+	{
+		LerpPosition ();
+	}
+
+	void LerpPosition() {
+		if (isLocalPlayer)
+			return;
+		this.transform.position = Vector3.Lerp (this.transform.position, _playerPosition, Time.deltaTime * smoothRatio);
+	}
+
+	IEnumerator UpdatePosition() {
+		while (enabled) {
+			if (sendPosition)
+				CmdSendPosition (this.transform.position);
+			yield return new WaitForSeconds (positionUpdateRate);
+		}
+	}
+
+	[Command]
+	void CmdSendPosition(Vector3 position) {
+		_playerPosition = position;
+		RpcReceivePosition (position);
+	}
+
+	[ClientRpc]
+	void RpcReceivePosition(Vector3 position) {
+		_playerPosition = position;
+	}
+		
 }

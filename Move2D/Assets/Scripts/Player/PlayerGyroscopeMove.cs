@@ -18,7 +18,6 @@ class PlayerGyroscopeMove : NetworkBehaviour, IPlayerMotion
 
 	public void Move ()
 	{
-		return;
 		// Only the local player should call this method
 		if (!isLocalPlayer)
 			return;
