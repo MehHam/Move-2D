@@ -544,9 +544,7 @@ public class GameManager : NetworkBehaviour {
 
 	// ----------------- Client ------------------
 
-
-	[Client]
-	void Start()
+	public override void OnStartClient ()
 	{
 		CustomNetworkLobbyManager.singleton.client.Send (MyStartMsg, new EmptyMessage ());
 	}

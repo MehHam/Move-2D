@@ -19,9 +19,11 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4053695482800070}
-  - component: {fileID: 114488520019248152}
-  - component: {fileID: 114094839773886154}
-  - component: {fileID: 114192447274613774}
+  - component: {fileID: 114807734421735812}
+  - component: {fileID: 114449890780339394}
+  - component: {fileID: 114983340475275844}
+  - component: {fileID: 114947542261293658}
+  - component: {fileID: 114378689189625778}
   m_Layer: 0
   m_Name: MoveManager
   m_TagString: Untagged
@@ -42,7 +44,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114094839773886154
+--- !u!114 &114378689189625778
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1159875401560976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30708daeb15c243b08729832f38b7bd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 50
+--- !u!114 &114449890780339394
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -53,9 +67,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14eaeee8dc2004a6b8cbb4ebd9020c22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 30
+  speed: 50
   sliderValue: 0
---- !u!114 &114192447274613774
+--- !u!114 &114807734421735812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1159875401560976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 319cd48fc0c1146d6a211b74bda7bc93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positionUpdateRate: 0.2
+  smoothRatio: 15
+  sendPosition: 1
+--- !u!114 &114947542261293658
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -67,7 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 1
-  m_SendInterval: 0.041666668
+  m_SendInterval: 0
   m_SyncRotationAxis: 2
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
@@ -75,7 +103,7 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!114 &114488520019248152
+--- !u!114 &114983340475275844
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

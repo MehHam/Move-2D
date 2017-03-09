@@ -11,14 +11,10 @@ GameObject:
   - component: {fileID: 3320852}
   - component: {fileID: 2356932}
   - component: {fileID: 11486648}
-  - component: {fileID: 11461956}
   - component: {fileID: 5815376}
-  - component: {fileID: 11403898}
   - component: {fileID: 114226452451224076}
   - component: {fileID: 58078462125004018}
-  - component: {fileID: 114246379408185164}
-  - component: {fileID: 114806881444775818}
-  - component: {fileID: 114421152566768632}
+  - component: {fileID: 114474116737414078}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -91,31 +87,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.55
---- !u!114 &11403898
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 152500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 763992d85d3f6d4428454c2a968ce084, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInGame: 0
---- !u!114 &11461956
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 152500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3b6d3332f5092b499f8c76b1e1a01a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerUniqueIdentity: 
-  myTransform: {fileID: 421054}
 --- !u!114 &11486648
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -190,20 +161,11 @@ MonoBehaviour:
     mass: 0
     playerControllerId: 0
   player2: 0
---- !u!114 &114246379408185164
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 152500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 319cd48fc0c1146d6a211b74bda7bc93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  positionUpdateRate: 0.1
+  moveController: {fileID: 1159875401560976, guid: b6e6d2d96bd88469da3e6cc8f8d00a4f,
+    type: 2}
+  positionUpdateRate: 0.2
   smoothRatio: 15
---- !u!114 &114421152566768632
+--- !u!114 &114474116737414078
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -211,20 +173,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 152500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30708daeb15c243b08729832f38b7bd7, type: 3}
+  m_Script: {fileID: 11500000, guid: 908a325c6eb41456f86277b63d77a406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
---- !u!114 &114806881444775818
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 152500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14eaeee8dc2004a6b8cbb4ebd9020c22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 75
-  sliderValue: 0
+  _posLerpRate: 15
+  _rotLerpRate: 15
+  _posThreshold: 0.1
+  _rotThreshold: 1

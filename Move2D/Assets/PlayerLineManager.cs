@@ -34,13 +34,13 @@ public class PlayerLineManager : MonoBehaviour {
 
 	void Start()
 	{
-		_lines = new List<PlayerLine> ();
+		this._lines = new List<PlayerLine> ();
 		InitLines ();
 	}
 
 	void InitLines()
 	{
-		foreach (var line in _lines) {
+		foreach (var line in this._lines) {
 			Destroy (line);
 		}
 		var players = GameObject.FindGameObjectsWithTag ("Player");

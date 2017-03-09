@@ -22,17 +22,9 @@ public class PlayerMoveManager : NetworkBehaviour
 
 	Vector3 _playerPosition;
 
-	public override void OnStartLocalPlayer ()
-	{
-		StartCoroutine (UpdatePosition());
-		base.OnStartLocalPlayer ();
-	}
-
 	void FixedUpdate ()
 	{
 		// Only the local player should call this method
-		if (!isLocalPlayer)
-			return;
 		// The player can't move if the game is paused
 		if (GameManager.singleton != null && !GameManager.singleton.paused) {
 			foreach (var playerMotion in gameObject.GetComponents<IPlayerMotion>()) {
@@ -40,36 +32,6 @@ public class PlayerMoveManager : NetworkBehaviour
 			}
 		}
 		//this.GetComponent<Rigidbody2D> ().isKinematic = (GameManager.singleton != null && GameManager.singleton.paused);
-	}
-
-	void Update()
-	{
-		LerpPosition ();
-	}
-
-	void LerpPosition() {
-		if (isLocalPlayer)
-			return;
-		this.transform.position = Vector3.Lerp (this.transform.position, _playerPosition, Time.deltaTime * smoothRatio);
-	}
-
-	IEnumerator UpdatePosition() {
-		while (enabled) {
-			if (sendPosition)
-				CmdSendPosition (this.transform.position);
-			yield return new WaitForSeconds (positionUpdateRate);
-		}
-	}
-
-	[Command]
-	void CmdSendPosition(Vector3 position) {
-		_playerPosition = position;
-		RpcReceivePosition (position);
-	}
-
-	[ClientRpc]
-	void RpcReceivePosition(Vector3 position) {
-		_playerPosition = position;
 	}
 		
 }

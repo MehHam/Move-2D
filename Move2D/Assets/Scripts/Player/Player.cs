@@ -35,7 +35,6 @@ public class PlayerInfo
 /// <summary>
 /// Class used to keep basic informations about the player and manage its behaviour when it's disconnected
 /// </summary>
-[RequireComponent(typeof(PlayerMoveManager))]
 public class Player : NetworkBehaviour {
 	/// <summary>
 	/// All the informations about this player
@@ -69,6 +68,13 @@ public class Player : NetworkBehaviour {
 	/// </summary>
 	public bool player2;
 
+	public GameObject moveController;
+
+	public float positionUpdateRate = 0.2f;
+	public float smoothRatio = 15.0f;
+
+	Vector3 _playerPosition;
+
 	void OnEnable()
 	{
 		CustomNetworkLobbyManager.onClientDisconnect += OnClientDisconnect;
@@ -87,13 +93,6 @@ public class Player : NetworkBehaviour {
 
 	void Awake() {
 		playerInfo.mass = 1.0f;
-	}
-
-	[ClientRpc]
-	public void RpcSetPosition(Vector2 position)
-	{
-		Debug.Log ("RpcSetPosition called : " + position);
-		this.GetComponent<Rigidbody2D> ().position = position;
 	}
 
 	/// <summary>
@@ -124,17 +123,74 @@ public class Player : NetworkBehaviour {
 	}
 
 	// Use this for initialization
-	void Start () {
+	public override void OnStartLocalPlayer ()
+	{
 		this.GetComponent<Renderer> ().material.color = color;
+		if (isLocalPlayer)
+		{
+			var diff = this.transform.position - Vector3.zero;
+			var direction = diff / diff.magnitude;
+			var moveController = GameObject.Instantiate (this.moveController,
+				Vector3.zero,
+				Quaternion.Euler(0.0f, 0.0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90.0f)
+			);
+			this.transform.SetParent (moveController.transform);
+			_playerPosition = this.transform.position;
+			//CmdSpawnMoveController ();
+			//StartCoroutine (UpdatePosition());
+		}
+		base.OnStartLocalPlayer ();
+	}
+
+	[Command]
+	void CmdSpawnMoveController()
+	{
+		var moveController = GameObject.Instantiate (this.moveController, Vector3.zero, Quaternion.identity);
+		this.transform.SetParent (moveController.transform);
+		NetworkServer.SpawnWithClientAuthority (moveController, connectionToClient);
+		RpcSetMoveControllerAsParent (moveController);
+	}
+
+	[ClientRpc]
+	void RpcSetMoveControllerAsParent(GameObject moveController)
+	{
+		if (isLocalPlayer) {
+			this.transform.SetParent (moveController.transform);
+		}
 	}
 
 	void Update() {
 		this.transform.localScale = new Vector3 (mass, mass, mass);
 		this.GetComponent<Renderer> ().material.color = color;
+		//LerpPosition ();
 	}
 
 	void OnClientDisconnect(NetworkConnection conn) {
 		if (conn == this.connectionToClient)
 			NetworkServer.Destroy (gameObject);
+	}
+
+	void LerpPosition() {
+		if (isLocalPlayer)
+			return;
+		this.transform.localPosition = Vector3.Lerp (this.transform.position, _playerPosition, Time.deltaTime * smoothRatio);
+	}
+
+	IEnumerator UpdatePosition() {
+		while (enabled) {
+			CmdSendPosition (this.transform.position);
+			yield return new WaitForSeconds (positionUpdateRate);
+		}
+	}
+
+	[Command]
+	void CmdSendPosition(Vector3 position) {
+		_playerPosition = position;
+		RpcReceivePosition (position);
+	}
+
+	[ClientRpc]
+	void RpcReceivePosition(Vector3 position) {
+		_playerPosition = position;
 	}
 }
