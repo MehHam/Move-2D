@@ -14,7 +14,7 @@ public enum MotionMode
 	Gyroscope,
 	Drag,
 }
-public class PlayerMoveManager : NetworkBehaviour
+public class PlayerMoveManager : MonoBehaviour
 {
 	public float positionUpdateRate = 0.2f;
 	public float smoothRatio = 15.0f;

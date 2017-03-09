@@ -6,30 +6,30 @@ using UnityEngine.Networking;
 /// <summary>
 /// Creates all the lines between the players
 /// </summary>
-public class PlayerLineManager : MonoBehaviour {
+public class PlayerLineManager : NetworkBehaviour {
 	public PlayerLine linePrefab;
 	List<PlayerLine> _lines;
 
 	void OnEnable()
 	{
-		CustomNetworkLobbyManager.onClientDisconnect += OnClientDisconnect;
-		CustomNetworkLobbyManager.onClientConnect += OnClientConnect;
+		Player.onPlayerDestroy += OnPlayerDestroy;
 	}
-		
+
 	void OnDisable()
 	{
-		CustomNetworkLobbyManager.onClientDisconnect -= OnClientDisconnect;
-		CustomNetworkLobbyManager.onClientConnect -= OnClientConnect;
+		Player.onPlayerDestroy -= OnPlayerDestroy;
 	}
 
-	void OnClientConnect (NetworkConnection conn)
+	void OnPlayerDestroy (Player player)
 	{
-		InitLines ();
-	}
-
-	void OnClientDisconnect (NetworkConnection conn)
-	{
-		InitLines ();
+		for (int i = 0; i < _lines.Count; i++)
+		{
+			if (_lines [i].player1 == player || _lines [i].player2 == player) {
+				Destroy (_lines [i].gameObject);
+				Destroy (_lines [i]);
+			}
+			_lines.RemoveAt (i);
+		}
 	}
 
 	void Start()
@@ -41,8 +41,10 @@ public class PlayerLineManager : MonoBehaviour {
 	void InitLines()
 	{
 		foreach (var line in this._lines) {
+			Destroy (line.gameObject);
 			Destroy (line);
 		}
+		this._lines = new List<PlayerLine> ();
 		var players = GameObject.FindGameObjectsWithTag ("Player");
 		for (int i = 0; i < players.Length; i++) {
 			for (int j = i + 1; j < players.Length; j++) {

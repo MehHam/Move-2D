@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// A movement module manages the drag type of movement for the player
 /// </summary>
-public class PlayerDragMove : NetworkBehaviour, IPlayerMotion, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class PlayerDragMove : MonoBehaviour, IPlayerMotion, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 	public static GameObject DraggedInstance;
 
@@ -38,7 +38,7 @@ public class PlayerDragMove : NetworkBehaviour, IPlayerMotion, IBeginDragHandler
 		var direction = diff / diff.magnitude;
 
 		float rot_z = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90.0f);
+		transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler(0f, 0f, rot_z - 90.0f), speed * Time.deltaTime);
 	}
 
 	#endregion

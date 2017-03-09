@@ -118,6 +118,7 @@ public class CustomNetworkLobbyManager : LobbyManager {
 
 	public override void OnServerDisconnect (NetworkConnection conn)
 	{
+		Debug.Log ("Server Disconnect");
 		base.OnServerDisconnect (conn);
 		if (onServerDisconnect != null)
 			onServerDisconnect (conn);
@@ -132,6 +133,7 @@ public class CustomNetworkLobbyManager : LobbyManager {
 
 	public override void OnClientDisconnect (NetworkConnection conn)
 	{
+		Debug.Log ("Client Disconnect");
 		base.OnClientDisconnect (conn);
 		if (onClientDisconnect != null)
 			onClientDisconnect (conn);

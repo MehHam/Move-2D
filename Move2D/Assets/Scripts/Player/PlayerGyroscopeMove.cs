@@ -6,9 +6,10 @@ using UnityEngine.UI;
 /// <summary>
 /// A movement module manages the gyroscopic type of movement for the player
 /// </summary>
-class PlayerGyroscopeMove : NetworkBehaviour, IPlayerMotion
+class PlayerGyroscopeMove : MonoBehaviour, IPlayerMotion
 {
 	public Gyroscope gyro;
+	public float speed = 50.0f;
 	public int sliderValue = 0;
 
 	public bool IsActivated (int sliderValue)
@@ -18,9 +19,6 @@ class PlayerGyroscopeMove : NetworkBehaviour, IPlayerMotion
 
 	public void Move ()
 	{
-		// Only the local player should call this method
-		if (!isLocalPlayer)
-			return;
 		// You can only move if the gyroscope is supporter
 		if (SystemInfo.supportsGyroscope) {
 			Debug.LogError ("Supports Gyroscope");
@@ -35,7 +33,11 @@ class PlayerGyroscopeMove : NetworkBehaviour, IPlayerMotion
 			}
 			Vector2 playerPos = new Vector2 (radiusR * Mathf.Cos (alpha), radiusR * Mathf.Sin (alpha));
 			if (playerPos.magnitude > radiusR * 0.95f && playerPos.magnitude < radiusR * 1.05f) {
-				this.GetComponent<Rigidbody2D> ().transform.position = Vector2.Lerp (this.GetComponent<Rigidbody2D> ().position, playerPos, 0.25f);
+				this.transform.Rotate (
+					Vector3.forward * -Input.gyro.rotationRateUnbiased.y
+					* Time.deltaTime * speed
+				);
+				//this.GetComponent<Rigidbody2D> ().transform.position = Vector2.Lerp (this.GetComponent<Rigidbody2D> ().position, playerPos, 0.25f);
 			}
 		}
 	}

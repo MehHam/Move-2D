@@ -22,7 +22,11 @@ class PlayerKeyboardMove : MonoBehaviour, IPlayerMotion
 	}
 
 	public void Move() {
-		this.transform.Rotate (Vector3.forward * Input.GetAxis ("Horizontal") * Time.deltaTime * speed);
+		this.transform.Rotate (
+			(Vector3.forward * Input.GetAxis ("Horizontal")
+			+ Vector3.forward * Input.GetAxis("Vertical"))
+			* Time.deltaTime * speed
+		);
 	}
 }
 

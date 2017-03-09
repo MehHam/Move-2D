@@ -47,7 +47,7 @@ public class PlayerLine : MonoBehaviour {
 		_lineRenderer.SetPositions (positions);
 	}
 
-	void Update()
+	void LateUpdate()
 	{
 		SetColors ();
 		SetPositions ();

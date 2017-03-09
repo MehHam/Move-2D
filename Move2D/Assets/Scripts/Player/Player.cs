@@ -75,6 +75,9 @@ public class Player : NetworkBehaviour {
 
 	Vector3 _playerPosition;
 
+	public delegate void PlayerDestroyHandler(Player player);
+	public static event PlayerDestroyHandler onPlayerDestroy;
+
 	void OnEnable()
 	{
 		CustomNetworkLobbyManager.onClientDisconnect += OnClientDisconnect;
@@ -192,5 +195,11 @@ public class Player : NetworkBehaviour {
 	[ClientRpc]
 	void RpcReceivePosition(Vector3 position) {
 		_playerPosition = position;
+	}
+
+	void OnDestroy()
+	{
+		if (onPlayerDestroy != null)
+			onPlayerDestroy (this);		
 	}
 }
