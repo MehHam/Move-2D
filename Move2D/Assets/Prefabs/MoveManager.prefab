@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 114807734421735812}
   - component: {fileID: 114449890780339394}
   - component: {fileID: 114378689189625778}
-  - component: {fileID: 114133951909815844}
   - component: {fileID: 114027306547331292}
   m_Layer: 0
   m_Name: MoveManager
@@ -57,38 +56,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 50
   sliderValue: 0
---- !u!114 &114133951909815844
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1159875401560976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 182
-    i1: 230
-    i2: 210
-    i3: 217
-    i4: 107
-    i5: 216
-    i6: 132
-    i7: 105
-    i8: 218
-    i9: 62
-    i10: 108
-    i11: 200
-    i12: 248
-    i13: 208
-    i14: 10
-    i15: 79
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!114 &114378689189625778
 MonoBehaviour:
   m_ObjectHideFlags: 1
