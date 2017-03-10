@@ -30,15 +30,20 @@ public enum GameState
 /// Class that manages the current state of the game
 /// </summary>
 public class GameManager : NetworkBehaviour {
-	public delegate void GameManagerEvent();
-	public delegate void ClientEvent(NetworkConnection conn);
+	public delegate void GameManagerHandler();
+	public delegate void GameManagerScoreHandler(int value);
+	public delegate void ClientHandler(NetworkConnection conn);
 
-	public static event ClientEvent onClientSceneChanged;
+	public static event ClientHandler onClientSceneChanged;
 
 	/// <summary>
 	/// Event called whenever the level started
 	/// </summary>
-	public static event GameManagerEvent onLevelStarted;
+	public static event GameManagerHandler onLevelStarted;
+	/// <summary>
+	/// Occurs when the score is changed;
+	/// </summary>
+	public static event GameManagerScoreHandler onScoreChange;
 
 	public enum Difficulty
 	{
@@ -539,10 +544,13 @@ public class GameManager : NetworkBehaviour {
 	/// <param name="value">The value by which the score will incremented. Can be negative</param>
 	public void AddToScore(int value = 1)
 	{
+		int previousScore = this.score;
 		if (value > 0)
 			this.score += value * Math.Max(1, (networkPlayersInfo.Count - 1));
 		if (value < 0)
 			this.score = Mathf.Max (this.score + value, 0);
+		if (previousScore != this.score)
+			onScoreChange (this.score - previousScore);
 	}
 
 	[Server]

@@ -32,8 +32,8 @@ public class CenterOfMassValidatorUI : NetworkBehaviour {
 		}
 	}
 
-
-	public void TryGuess()
+	[Server]
+	public void ServerGuess()
 	{
 		_cooldownTime = Time.time;
 		_isCooldown = true;
@@ -44,6 +44,13 @@ public class CenterOfMassValidatorUI : NetworkBehaviour {
 				GameManager.singleton.AddToScore (rangeScore.GetScore (range));
 			}
 		}
+	}
+
+
+	public void TryGuess()
+	{
+		_cooldownTime = Time.time;
+		CustomNetworkLobbyManager.singleton.client.connection.playerControllers[0].gameObject.GetComponent<Player>().CmdTryGuess ();
 	}
 
 	bool IsActivated()
@@ -59,7 +66,7 @@ public class CenterOfMassValidatorUI : NetworkBehaviour {
 		this.GetComponent<CanvasGroup> ().alpha = IsActivated() ? 1 : 0;
 		this.GetComponent<CanvasGroup> ().interactable = IsActivated() && !_isCooldown;
 		this.GetComponent<CanvasGroup> ().blocksRaycasts = IsActivated();
-		if (_cooldownTime + cooldownDuration <= Time.time)
+		if (isServer && _cooldownTime + cooldownDuration <= Time.time)
 			_isCooldown = false;
 	}
 }

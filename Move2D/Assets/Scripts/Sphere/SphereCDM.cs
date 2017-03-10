@@ -21,16 +21,26 @@ public class SphereCDM : NetworkBehaviour
 	[Tooltip("The duration of the damage animation")]
 	public float damageDuration = 2.0f;
 
+	public ScorePopupUI scorePopup;
+
 	// ----------------- Events ------------------
 
 	void OnEnable()
 	{
 		GameManager.onLevelStarted += OnLevelStarted;
+		GameManager.onScoreChange += OnScoreChange;
 	}
+
 
 	void OnDisable()
 	{
 		GameManager.onLevelStarted -= OnLevelStarted;
+		GameManager.onScoreChange -= OnScoreChange;
+	}
+
+	void OnScoreChange (int value)
+	{
+		RpcScoreChange (value);
 	}
 
 	void OnLevelStarted()
@@ -118,5 +128,17 @@ public class SphereCDM : NetworkBehaviour
 	void RpcBlink()
 	{
 		this.GetComponent<Blinker> ().Blink ();
+	}
+
+	[ClientRpc]
+	void RpcScoreChange (int value)
+	{
+		var go = GameManager.Instantiate (
+			scorePopup,
+			this.transform.position,
+			Quaternion.identity
+		);
+		go.text.text = value.ToString ();
+		go.text.color = value >= 0 ? Color.white : Color.red;
 	}
 }

@@ -125,6 +125,12 @@ public class Player : NetworkBehaviour {
 		NetworkServer.ReplacePlayerForConnection (this.connectionToClient, player, this.playerControllerId);
 	}
 
+	[Command]
+	public void CmdTryGuess()
+	{
+		GameObject.FindObjectOfType<CenterOfMassValidatorUI> ().ServerGuess ();
+	}
+
 	// Use this for initialization
 	public override void OnStartLocalPlayer ()
 	{

@@ -529,7 +529,6 @@ GameObject:
   - component: {fileID: 224145258190016094}
   - component: {fileID: 114494637188520598}
   - component: {fileID: 114636278780391946}
-  - component: {fileID: 114403838567476894}
   - component: {fileID: 225035050183474238}
   m_Layer: 5
   m_Name: Slider
@@ -602,6 +601,7 @@ GameObject:
   - component: {fileID: 224985137219230300}
   - component: {fileID: 225528033724285296}
   - component: {fileID: 114132870787591464}
+  - component: {fileID: 114242767795243416}
   m_Layer: 5
   m_Name: CenterOfMassValidator
   m_TagString: Untagged
@@ -1113,6 +1113,38 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114242767795243416
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1712716347990480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 147
+    i1: 138
+    i2: 33
+    i3: 34
+    i4: 27
+    i5: 31
+    i6: 228
+    i7: 60
+    i8: 185
+    i9: 202
+    i10: 128
+    i11: 229
+    i12: 110
+    i13: 171
+    i14: 10
+    i15: 203
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114277962653286374
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1233,38 +1265,6 @@ MonoBehaviour:
   m_FillAmount: 0
   m_FillClockwise: 0
   m_FillOrigin: 0
---- !u!114 &114403838567476894
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1580526642060092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 147
-    i1: 138
-    i2: 33
-    i3: 34
-    i4: 27
-    i5: 31
-    i6: 228
-    i7: 60
-    i8: 185
-    i9: 202
-    i10: 128
-    i11: 229
-    i12: 110
-    i13: 171
-    i14: 10
-    i15: 203
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 1
 --- !u!114 &114429374488267976
 MonoBehaviour:
   m_ObjectHideFlags: 1

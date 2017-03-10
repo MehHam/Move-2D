@@ -56,3 +56,9 @@ TagManager:
   - name: Player
     uniqueID: 1338097493
     locked: 0
+  - name: TextMesh
+    uniqueID: 2509224283
+    locked: 0
+  - name: Line
+    uniqueID: 2053823475
+    locked: 0
