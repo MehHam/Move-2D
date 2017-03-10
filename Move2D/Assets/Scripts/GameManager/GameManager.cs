@@ -10,6 +10,23 @@ using Prototype.NetworkLobby;
 using System;
 
 /// <summary>
+/// Game state.
+/// </summary>
+public enum GameState
+{
+	Inactive,
+	WaitingForPlayers,
+	ReadyToStartLevel,
+	PreLevel,
+	WaitingForAnimation,
+	LevelStart,
+	Playing,
+	PreLevelEnd,
+	LevelEnd,
+	EndGame,
+}
+
+/// <summary>
 /// Class that manages the current state of the game
 /// </summary>
 public class GameManager : NetworkBehaviour {
@@ -29,6 +46,7 @@ public class GameManager : NetworkBehaviour {
 		Intermediate,
 		Expert,
 	}
+
 
 	/// <summary>
 	/// Player information relative to a networkConnection
@@ -57,8 +75,10 @@ public class GameManager : NetworkBehaviour {
 	public GameObject motionPointFollow;
 	public GameObject sphereCDM;
 
-	bool _isReadyToBegin;
 	int _playerReadyToStart = 0;
+	bool _readyToStart = false;
+	private int _nextLevelIndex = 0;
+	float? _startingTime = null;
 	Coroutine _timeCoroutine;
 
 	public static GameManager singleton { get; private set; }
@@ -111,22 +131,22 @@ public class GameManager : NetworkBehaviour {
 	/// After this timeout the server will start the game and kick all clients that didn't send their ready to begin message
 	/// </summary>
 	public float timeOut = 10.0f;
-
+	public bool isPlaying { get { return this.gameState == GameState.Playing; } }
 	/// <summary>
-	/// Has the game started or not. Becomes true the first time the time on a level is started.
+	/// Has the game started or not.
 	/// </summary>
-	[Tooltip("Has the game started ?")]
-	[SyncVar] public bool gameStarted = false;
+	public bool gameStarted { get { return this.gameState != GameState.Inactive; }}
+
 	/// <summary>
 	/// The difficulty of the game
 	/// </summary>
 	[Tooltip("The difficulty of the game")]
 	[SyncVar] public Difficulty difficulty = Difficulty.Beginner;
 	/// <summary>
-	/// Whether the game is paused or not.
+	/// The current game state
 	/// </summary>
-	[Tooltip("Is the game paused ?")]
-	[SyncVar] public bool paused = true;
+	[Tooltip("The current game state")]
+	[SyncVar] public GameState gameState = GameState.Inactive;
 	/// <summary>
 	/// The index of the level that is currently played
 	/// </summary>
@@ -143,23 +163,27 @@ public class GameManager : NetworkBehaviour {
 	[Tooltip("Current score of the player")]
 	[SyncVar] public int score = 0;
 
+
+
+	// ----------------- NetworkBehaviour Events ------------------
+
+
+
 	void OnEnable()
 	{
-		//NetworkSceneManager.OnClientLevelLoaded += OnLevelFinishedLoading;
-		//NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
+		CustomNetworkLobbyManager.onServerSceneChanged += OnServerSceneChanged;
+		CustomNetworkLobbyManager.onClientSceneChanged += OnClientSceneChanged;
 		CustomNetworkLobbyManager.onServerDisconnect += OnServerDisconnect;
 		CustomNetworkLobbyManager.onServerConnect += OnServerConnect;
-		//CustomNetworkLobbyManager.onClientSceneLoaded += OnClientSceneLoaded;
 		ReadySetGo.onAnimationFinished += OnAnimationFinished;
 	}
 
 	void OnDisable()
 	{
-		//NetworkSceneManager.OnClientLevelLoaded += OnLevelFinishedLoading;
-		//NetworkSceneManager.OnServerLevelLoaded += OnLevelFinishedLoading;
+		CustomNetworkLobbyManager.onServerSceneChanged -= OnServerSceneChanged;
+		CustomNetworkLobbyManager.onClientSceneChanged -= OnClientSceneChanged;
 		CustomNetworkLobbyManager.onServerConnect -= OnServerConnect;
 		CustomNetworkLobbyManager.onServerDisconnect -= OnServerDisconnect;
-		//CustomNetworkLobbyManager.onClientSceneLoaded -= OnClientSceneLoaded;
 		ReadySetGo.onAnimationFinished -= OnAnimationFinished;
 	}
 
@@ -175,61 +199,15 @@ public class GameManager : NetworkBehaviour {
 		}
 	}
 
-	void InitPlayerInfo() {
-		networkPlayersInfo = new List<NetworkPlayerInfo> ();
-		foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
-			networkPlayersInfo.Add (
-				new NetworkPlayerInfo(player.GetComponent<Player>().playerInfo,
-				player.GetComponent<Player>().connectionToClient)
-			);
-		}
+	void Update()
+	{
+		if (isServer)
+			HandleStateMachine ();
 	}
 
-	void DeactivateWaitingForPlayersUI()
+	void OnDestroy()
 	{
-		var waitingForPlayers = GameObject.FindObjectOfType<EllipsisTextUI> ();
-		if (waitingForPlayers != null)
-			waitingForPlayers.Deactivate ();
-	}
-
-	/// <summary>
-	/// Returns true if the variable readyToBegin is true for all network player info
-	/// </summary>
-	/// <returns><c>true</c>, if players are ready, <c>false</c> otherwise.</returns>
-	bool AllPlayersReady()
-	{
-		foreach (var networkPlayerInfo in networkPlayersInfo)
-		{
-			if (!networkPlayerInfo.readyToBegin)
-				return false;
-		}
-		return _isReadyToBegin;
-	}
-
-	/// <summary>
-	/// Get the current level data
-	/// </summary>
-	/// <returns>The current level data</returns>
-	public Level GetCurrentLevel()
-	{
-		return this.GetCurrentLevels () [this.currentLevelIndex];
-	}
-
-	/// <summary>
-	/// Get the levels for the current difficulty
-	/// </summary>
-	/// <returns>Get the levels for the current difficulty.</returns>
-	public Level[] GetCurrentLevels()
-	{
-		switch (difficulty) {
-		case Difficulty.Beginner:
-			return beginnerLevels;
-		case Difficulty.Intermediate:
-			return intermediateLevels;
-		case Difficulty.Expert:
-			return expertLevels;
-		}
-		return null;
+		StopAllCoroutines ();
 	}
 		
 	void OnDisconnectedFromServer()
@@ -237,32 +215,36 @@ public class GameManager : NetworkBehaviour {
 		Destroy (gameObject);
 	}
 
-	// Called when the ready set go animation is finished
-	void OnAnimationFinished()
+
+
+	// ----------------- State Machine ------------------
+
+
+
+	void Inactive()
 	{
-		ImmediateStartLevel ();
+		int count = 0;
+		// Some connections can be null for some reason, so we have to do the count by ourself
+		foreach (var connection in NetworkServer.connections) {
+			if (connection != null)
+				count++;
+		}
+		// If all clients are ready we can start the level
+		if (count == this._playerReadyToStart)
+			this.gameState = GameState.PreLevel;
 	}
-
-	void OnDestroy()
-	{
-		StopAllCoroutines ();
-	}
-
-
-
-	// ----------------- IEnumerator ------------------
-
 
 	/// <summary>
+	/// Called when the game state is WaitingForPlayers.
 	/// Waits for all players to be ready, kicks all the clients that aren't after the timeout.
 	/// </summary>
 	/// <param name="timeOut">The time out time.</param>
-	IEnumerator WaitForAllPlayersReady(float timeOut)
+	void WaitingForPlayers()
 	{
-		var time = Time.time;
-		// Wait until timeout OR both the players and the server are ready
-		while ((Time.time < time + timeOut) && !AllPlayersReady()) {
-			yield return null;
+		if (!_startingTime.HasValue)
+			_startingTime = Time.time;
+		if ((Time.time < _startingTime.Value + timeOut) && !AllPlayersReady()) {
+			return;
 		}
 		var players = FindObjectsOfType<Player> ();
 		// Kick all players that aren't ready if timeout
@@ -278,43 +260,39 @@ public class GameManager : NetworkBehaviour {
 				networkPlayersInfo [i].readyToBegin = false;
 			}
 		}
-		StartLevel ();
+		_startingTime = null;
+		this.gameState = GameState.PreLevel;
+	}
+
+	/// <summary>
+	/// Called when the game state is at PreLevel. Do all the pre-level actions.
+	/// </summary>
+	[Server]
+	void PreLevel ()
+	{
+		var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
+		if (GetCurrentLevel ().readyAnimation && readySetGo != null && readySetGo.GetComponent<Animator> () != null) {
+			readySetGo.GetComponent<Animator> ().SetTrigger ("Activation");
+			readySetGo.GetComponent<NetworkAnimator> ().SetTrigger ("Activation");
+			this.gameState = GameState.WaitingForAnimation;
+
+		} else
+			this.gameState = GameState.LevelStart;
+	}
+
+	/// <summary>
+	/// Waitings for pre level animation.
+	/// </summary>
+	[Server]
+	void WaitingForAnimation ()
+	{
 	}
 		
 	/// <summary>
-	/// Converts the time to a score.
+	/// Called when the game state is at LevelStart. Start the level
 	/// </summary>
-	IEnumerator ConvertTimeToScore()
-	{
-		while (this.time > 0) {
-			this.time--;
-			this.score++;
-			yield return null;
-		}
-		LoadNextLevel ();
-	}
-
-	// The time countdown
 	[Server]
-	IEnumerator DecreaseTime()
-	{
-		while (time > 0)
-		{
-			yield return new WaitForSeconds (1.0f);
-			time--;
-		}
-		// If there's a level next, loads the next level when the time is finished
-		if (this.currentLevelIndex + 1 < this.GetCurrentLevels().Length) {
-			LoadNextLevel ();
-		}
-	}
-
-
-	// ----------------- Server ------------------
-
-	// Starts immediately the level, ignore the ready set go animation
-	[Server]
-	void ImmediateStartLevel ()
+	void LevelStart ()
 	{
 		InitPlayerInfo ();
 		StopTime ();
@@ -329,103 +307,96 @@ public class GameManager : NetworkBehaviour {
 		if (onLevelStarted != null)
 			onLevelStarted ();
 		RpcLevelStarted ();
+		this.gameState = GameState.Playing;
+	}
+		
+	/// <summary>
+	/// Called when the game state is Playing.
+	/// </summary>
+	void Playing ()
+	{
 	}
 
-	// Starts the level
+	/// <summary>
+	/// Called when the game state is PreLevelEnd. Do the pre level end stuff.
+	/// </summary>
 	[Server]
-	void StartLevel ()
+	void PreLevelEnd()
 	{
-		var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
-		DeactivateWaitingForPlayersUI ();
-		RpcReadyToBegin ();
-		if (GetCurrentLevel ().readyAnimation && readySetGo != null && readySetGo.GetComponent<Animator>() != null) {
-			paused = true;
-			readySetGo.GetComponent<Animator> ().SetTrigger ("Activation");
-			readySetGo.GetComponent<NetworkAnimator>().SetTrigger ("Activation");
+		if (this.time > 0) {
+			this.time--;
+			this.score++;
+		} else {
+			this._nextLevelIndex = this.currentLevelIndex + 1;
+			this.gameState = GameState.LevelEnd;
 		}
-		else
-			ImmediateStartLevel ();
 	}
 
 	/// <summary>
-	/// Increase the score
+	/// Called when the game state is LevelEnd. End the level and loads the next one.
 	/// </summary>
 	[Server]
-	public void IncreaseScore()
-	{
-		IncreaseScore (1);
-	}
-
-	/// <summary>
-	/// Increase the score by a value.
-	/// The more player there is, the more points you get
-	/// </summary>
-	/// <param name="value">The value by which the score will be increased.</param>
-	[Server]
-	public void IncreaseScore(int value)
-	{
-		this.score += value * Math.Max(1, (networkPlayersInfo.Count - 1));
-	}
-
-	/// <summary>
-	/// Decrease the score
-	/// </summary>
-	[Server]
-	public void DecreaseScore()
-	{
-		DecreaseScore (1);
-	}
-
-	/// <summary>
-	/// Decrease the score by a value
-	/// </summary>
-	/// <param name="value">The value by which the score will be decreased.</param>
-	[Server]
-	public void DecreaseScore(int value)
-	{
-		if (paused)
-			return;
-		this.score -= value;
-		this.score = Mathf.Max (this.score, 0);
-	}
-
-
-	/// <summary>
-	/// Loads the next level.
-	/// </summary>
-	[Server]
-	void LoadNextLevel ()
-	{
-		this.currentLevelIndex++;
-		LoadLevel ();
-	}
-
-	/// <summary>
-	/// Loads the level.
-	/// </summary>
-	[Server]
-	void LoadLevel ()
-	{
-		var nextSceneName = this.GetCurrentLevels() [this.currentLevelIndex].sceneName;
-		StopTime ();
-		this.time = this.GetCurrentLevel ().time;
-		CustomNetworkLobbyManager.singleton.ServerChangeScene(nextSceneName);
-		StartCoroutine (WaitForAllPlayersReady (this.timeOut));
-	}
-
-	[Server]
-	/// <summary>
-	/// Change the difficulty of the game. The first level of that difficulty setting is automatically started.
-	/// </summary>
-	/// <param name="difficulty">The new difficulty.</param>
-	public void ChangeDifficulty(Difficulty difficulty)
+	void LevelEnd()
 	{
 		StopAllCoroutines ();
-		this.score = 0;
-		this.difficulty = difficulty;
-		this.currentLevelIndex = 0;
-		LoadLevel ();
+		if (this._nextLevelIndex < this.GetCurrentLevels().Length) {
+			this.currentLevelIndex = this._nextLevelIndex;
+			LoadLevel ();
+		}
 	}
+
+	/// <summary>
+	/// Called when the game state is at EndGame.a
+	/// </summary>
+	[Server]
+	void EndGame()
+	{
+	}
+
+	/// <summary>
+	/// Handles the state machine.
+	/// </summary>
+	void HandleStateMachine()
+	{
+		switch (this.gameState)
+		{
+		case GameState.Inactive:
+			Inactive ();
+			break;
+		case GameState.WaitingForPlayers:
+			WaitingForPlayers();
+			break;
+		case GameState.PreLevel:
+			PreLevel ();
+			break;
+		case GameState.WaitingForAnimation:
+			WaitingForAnimation ();
+			break;
+		case GameState.LevelStart:
+			LevelStart ();
+			break;
+		case GameState.Playing:
+			Playing ();
+			break;
+		case GameState.PreLevelEnd:
+			PreLevelEnd ();
+			break;
+		case GameState.LevelEnd:
+			LevelEnd ();
+			break;
+		case GameState.EndGame:
+			EndGame ();
+			break;
+		default:
+			break;
+		}
+	}
+
+
+
+	// ----------------- Handlers ------------------
+		
+
 
 	/// <summary>
 	/// Event handler called on the server when a client disconnects
@@ -454,10 +425,9 @@ public class GameManager : NetworkBehaviour {
 	/// Event handler called when the scene is changed for the server
 	/// </summary>
 	[Server]
-	public void OnServerSceneChanged()
+	void OnServerSceneChanged()
 	{
-		// Call this only if this isn't the first time the scene changed
-		if (gameStarted) {
+		if (this.gameState != GameState.Inactive) {
 			foreach (var networkPlayerInfo in networkPlayersInfo) {
 				var startPos = NetworkManager.singleton.GetStartPosition ();
 				GameObject gamePlayer;
@@ -473,9 +443,21 @@ public class GameManager : NetworkBehaviour {
 					gamePlayer,
 					networkPlayerInfo.playerInfo.playerControllerId);
 				gamePlayer.GetComponent<Player> ().playerInfo = networkPlayerInfo.playerInfo;
-				_isReadyToBegin = true;
+				_readyToStart = true;
 			}
 		}
+	}
+		
+	/// <summary>
+	/// Event handler called on the client when its scene changed
+	/// </summary>
+	/// <param name="conn">The network connection of the client</param>
+	public void OnClientSceneChanged(NetworkConnection conn)
+	{
+		if (onClientSceneChanged != null)
+			onClientSceneChanged (conn);
+		if (gameStarted)
+			conn.Send (MyBeginMsg, new EmptyMessage ());
 	}
 
 	/// <summary>
@@ -483,7 +465,7 @@ public class GameManager : NetworkBehaviour {
 	/// </summary>
 	/// <param name="netMsg">Network message.</param>
 	[Server]
-	public void OnServerStartLevelMessage(NetworkMessage netMsg)
+	void OnServerStartLevelMessage(NetworkMessage netMsg)
 	{
 		for (int i = 0; i < networkPlayersInfo.Count; i++) {
 			if (networkPlayersInfo [i].networkConnection == netMsg.conn)
@@ -496,69 +478,96 @@ public class GameManager : NetworkBehaviour {
 	/// </summary>
 	/// <param name="netMsg">Net message.</param>
 	[Server]
-	public void OnServerStartGameMessage(NetworkMessage netMsg)
+	void OnServerStartGameMessage(NetworkMessage netMsg)
 	{
 		this._playerReadyToStart++;
-		int count = 0;
-		// Some connections can be null for some reason, so we have to do the count by ourself
-		foreach (var connection in NetworkServer.connections) {
-			if (connection != null)
-				count++;
-		}
-		// If all clients are ready we can start the level
-		if (count == this._playerReadyToStart)
-			StartLevel ();
+	}
+		
+	// Called when the ready set go animation is finished
+	void OnAnimationFinished()
+	{
+		this.gameState = GameState.LevelStart;
 	}
 
+
+
+	// ----------------- Public Methods ------------------
+
+
+
+	/// <summary>
+	/// Exits the level.
+	/// </summary>
 	[Server]
 	public void ExitLevel()
 	{
-		StopTime ();
-		StartCoroutine (ConvertTimeToScore());
+		this._nextLevelIndex = this.currentLevelIndex + 1;
+		this.gameState = GameState.PreLevelEnd;
 	}
 
 	/// <summary>
-	/// Starts the time countdown
+	/// Get the current level data
 	/// </summary>
-	[Server]
-	public void StartTime()
+	/// <returns>The current level data</returns>
+	public Level GetCurrentLevel()
 	{
-		this._timeCoroutine = StartCoroutine(DecreaseTime());
-		this.paused = false;
-		// If we start the time, it means that the game was started at least once
-		gameStarted = true;
+		return this.GetCurrentLevels () [this.currentLevelIndex];
 	}
 
 	/// <summary>
-	/// Stops the time countdown
+	/// Get the levels for the current difficulty
 	/// </summary>
-	[Server]
-	public void StopTime()
+	/// <returns>Get the levels for the current difficulty.</returns>
+	public Level[] GetCurrentLevels()
 	{
-		if (this._timeCoroutine != null)
-			StopCoroutine (this._timeCoroutine);
-		this.paused = true;
+		switch (difficulty) {
+		case Difficulty.Beginner:
+			return beginnerLevels;
+		case Difficulty.Intermediate:
+			return intermediateLevels;
+		case Difficulty.Expert:
+			return expertLevels;
+		}
+		return null;
+	}
+
+	[Server]
+	/// <summary>
+	/// Increase the score by a value.
+	/// The more player there is, the more points you get
+	/// </summary>
+	/// <param name="value">The value by which the score will incremented. Can be negative</param>
+	public void AddToScore(int value = 1)
+	{
+		if (value > 0)
+			this.score += value * Math.Max(1, (networkPlayersInfo.Count - 1));
+		if (value < 0)
+			this.score = Mathf.Max (this.score + value, 0);
+	}
+
+	[Server]
+	/// <summary>
+	/// Change the difficulty of the game. The first level of that difficulty setting is automatically started.
+	/// </summary>
+	/// <param name="difficulty">The new difficulty.</param>
+	public void ChangeDifficulty(Difficulty difficulty)
+	{
+		StopAllCoroutines ();
+		this.score = 0;
+		this.difficulty = difficulty;
+		this._nextLevelIndex = 0;
+		this.gameState = GameState.LevelEnd;
 	}
 
 
 
 	// ----------------- Client ------------------
 
+
+
 	public override void OnStartClient ()
 	{
 		CustomNetworkLobbyManager.singleton.client.Send (MyStartMsg, new EmptyMessage ());
-	}
-
-	/// <summary>
-	/// Event handler called on the client when its scene changed
-	/// </summary>
-	/// <param name="conn">The network connection of the client</param>
-	public void OnClientSceneChanged(NetworkConnection conn)
-	{
-		if (onClientSceneChanged != null)
-			onClientSceneChanged (conn);
-		if (gameStarted)
-			conn.Send (MyBeginMsg, new EmptyMessage ());
 	}
 
 	/// <summary>
@@ -573,12 +582,78 @@ public class GameManager : NetworkBehaviour {
 		}
 	}
 
+
+
+	// ---------------------------------------------------
+
+
+
+
 	/// <summary>
-	/// Request on the client when the server is ready to begin.
-	/// </summary> 
-	[ClientRpc]
-	void RpcReadyToBegin()
+	/// Returns true if the variable readyToBegin is true for all network player info
+	/// </summary>
+	/// <returns><c>true</c>, if players are ready, <c>false</c> otherwise.</returns>
+	bool AllPlayersReady()
 	{
-		DeactivateWaitingForPlayersUI ();
+		foreach (var networkPlayerInfo in networkPlayersInfo)
+		{
+			if (!networkPlayerInfo.readyToBegin)
+				return false;
+		}
+		return this._readyToStart;
+	}
+
+	/// <summary>
+	/// Loads the level.
+	/// </summary>
+	[Server]
+	void LoadLevel ()
+	{
+		var nextSceneName = this.GetCurrentLevels() [this.currentLevelIndex].sceneName;
+		this.time = this.GetCurrentLevel ().time;
+		CustomNetworkLobbyManager.singleton.ServerChangeScene(nextSceneName);
+		this.gameState = GameState.WaitingForPlayers;
+	}
+
+	/// <summary>
+	/// Starts the time countdown
+	/// </summary>
+	[Server]
+	void StartTime()
+	{
+		this._timeCoroutine = StartCoroutine(DecreaseTime());
+	}
+
+	/// <summary>
+	/// Stops the time countdown
+	/// </summary>
+	[Server]
+	void StopTime()
+	{
+		if (this._timeCoroutine != null)
+			StopCoroutine (this._timeCoroutine);
+	}
+
+	// The time countdown
+	[Server]
+	IEnumerator DecreaseTime()
+	{
+		while (time > 0)
+		{
+			yield return new WaitForSeconds (1.0f);
+			time--;
+		}
+		this._nextLevelIndex = this.currentLevelIndex + 1;
+		this.gameState = GameState.PreLevelEnd;
+	}
+
+	void InitPlayerInfo() {
+		networkPlayersInfo = new List<NetworkPlayerInfo> ();
+		foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
+			networkPlayersInfo.Add (
+				new NetworkPlayerInfo(player.GetComponent<Player>().playerInfo,
+					player.GetComponent<Player>().connectionToClient)
+			);
+		}
 	}
 }

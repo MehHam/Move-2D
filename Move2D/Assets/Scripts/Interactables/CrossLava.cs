@@ -20,7 +20,7 @@ public class CrossLava : NetworkBehaviour, IEnterInteractable, IStayInteractable
 	[Server]
 	public void OnEnterEffect (SphereCDM sphere)
 	{
-		GameManager.singleton.DecreaseScore ();
+		GameManager.singleton.AddToScore(-1);
 		StartCoroutine (ScoreCooldown ());
 		sphere.Damage ();
 	}
@@ -29,7 +29,7 @@ public class CrossLava : NetworkBehaviour, IEnterInteractable, IStayInteractable
 	public void OnStayEffect (SphereCDM sphere)
 	{
 		if (!_cooldown) {
-			GameManager.singleton.DecreaseScore ();
+			GameManager.singleton.AddToScore (-1);
 			StartCoroutine (ScoreCooldown ());
 		}
 	}

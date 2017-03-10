@@ -1,6 +1,5 @@
 using UnityEngine;
-
-// This script will set up LineRenderers based on recorded fingers
+/*
 public class SimpleSnapshots : MonoBehaviour
 {
 	public LineRenderer[] LineRenderers;
@@ -48,3 +47,4 @@ public class SimpleSnapshots : MonoBehaviour
 		}
 	}
 }
+*/

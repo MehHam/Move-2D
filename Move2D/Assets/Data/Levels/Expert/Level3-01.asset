@@ -17,5 +17,5 @@ MonoBehaviour:
   gameMode: 0
   motionMode: 0
   readyAnimation: 1
-  sphereVisibility: 2
+  sphereVisibility: 1
   massModification: 1

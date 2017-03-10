@@ -10,28 +10,33 @@ using UnityEngine.Networking.NetworkSystem;
 /// Custom NetworkLobby class
 /// </summary>
 public class CustomNetworkLobbyManager : LobbyManager {
-	public delegate void NetworkEvent(NetworkConnection conn);
-	public delegate void SceneLoadedEvent(GameObject lobbyPlayer, GameObject gamePlayer);
-	/// <summary>
-	/// Occurs when a  scene loaded.
-	/// </summary>
-	public static event SceneLoadedEvent onClientSceneLoaded;
+	public delegate void NetworkHandler();
+	public delegate void NetworkConnectionHandler(NetworkConnection conn);
+	public delegate void SceneLoadedHandler(GameObject lobbyPlayer, GameObject gamePlayer);
 	/// <summary>
 	/// Event called on client when a client disconnect
 	/// </summary>
-	public static event NetworkEvent onClientDisconnect;
+	public static event NetworkConnectionHandler onClientDisconnect;
 	/// <summary>
 	/// Event called on server when a client disconnect
 	/// </summary>
-	public static event NetworkEvent onServerDisconnect;
+	public static event NetworkConnectionHandler onServerDisconnect;
 	/// <summary>
 	/// Event called on client when a client connects
 	/// </summary>
-	public static event NetworkEvent onClientConnect;
+	public static event NetworkConnectionHandler onClientConnect;
 	/// <summary>
 	/// Event called on server when a client connects
 	/// </summary>
-	public static event NetworkEvent onServerConnect;
+	public static event NetworkConnectionHandler onServerConnect;
+	/// <summary>
+	/// Occurs when the scene changed on the server.
+	/// </summary>
+	public static event NetworkHandler onServerSceneChanged;
+	/// <summary>
+	/// Occurs when the scene changed on the client
+	/// </summary>
+	public static event NetworkConnectionHandler onClientSceneChanged;
 
 	public override NetworkClient StartHost()
 	{
@@ -91,9 +96,8 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	public override void OnServerSceneChanged (string sceneName)
 	{
 		base.OnServerSceneChanged (sceneName);
-		if (!_isMatchmaking && GameManager.singleton != null) {
-			GameManager.singleton.OnServerSceneChanged ();
-		}
+		if (onServerSceneChanged != null)
+			onServerSceneChanged ();
 	}
 
 	/// <summary>
@@ -102,9 +106,8 @@ public class CustomNetworkLobbyManager : LobbyManager {
 	public override void OnClientSceneChanged (NetworkConnection conn)
 	{
 		base.OnClientSceneChanged (conn);
-		if (!_isMatchmaking && GameManager.singleton != null) {
-			GameManager.singleton.OnClientSceneChanged (conn);
-		}
+		if (onClientSceneChanged != null)
+			onClientSceneChanged (conn);
 	}
 
 	public override bool OnLobbyServerSceneLoadedForPlayer (GameObject lobbyPlayer, GameObject gamePlayer)

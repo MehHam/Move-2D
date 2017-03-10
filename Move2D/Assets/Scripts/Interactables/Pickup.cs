@@ -17,7 +17,7 @@ public class Pickup : NetworkBehaviour, IEnterInteractable {
 	public void OnEnterEffect (SphereCDM sphere)
 	{
 		this.gameObject.SetActive(false);
-		GameManager.singleton.IncreaseScore (scoreValue);
+		GameManager.singleton.AddToScore (scoreValue);
 		if (GameManager.singleton.GetCurrentLevel ().sphereVisibility == Level.SphereVisibility.FadeAfterStartLevel ||
 		    GameManager.singleton.GetCurrentLevel ().sphereVisibility == Level.SphereVisibility.Invisible) {
 			sphere.Blink ();

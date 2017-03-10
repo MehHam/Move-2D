@@ -24,6 +24,8 @@ public class PlayerDragMove : MonoBehaviour, IPlayerMotion, IBeginDragHandler, I
 
 	public void OnBeginDrag (PointerEventData eventData)
 	{
+		if (!GameManager.singleton.isPlaying)
+			return;
 		this._startPosition = this.transform.position;
 		_zDistanceToCamera = Mathf.Abs (_startPosition.z - Camera.main.transform.position.z);
 	}
@@ -34,6 +36,8 @@ public class PlayerDragMove : MonoBehaviour, IPlayerMotion, IBeginDragHandler, I
 
 	public void OnDrag (PointerEventData eventData)
 	{
+		if (!GameManager.singleton.isPlaying)
+			return;
 		var diff = (Camera.main.ScreenToWorldPoint(GetDragPosition (this._zDistanceToCamera))) - transform.position;
 		var direction = diff / diff.magnitude;
 
@@ -47,6 +51,8 @@ public class PlayerDragMove : MonoBehaviour, IPlayerMotion, IBeginDragHandler, I
 
 	public void OnEndDrag (PointerEventData eventData)
 	{
+		if (!GameManager.singleton.isPlaying)
+			return;
 	}
 
 	#endregion

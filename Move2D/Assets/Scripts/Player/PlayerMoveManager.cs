@@ -26,7 +26,7 @@ public class PlayerMoveManager : MonoBehaviour
 	{
 		// Only the local player should call this method
 		// The player can't move if the game is paused
-		if (GameManager.singleton != null && !GameManager.singleton.paused) {
+		if (GameManager.singleton != null && GameManager.singleton.gameState == GameState.Playing) {
 			foreach (var playerMotion in gameObject.GetComponents<IPlayerMotion>()) {
 				playerMotion.Move ();
 			}

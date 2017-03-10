@@ -37,7 +37,7 @@ public class Bullet: NetworkBehaviour, IEnterInteractable
 	[Server]
 	public void OnEnterEffect (SphereCDM sphere)
 	{
-		GameManager.singleton.DecreaseScore (1);
+		GameManager.singleton.AddToScore (-scoreValue);
 		this.velocity = 0.0f;
 		if (GameManager.singleton.invisibleSphere)
 			sphere.Damage ();

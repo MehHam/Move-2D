@@ -40,20 +40,8 @@ public class ProgressBarUI : MonoBehaviour
 	{
 		if (_active)
 		{
-			var criterion = xiSquareCriterion (_sphereCDM, _pointFollow);
+			var criterion = _sphereCDM.GetComponent<SpherePhysics>().XISquareCriterion(_pointFollow.transform.position);
 			this.GetComponent<ProgressRadialBehaviour>().Value = criterion;
 		}
-	}
-
-	// Computing the distance between the sphere and the point as a purcentage
-	float xiSquareCriterion (GameObject sphereCDM, GameObject pointFollow)
-	{
-		float criterion;
-		int radiusCriterion = 20;
-
-		criterion = Vector3.SqrMagnitude (sphereCDM.transform.position - pointFollow.transform.position) /
-			Vector3.SqrMagnitude (new Vector3 (0, 0, radiusCriterion));
-
-		return 100 * (1.0f - Mathf.Max(criterion, 0.01f));
 	}
 }

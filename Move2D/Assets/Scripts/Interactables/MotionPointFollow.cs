@@ -65,7 +65,7 @@ public class MotionPointFollow : NetworkBehaviour, IEnterInteractable, IStayInte
 	[Server]
 	public void OnEnterEffect (SphereCDM sphere)
 	{
-		GameManager.singleton.IncreaseScore ();
+		GameManager.singleton.AddToScore();
 		_coroutineHandle = StartCoroutine (ScoreCooldown ());
 	}
 
@@ -73,7 +73,7 @@ public class MotionPointFollow : NetworkBehaviour, IEnterInteractable, IStayInte
 	public void OnStayEffect (SphereCDM sphere)
 	{
 		if (!_cooldown) {
-			GameManager.singleton.IncreaseScore ();
+			GameManager.singleton.AddToScore();
 			_coroutineHandle = StartCoroutine (ScoreCooldown());
 		}
 	}

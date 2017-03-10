@@ -14,7 +14,7 @@ public class DifficultySettingsUI : MonoBehaviour {
 
 	void Update()
 	{
-		this.GetComponent<Dropdown> ().interactable = !GameManager.singleton.paused;
+		this.GetComponent<Dropdown> ().interactable = GameManager.singleton.isPlaying;
 	}
 
 	public void OnValueChanged()

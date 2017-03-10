@@ -162,7 +162,7 @@ public class Enemy : NetworkBehaviour, IEnterInteractable {
 		
 	void Update()
 	{
-		if (path.Count != 0 && GameManager.singleton != null && !GameManager.singleton.paused) {
+		if (path.Count != 0 && GameManager.singleton != null && GameManager.singleton.gameState == GameState.Playing) {
 			Move ();
 		}
 	}
@@ -184,7 +184,7 @@ public class Enemy : NetworkBehaviour, IEnterInteractable {
 	{
 		if (_damaged)
 			return;
-		GameManager.singleton.DecreaseScore ();
+		GameManager.singleton.AddToScore(-this.scoreValue);
 		sphere.Damage ();
 		if (this.isDestroyedOnHit)
 			NetworkServer.Destroy (this.gameObject);
