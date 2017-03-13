@@ -1,10 +1,13 @@
 fileFormatVersion: 2
 guid: eb491130bc417425c94a1a0121d58e2f
-timeCreated: 1487084707
+timeCreated: 1489399964
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - motionPointFollow: {instanceID: 0}
+  - sphereCDM: {instanceID: 0}
+  - levelList: {fileID: 11400000, guid: a370ec100d33d4abdb3373b78f393217, type: 2}
   executionOrder: -100
   icon: {instanceID: 0}
   userData: 
