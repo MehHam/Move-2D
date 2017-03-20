@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+namespace Move2D {
 /// <summary>
 /// All the informations about a Player
 /// </summary>
@@ -208,4 +209,5 @@ public class Player : NetworkBehaviour {
 		if (onPlayerDestroy != null)
 			onPlayerDestroy (this);		
 	}
+}
 }

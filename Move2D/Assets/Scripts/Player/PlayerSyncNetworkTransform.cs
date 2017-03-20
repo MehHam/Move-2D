@@ -2,106 +2,107 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class PlayerSyncNetworkTransform : NetworkBehaviour
+namespace Move2D
 {
-	[SerializeField]
-	private float _posLerpRate = 15;
-	[SerializeField]
-	private float _rotLerpRate = 15;
-	[SerializeField]
-	private float _posThreshold = 0.1f;
-	[SerializeField]
-	private float _rotThreshold = 1f;
-
-	[SyncVar]
-	private Vector3 _lastPosition;
-
-	[SyncVar]
-	private Vector3 _lastRotation;
-
-	void Awake()
+	public class PlayerSyncNetworkTransform : NetworkBehaviour
 	{
-		_lastPosition = transform.position;
-		_lastRotation = transform.localEulerAngles;
-	}
+		[SerializeField]
+		private float _posLerpRate = 15;
+		[SerializeField]
+		private float _rotLerpRate = 15;
+		[SerializeField]
+		private float _posThreshold = 0.1f;
+		[SerializeField]
+		private float _rotThreshold = 1f;
 
-	public override void OnStartLocalPlayer ()
-	{
-		transform.position = _lastPosition;
-		transform.localEulerAngles = _lastRotation;
-		base.OnStartLocalPlayer ();
-	}
+		[SyncVar]
+		private Vector3 _lastPosition;
 
-	void Update()
-	{
-		if (isLocalPlayer)
-			return;
+		[SyncVar]
+		private Vector3 _lastRotation;
 
-		InterpolatePosition();
-		InterpolateRotation();
-	}
-
-	void FixedUpdate()
-	{
-		if (!isLocalPlayer)
-			return;
-
-		var posChanged = IsPositionChanged();
-
-		if (posChanged)
+		void Awake ()
 		{
-			CmdSendPosition(transform.position);
 			_lastPosition = transform.position;
-		}
-
-		var rotChanged = IsRotationChanged();
-
-		if (rotChanged)
-		{
-			CmdSendRotation(transform.localEulerAngles);
 			_lastRotation = transform.localEulerAngles;
 		}
-	}
 
-	private void InterpolatePosition()
-	{
-		transform.position = Vector3.Lerp(transform.position, _lastPosition, Time.deltaTime * _posLerpRate);
-	}
+		public override void OnStartLocalPlayer ()
+		{
+			transform.position = _lastPosition;
+			transform.localEulerAngles = _lastRotation;
+			base.OnStartLocalPlayer ();
+		}
 
-	private void InterpolateRotation()
-	{
-		transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_lastRotation), Time.deltaTime * _rotLerpRate);
-	}
+		void Update ()
+		{
+			if (isLocalPlayer)
+				return;
 
-	[Command]
-	private void CmdSendPosition(Vector3 pos)
-	{
-		_lastPosition = pos;
-	}
+			InterpolatePosition ();
+			InterpolateRotation ();
+		}
 
-	[Command]
-	private void CmdSendRotation(Vector3 rot)
-	{
-		_lastRotation = rot;
-	}
+		void FixedUpdate ()
+		{
+			if (!isLocalPlayer)
+				return;
 
-	private bool IsPositionChanged()
-	{
-		return Vector3.Distance(transform.position, _lastPosition) > _posThreshold;
-	}
+			var posChanged = IsPositionChanged ();
 
-	private bool IsRotationChanged()
-	{
-		return Vector3.Distance(transform.localEulerAngles, _lastRotation) > _rotThreshold;
-	}
+			if (posChanged) {
+				CmdSendPosition (transform.position);
+				_lastPosition = transform.position;
+			}
 
-	public override int GetNetworkChannel()
-	{
-		return Channels.DefaultUnreliable;
-	}
+			var rotChanged = IsRotationChanged ();
 
-	public override float GetNetworkSendInterval()
-	{
-		return 0.01f;
+			if (rotChanged) {
+				CmdSendRotation (transform.localEulerAngles);
+				_lastRotation = transform.localEulerAngles;
+			}
+		}
+
+		private void InterpolatePosition ()
+		{
+			transform.position = Vector3.Lerp (transform.position, _lastPosition, Time.deltaTime * _posLerpRate);
+		}
+
+		private void InterpolateRotation ()
+		{
+			transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.Euler (_lastRotation), Time.deltaTime * _rotLerpRate);
+		}
+
+		[Command]
+		private void CmdSendPosition (Vector3 pos)
+		{
+			_lastPosition = pos;
+		}
+
+		[Command]
+		private void CmdSendRotation (Vector3 rot)
+		{
+			_lastRotation = rot;
+		}
+
+		private bool IsPositionChanged ()
+		{
+			return Vector3.Distance (transform.position, _lastPosition) > _posThreshold;
+		}
+
+		private bool IsRotationChanged ()
+		{
+			return Vector3.Distance (transform.localEulerAngles, _lastRotation) > _rotThreshold;
+		}
+
+		public override int GetNetworkChannel ()
+		{
+			return Channels.DefaultUnreliable;
+		}
+
+		public override float GetNetworkSendInterval ()
+		{
+			return 0.01f;
+		}
 	}
 }

@@ -4,55 +4,62 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-/// <summary>
-/// Set the player mass and displays it
-/// </summary>
-[RequireComponent(typeof(Slider))]
-[RequireComponent(typeof(CanvasGroup))]
-public class MoveSliderUI : MonoBehaviour {
+namespace Move2D
+{
 	/// <summary>
-	/// Text to display the current slider value
+	/// Set the player mass and displays it
 	/// </summary>
-	public Text text;
-
-	Player _player;
-	IEnumerator Start()
+	[RequireComponent (typeof(Slider))]
+	[RequireComponent (typeof(CanvasGroup))]
+	public class MoveSliderUI : MonoBehaviour
 	{
-		SetVisibility ();
-		do {
-			yield return new WaitForEndOfFrame();
-			_player = FindLocalPlayer ();
-		} while (_player == null);
-		GetComponent<Slider> ().value = _player.mass;
-		GetComponent<Slider>().onValueChanged.AddListener(delegate {OnValueChanged();});
-	}
+		/// <summary>
+		/// Text to display the current slider value
+		/// </summary>
+		public Text text;
 
-	void OnValueChanged()
-	{
-		_player.CmdSetMass (GetComponent<Slider> ().value);
-	}
+		Player _player;
 
-	Player FindLocalPlayer()
-	{
-		foreach (var player in GameObject.FindObjectsOfType<Player>()) {
-			if (player.isLocalPlayer)
-				return player;
+		IEnumerator Start ()
+		{
+			SetVisibility ();
+			do {
+				yield return new WaitForEndOfFrame ();
+				_player = FindLocalPlayer ();
+			} while (_player == null);
+			GetComponent<Slider> ().value = _player.mass;
+			GetComponent<Slider> ().onValueChanged.AddListener (delegate {
+				OnValueChanged ();
+			});
 		}
-		return null;
-	}
 
-	void SetVisibility()
-	{
-		var massModification = GameManager.singleton.GetCurrentLevel ().massModification;
-		this.GetComponent<CanvasGroup> ().interactable = massModification;
-		this.GetComponent<CanvasGroup> ().blocksRaycasts = massModification;
-		this.GetComponent<CanvasGroup> ().alpha = massModification ? 1.0f : 0.0f;
-	}
+		void OnValueChanged ()
+		{
+			_player.CmdSetMass (GetComponent<Slider> ().value);
+		}
 
-	void Update()
-	{
-		this.GetComponent<Slider> ().interactable = GameManager.singleton.isPlaying;
-		SetVisibility ();
-		text.text = (_player != null) ? "Mass: " + this._player.mass.ToString("0.00") : "";
+		Player FindLocalPlayer ()
+		{
+			foreach (var player in GameObject.FindObjectsOfType<Player>()) {
+				if (player.isLocalPlayer)
+					return player;
+			}
+			return null;
+		}
+
+		void SetVisibility ()
+		{
+			var massModification = GameManager.singleton.GetCurrentLevel ().massModification;
+			this.GetComponent<CanvasGroup> ().interactable = massModification;
+			this.GetComponent<CanvasGroup> ().blocksRaycasts = massModification;
+			this.GetComponent<CanvasGroup> ().alpha = massModification ? 1.0f : 0.0f;
+		}
+
+		void Update ()
+		{
+			this.GetComponent<Slider> ().interactable = GameManager.singleton.isPlaying;
+			SetVisibility ();
+			text.text = (_player != null) ? "Mass: " + this._player.mass.ToString ("0.00") : "";
+		}
 	}
 }

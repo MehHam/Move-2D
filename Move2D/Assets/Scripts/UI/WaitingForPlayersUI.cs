@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaitingForPlayersUI : MonoBehaviour {
-	void Update()
+namespace Move2D
+{
+	public class WaitingForPlayersUI : MonoBehaviour
 	{
-		this.GetComponent<CanvasGroup> ().alpha =
+		void Update ()
+		{
+			this.GetComponent<CanvasGroup> ().alpha =
 			(GameManager.singleton != null && GameManager.singleton.gameState == GameState.WaitingForPlayers) ?
 			1 :
 			0;
+		}
 	}
 }
