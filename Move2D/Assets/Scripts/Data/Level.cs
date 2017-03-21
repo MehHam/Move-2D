@@ -59,7 +59,9 @@ namespace Move2D
 		/// If the gameMode is MotionPointFollow, what kind of motion the point has
 		/// </summary>
 		[Tooltip ("If the game mode if MotionPointFollow, what kind of motion the point has")]
+		#if UNITY_EDITOR
 		[HideWhenFalse ("spawnMotionPointFollow")]
+		#endif
 		public MotionPointFollow.MotionMode motionMode;
 		/// <summary>
 		/// Whether the ready animation is displayed at the beginning of this level or not.
@@ -80,7 +82,9 @@ namespace Move2D
 		/// If true, spawn a bullet builder on the scene
 		/// </summary>
 		public bool spawnBulletBuilder = false;
+		#if UNITY_EDITOR
 		[HideWhenFalse("spawnBulletBuilder")]
+		#endif
 		/// <summary>
 		/// The pattern of the bullet builder object
 		/// </summary>

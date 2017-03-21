@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
@@ -34,8 +35,9 @@ namespace Move2D
 
 			if (!boolProperty.boolValue)
 				return 0f;
-
+		
 			return EditorGUI.GetPropertyHeight (property);
 		}
 	}
 }
+#endif
