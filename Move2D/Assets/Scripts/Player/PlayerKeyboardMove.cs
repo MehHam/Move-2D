@@ -25,9 +25,23 @@ namespace Move2D
 
 		public void Move ()
 		{
+			float horizontal = 0.0f;
+			float vertical = 0.0f;
+			if (this.transform.rotation.eulerAngles.z >= 267.5f || this.transform.rotation.eulerAngles.z <= 92.5f) {
+				horizontal -= Input.GetAxis ("Horizontal");
+			}
+			if (this.transform.rotation.eulerAngles.z <= 272.5f && this.transform.rotation.eulerAngles.z >= 87.5f) {
+				horizontal += Input.GetAxis ("Horizontal");
+			}
+			if (this.transform.rotation.eulerAngles.z >= 177.5f || this.transform.rotation.eulerAngles.z <= 2.5f) {
+				vertical += Input.GetAxis ("Vertical");
+			}
+			if (this.transform.rotation.eulerAngles.z <= 182.5f || this.transform.rotation.eulerAngles.z >= 357.5f) {
+				vertical -= Input.GetAxis ("Vertical");
+			}
 			this.transform.Rotate (
-				(Vector3.forward * Input.GetAxis ("Horizontal")
-				+ Vector3.forward * Input.GetAxis ("Vertical"))
+				(Vector3.forward * horizontal
+				+ Vector3.forward * vertical)
 				* Time.deltaTime * speed
 			);
 		}

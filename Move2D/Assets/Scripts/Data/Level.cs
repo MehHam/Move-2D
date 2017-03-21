@@ -51,14 +51,15 @@ namespace Move2D
 		[Tooltip ("The scene name in the build, this should never be empty")]
 		public string sceneName;
 		/// <summary>
-		/// The gameMode of this level
+		/// Should the gameManager spawn a motion point follow ?
 		/// </summary>
-		[Tooltip ("The game mode of this level")]
-		public GameMode gameMode;
+		[Tooltip ("Should the gameManager spawn a motion point follow ?")]
+		public bool spawnMotionPointFollow = false;
 		/// <summary>
 		/// If the gameMode is MotionPointFollow, what kind of motion the point has
 		/// </summary>
 		[Tooltip ("If the game mode if MotionPointFollow, what kind of motion the point has")]
+		[HideWhenFalse ("spawnMotionPointFollow")]
 		public MotionPointFollow.MotionMode motionMode;
 		/// <summary>
 		/// Whether the ready animation is displayed at the beginning of this level or not.
@@ -75,5 +76,14 @@ namespace Move2D
 		/// </summary>
 		[Tooltip ("Is mass modification enabled ?")]
 		public bool massModification = true;
+		/// <summary>
+		/// If true, spawn a bullet builder on the scene
+		/// </summary>
+		public bool spawnBulletBuilder = false;
+		[HideWhenFalse("spawnBulletBuilder")]
+		/// <summary>
+		/// The pattern of the bullet builder object
+		/// </summary>
+		public BulletBuilder.Pattern bulletBuilderPattern = BulletBuilder.Pattern.Random;
 	}
 }

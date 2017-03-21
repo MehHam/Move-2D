@@ -55,8 +55,10 @@ MonoBehaviour:
   bulletPrefab: {fileID: 114453893809955442, guid: 141870fd06f6544518af4e98304b730b,
     type: 2}
   spawnRadius: 20
+  angleIncrement: 30
   spawnCenter: {x: 0, y: 0, z: 0}
-  cooldownTime: 3
+  cooldownTime: 0.1
+  _pattern: 1
 --- !u!114 &114798347112423458
 MonoBehaviour:
   m_ObjectHideFlags: 1

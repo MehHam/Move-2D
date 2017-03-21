@@ -542,9 +542,9 @@ PlayerSettings:
     Game_Performance: 0
     Hub: 0
     Purchasing: 0
-    UNet: 0
+    UNet: 1
     Unity_Ads: 0
-  cloudProjectId: 
-  projectName: 
-  organizationId: 
+  cloudProjectId: 4defcacf-8ae6-406e-a48d-a0c6336b2a14
+  projectName: Move2Dalpha (1)
+  organizationId: kazhar
   cloudEnabled: 0

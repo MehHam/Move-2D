@@ -35,11 +35,11 @@ namespace Move2D
 				}
 				Vector2 playerPos = new Vector2 (radiusR * Mathf.Cos (alpha), radiusR * Mathf.Sin (alpha));
 				if (playerPos.magnitude > radiusR * 0.95f && playerPos.magnitude < radiusR * 1.05f) {
-					this.transform.Rotate (
-						Vector3.forward * -Input.gyro.rotationRateUnbiased.y
+					/* this.transform.Rotate (
+						Vector3.forward * -Input.gyro.attitude.z
 						* Time.deltaTime * speed
-					);
-					//this.GetComponent<Rigidbody2D> ().transform.position = Vector2.Lerp (this.GetComponent<Rigidbody2D> ().position, playerPos, 0.25f);
+					);*/
+					this.GetComponentInChildren<Rigidbody2D> ().transform.position = Vector2.Lerp (this.GetComponentInChildren<Rigidbody2D> ().position, playerPos, 0.25f);
 				}
 			}
 		}

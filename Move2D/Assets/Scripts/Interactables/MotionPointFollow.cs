@@ -92,10 +92,6 @@ namespace Move2D
 		[ServerCallback]
 		void Start ()
 		{
-			if (GameManager.singleton.GetCurrentLevel ().gameMode != Level.GameMode.MotionPointFollow) {
-				this.enabled = false;
-				return;
-			}
 			StartMovePattern ();
 		}
 

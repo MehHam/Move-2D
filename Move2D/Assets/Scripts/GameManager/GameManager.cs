@@ -84,6 +84,7 @@ namespace Move2D
 
 		public GameObject motionPointFollow;
 		public GameObject sphereCDM;
+		public GameObject bulletBuilder;
 
 		int _playerReadyToStart = 0;
 		bool _readyToStart = false;
@@ -309,12 +310,7 @@ namespace Move2D
 			StopTime ();
 			time = this.GetCurrentLevels () [currentLevelIndex].time;
 			StartTime ();
-			if (this.GetCurrentLevel ().gameMode == Level.GameMode.MotionPointFollow) {
-				var motionPointFollow = GameObject.Instantiate (this.motionPointFollow, new Vector3 (0, 4, 0), Quaternion.identity);
-				NetworkServer.Spawn (motionPointFollow);
-			}
-			var sphereCDM = GameObject.Instantiate (this.sphereCDM, Vector3.zero, Quaternion.identity);
-			NetworkServer.Spawn (sphereCDM);
+			SpawnNetworkPrefabs ();
 			if (onLevelStarted != null)
 				onLevelStarted ();
 			RpcLevelStarted ();
@@ -599,8 +595,23 @@ namespace Move2D
 
 		// ---------------------------------------------------
 
-
-
+		/// <summary>
+		/// Spawn all networkPrefabs
+		/// </summary>
+		void SpawnNetworkPrefabs()
+		{
+			if (this.GetCurrentLevel ().spawnMotionPointFollow) {
+				var motionPointFollow = GameObject.Instantiate (this.motionPointFollow, new Vector3 (0, 4, 0), Quaternion.identity);
+				NetworkServer.Spawn (motionPointFollow);
+			}
+			if (this.GetCurrentLevel ().spawnBulletBuilder) {
+				var bulletBuilder = GameObject.Instantiate (this.bulletBuilder, new Vector3 (0, 0, 0), Quaternion.identity);
+				bulletBuilder.GetComponent<BulletBuilder> ().pattern = this.GetCurrentLevel ().bulletBuilderPattern;
+				NetworkServer.Spawn (bulletBuilder);
+			}
+			var sphereCDM = GameObject.Instantiate (this.sphereCDM, Vector3.zero, Quaternion.identity);
+			NetworkServer.Spawn (sphereCDM);
+		}
 
 		/// <summary>
 		/// Returns true if the variable readyToBegin is true for all network player info

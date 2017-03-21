@@ -1,12 +1,14 @@
 fileFormatVersion: 2
 guid: eb491130bc417425c94a1a0121d58e2f
-timeCreated: 1489399964
+timeCreated: 1490116645
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
-  - motionPointFollow: {instanceID: 0}
-  - sphereCDM: {instanceID: 0}
+  - motionPointFollow: {fileID: 191588, guid: 2695905c03858a142b36e1fe3c406864, type: 2}
+  - sphereCDM: {fileID: 183040, guid: 8e2fd6ae2a6f8ca4d82ba8f4b11d045d, type: 2}
+  - bulletBuilder: {fileID: 1775025622414674, guid: 2f60369a6be9d409e813327bf23794d5,
+      type: 2}
   - levelList: {fileID: 11400000, guid: a370ec100d33d4abdb3373b78f393217, type: 2}
   executionOrder: -100
   icon: {instanceID: 0}

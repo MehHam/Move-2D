@@ -247,6 +247,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114634318891947548, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_SpawnPrefabs.Array.size
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 224703497825070660, guid: d452712503b114cc1a33b1f89fcb7081,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -342,6 +347,51 @@ Prefab:
       propertyPath: m_Text
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1884586572125764, guid: d452712503b114cc1a33b1f89fcb7081, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224144158657098372, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -440.00012
+      objectReference: {fileID: 0}
+    - target: {fileID: 224144158657098372, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 440
+      objectReference: {fileID: 0}
+    - target: {fileID: 224491221822888268, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00013974
+      objectReference: {fileID: 0}
+    - target: {fileID: 224491221822888268, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224144158657098372, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224144158657098372, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114634318891947548, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_MaxPlayersPerConnection
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114634318891947548, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 1775025622414674, guid: 2f60369a6be9d409e813327bf23794d5,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d452712503b114cc1a33b1f89fcb7081, type: 2}
   m_IsPrefabParent: 0

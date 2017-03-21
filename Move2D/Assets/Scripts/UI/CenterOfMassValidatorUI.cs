@@ -38,7 +38,7 @@ namespace Move2D
 		/// </summary>
 		void OnLevelStarted ()
 		{
-			if (GameManager.singleton.GetCurrentLevel ().gameMode == Level.GameMode.MotionPointFollow
+			if (GameManager.singleton.GetCurrentLevel ().spawnMotionPointFollow
 			   && GameManager.singleton.GetCurrentLevel ().sphereVisibility != Level.SphereVisibility.Visible) {
 				_sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
 				_motionPointFollow = GameObject.FindGameObjectWithTag ("PointFollow");
@@ -89,7 +89,7 @@ namespace Move2D
 		{
 			return (GameManager.singleton != null
 			&& GameManager.singleton.isPlaying
-			&& GameManager.singleton.GetCurrentLevel ().gameMode == Level.GameMode.MotionPointFollow
+			&& GameManager.singleton.GetCurrentLevel ().spawnMotionPointFollow
 			&& GameManager.singleton.GetCurrentLevel ().sphereVisibility != Level.SphereVisibility.Visible);	
 		}
 

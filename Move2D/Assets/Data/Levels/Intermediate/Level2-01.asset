@@ -14,8 +14,10 @@ MonoBehaviour:
   index: 1
   time: 600
   sceneName: Level5
-  gameMode: 1
+  spawnMotionPointFollow: 1
   motionMode: 2
   readyAnimation: 1
   sphereVisibility: 0
   massModification: 1
+  spawnBulletBuilder: 1
+  bulletBuilderPattern: 0

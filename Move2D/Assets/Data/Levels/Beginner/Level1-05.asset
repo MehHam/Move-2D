@@ -14,8 +14,10 @@ MonoBehaviour:
   index: 5
   time: 30
   sceneName: Level4
-  gameMode: 1
+  spawnMotionPointFollow: 1
   motionMode: 1
   readyAnimation: 1
   sphereVisibility: 0
   massModification: 0
+  spawnBulletBuilder: 0
+  bulletBuilderPattern: 0

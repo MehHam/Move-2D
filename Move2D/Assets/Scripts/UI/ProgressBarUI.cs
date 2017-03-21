@@ -27,7 +27,7 @@ namespace Move2D
 
 		void OnLevelStarted ()
 		{
-			_active = (GameManager.singleton.GetCurrentLevel ().gameMode == Level.GameMode.MotionPointFollow
+			_active = (GameManager.singleton.GetCurrentLevel ().spawnMotionPointFollow
 			&& GameManager.singleton.GetCurrentLevel ().sphereVisibility == Level.SphereVisibility.Visible);
 			if (_active) {
 				this.transform.parent.gameObject.GetComponent<CanvasGroup> ().alpha = 1;
