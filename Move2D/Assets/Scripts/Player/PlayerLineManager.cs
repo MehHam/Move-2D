@@ -26,7 +26,7 @@ namespace Move2D
 		void OnPlayerDestroy (Player player)
 		{
 			for (int i = 0; i < _lines.Count; i++) {
-				if (_lines [i].playerLineObject1 == player || _lines [i].playerLineObject2 == player) {
+				if (_lines [i].object1 == player || _lines [i].object2 == player) {
 					Destroy (_lines [i].gameObject);
 					Destroy (_lines [i]);
 				}
@@ -46,8 +46,8 @@ namespace Move2D
 			var sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
 			foreach (var player in players) {
 				var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
-				line.GetComponent<PlayerLine> ().playerLineObject1 = player;
-				line.GetComponent<PlayerLine> ().playerLineObject2 = sphereCDM;
+				line.GetComponent<PlayerLine> ().object1 = player;
+				line.GetComponent<PlayerLine> ().object2 = sphereCDM;
 				lines.Add (line);
 			}
 		}
@@ -58,8 +58,8 @@ namespace Move2D
 			for (int i = 0; i < players.Length; i++) {
 				for (int j = i + 1; j < players.Length; j++) {
 					var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
-					line.GetComponent<PlayerLine> ().playerLineObject1 = players [i];
-					line.GetComponent<PlayerLine> ().playerLineObject2 = players [j];
+					line.GetComponent<PlayerLine> ().object1 = players [i];
+					line.GetComponent<PlayerLine> ().object2 = players [j];
 					lines.Add (line);
 				}
 			}

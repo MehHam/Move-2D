@@ -36,7 +36,7 @@ public class PlayerInfo
 /// <summary>
 /// Class used to keep basic informations about the player and manage its behaviour when it's disconnected
 /// </summary>
-public class Player : NetworkBehaviour, IPlayerLineObject {
+public class Player : NetworkBehaviour, ILineObject {
 	/// <summary>
 	/// All the informations about this player
 	/// </summary>

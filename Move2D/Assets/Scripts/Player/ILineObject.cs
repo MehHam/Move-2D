@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace Move2D
 {
-	public interface IPlayerLineObject
+	public interface ILineObject
 	{
 		Color GetColor();
 		float GetMass();

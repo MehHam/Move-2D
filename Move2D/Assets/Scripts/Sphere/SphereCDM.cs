@@ -9,7 +9,7 @@ namespace Move2D
 	/// <summary>  
 	///  General class for the sphere
 	/// </summary>  
-	public class SphereCDM : NetworkBehaviour, IPlayerLineObject
+	public class SphereCDM : NetworkBehaviour, ILineObject
 	{
 		/// <summary>
 		/// How many seconds the sphere waits until it fades

@@ -11,12 +11,12 @@ namespace Move2D
 		/// The first player object
 		/// </summary>
 		[Tooltip ("The first player object")]
-		public GameObject playerLineObject1;
+		public GameObject object1;
 		/// <summary>
 		/// The second player object
 		/// </summary>
 		[Tooltip ("The second player object")]
-		public GameObject playerLineObject2;
+		public GameObject object2;
 		/// <summary>
 		/// The alpha of the line
 		/// </summary>
@@ -32,20 +32,20 @@ namespace Move2D
 
 		void SetColors ()
 		{
-			var startColor = playerLineObject1.GetComponent<IPlayerLineObject> ().GetColor ();
-			var endColor = playerLineObject2.GetComponent<IPlayerLineObject> ().GetColor ();
+			var startColor = object1.GetComponent<ILineObject> ().GetColor ();
+			var endColor = object2.GetComponent<ILineObject> ().GetColor ();
 			_lineRenderer.startColor = new Color (startColor.r, startColor.g, startColor.b, Input.GetKey (KeyCode.Tab) ? alpha : 0.0f);
 			_lineRenderer.endColor = new Color (endColor.r, endColor.g, endColor.b, Input.GetKey (KeyCode.Tab) ? alpha : 0.0f);
-			_lineRenderer.startWidth = playerLineObject1.GetComponent<IPlayerLineObject> ().GetMass();
-			_lineRenderer.endWidth = playerLineObject2.GetComponent<IPlayerLineObject> ().GetMass();
+			_lineRenderer.startWidth = object1.GetComponent<ILineObject> ().GetMass();
+			_lineRenderer.endWidth = object2.GetComponent<ILineObject> ().GetMass();
 			_lineRenderer.material.mainTextureOffset = new Vector2 (Time.time, 0.0f);
 		}
 
 		void SetPositions ()
 		{
 			Vector3[] positions = new Vector3[2];
-			positions [0] = playerLineObject1.transform.position;
-			positions [1] = playerLineObject2.transform.position;
+			positions [0] = object1.transform.position;
+			positions [1] = object2.transform.position;
 			_lineRenderer.numPositions = positions.Length;
 			_lineRenderer.SetPositions (positions);
 		}
