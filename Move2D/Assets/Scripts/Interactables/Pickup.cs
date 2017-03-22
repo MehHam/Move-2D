@@ -10,6 +10,8 @@ namespace Move2D
 	/// </summary>
 	public class Pickup : NetworkBehaviour, IEnterInteractable
 	{
+		public delegate void PickupHandler ();
+		public static event PickupHandler onPickupEnter;
 		/// <summary>
 		/// The number of points given to the players when the sphere collides with the pickup.
 		/// </summary>
@@ -28,6 +30,7 @@ namespace Move2D
 				sphere.Blink ();
 			}
 			RpcDisable ();
+			RpcPickupEvent ();
 		}
 
 		#endregion
@@ -36,6 +39,13 @@ namespace Move2D
 		public void RpcDisable ()
 		{
 			this.gameObject.SetActive (false);
+		}
+
+		[ClientRpc]
+		public void RpcPickupEvent ()
+		{
+			if (onPickupEnter != null)
+				onPickupEnter ();
 		}
 	}
 }

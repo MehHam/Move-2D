@@ -10,6 +10,8 @@ namespace Move2D
 	/// </summary>
 	public class Exit : NetworkBehaviour, IEnterInteractable, IExitInteractable
 	{
+		public delegate void ExitHandler();
+		public static event ExitHandler onExitEnter;
 		/// <summary>
 		/// The countdown time in seconds
 		/// </summary>
@@ -58,11 +60,19 @@ namespace Move2D
 		public void OnEnterEffect (SphereCDM sphere)
 		{
 			StartExitCountdown ();
+			RpcExitEvent ();
 		}
 
 		public void OnExitEffect (SphereCDM sphere)
 		{
 			StopExitCountdown ();
+		}
+
+		[ClientRpc]
+		public void RpcExitEvent()
+		{
+			if (onExitEnter != null)
+				onExitEnter ();
 		}
 	}
 }

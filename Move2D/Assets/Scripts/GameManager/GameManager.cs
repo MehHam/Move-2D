@@ -168,7 +168,7 @@ namespace Move2D
 		/// How much time is left in the current level
 		/// </summary>
 		[Tooltip ("Time left in the current level")]
-		[SyncVar] public uint time = 0;
+		[SyncVar] public int time = 0;
 		/// <summary>
 		/// The current score of the players
 		/// </summary>

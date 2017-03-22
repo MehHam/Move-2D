@@ -14,8 +14,11 @@ MonoBehaviour:
   index: 0
   time: 120
   sceneName: LevelTuto
-  gameMode: 0
+  spawnMotionPointFollow: 0
   motionMode: 0
   readyAnimation: 1
   sphereVisibility: 0
   massModification: 0
+  spawnBulletBuilder: 0
+  bulletBuilderPattern: 0
+  enabledTutorials: 00000000

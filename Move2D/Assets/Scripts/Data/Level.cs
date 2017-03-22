@@ -44,7 +44,7 @@ namespace Move2D
 		/// The level duration
 		/// </summary>
 		[Tooltip ("Level duration")]
-		public uint time = 60;
+		public int time = 60;
 		/// <summary>
 		/// The sceneName in the build, this should never be empty
 		/// </summary>
@@ -89,5 +89,9 @@ namespace Move2D
 		/// The pattern of the bullet builder object
 		/// </summary>
 		public BulletBuilder.Pattern bulletBuilderPattern = BulletBuilder.Pattern.Random;
+		/// <summary>
+		/// An array of all the enabledTutorials on this level
+		/// </summary>
+		public List<TutorialType> enabledTutorials = new List<TutorialType>();
 	}
 }

@@ -10,6 +10,7 @@ TagManager:
   - SphereCDM
   - PointFollow
   - Path
+  - Tutorial
   layers:
   - Default
   - TransparentFX
