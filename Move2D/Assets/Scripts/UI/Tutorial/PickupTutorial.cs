@@ -14,8 +14,10 @@ namespace Move2D
 
 		void OnPickupEnter ()
 		{
-			Deactivate ();
-			NextTutorial ();
+			if (_activated) {
+				Deactivate ();
+				NextTutorial ();
+			}
 		}
 
 		protected override void OnDisable ()

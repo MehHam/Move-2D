@@ -10,6 +10,9 @@ namespace Move2D
 		Exit,
 		Pickup,
 		ExitBis,
+		MotionPoint,
+		Lava,
+		Controls,
 		None,
 	}
 
@@ -29,7 +32,9 @@ namespace Move2D
 
 		public bool showOnActivate = true;
 
-		protected bool _activated;
+		protected bool _activated = false;
+		protected bool _blocksRaycast;
+		protected bool _interactable;
 
 		protected virtual void OnEnable ()
 		{
@@ -40,6 +45,16 @@ namespace Move2D
 		}
 
 		protected virtual void Start ()
+		{
+			_blocksRaycast = this.GetComponent<CanvasGroup> ().blocksRaycasts;
+			_interactable = this.GetComponent<CanvasGroup> ().interactable;
+		}
+
+		protected virtual void Update ()
+		{
+		}
+
+		protected virtual void Init()
 		{
 		}
 
@@ -62,9 +77,10 @@ namespace Move2D
 			_activated = true;
 			if (showOnActivate || forceShow) {
 				this.GetComponent<CanvasGroup> ().alpha = 1;
-				this.GetComponent<CanvasGroup> ().interactable = true;
-				this.GetComponent<CanvasGroup> ().blocksRaycasts = true;
+				this.GetComponent<CanvasGroup> ().interactable = _interactable;
+				this.GetComponent<CanvasGroup> ().blocksRaycasts = _blocksRaycast;
 			}
+			Init ();
 		}
 
 		/// <summary>

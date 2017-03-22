@@ -18,6 +18,7 @@ MonoBehaviour:
   motionMode: 2
   readyAnimation: 1
   sphereVisibility: 0
-  massModification: 1
+  massModification: 0
   spawnBulletBuilder: 1
   bulletBuilderPattern: 0
+  enabledTutorials: 

@@ -14,6 +14,8 @@ namespace Move2D
 	/// </summary>
 	public class MotionPointFollow : NetworkBehaviour, IEnterInteractable, IStayInteractable, IExitInteractable
 	{
+		public delegate void MotionPointFollowHandler();
+		public static event MotionPointFollowHandler onMotionPointEnter;
 		/// <summary>
 		/// All the different types of motion mode
 		/// Random: The motion point appears at random points in the arena
@@ -68,16 +70,21 @@ namespace Move2D
 		[Server]
 		public void OnEnterEffect (SphereCDM sphere)
 		{
-			GameManager.singleton.AddToScore ();
-			_coroutineHandle = StartCoroutine (ScoreCooldown ());
+			if (!GameManager.singleton.invisibleSphere) { 
+				GameManager.singleton.AddToScore ();
+				_coroutineHandle = StartCoroutine (ScoreCooldown ());
+			}
+			RpcMotionPointEvent ();
 		}
 
 		[Server]
 		public void OnStayEffect (SphereCDM sphere)
 		{
-			if (!_cooldown) {
-				GameManager.singleton.AddToScore ();
-				_coroutineHandle = StartCoroutine (ScoreCooldown ());
+			if (!GameManager.singleton.invisibleSphere) {
+				if (!_cooldown) {
+					GameManager.singleton.AddToScore ();
+					_coroutineHandle = StartCoroutine (ScoreCooldown ());
+				}
 			}
 		}
 
@@ -149,6 +156,13 @@ namespace Move2D
 			_cooldown = true;
 			yield return new WaitForSeconds (scoreCooldownTime);
 			_cooldown = false;
+		}
+
+		[ClientRpc]
+		void RpcMotionPointEvent()
+		{
+			if (onMotionPointEnter != null)
+				onMotionPointEnter ();
 		}
 	}
 }

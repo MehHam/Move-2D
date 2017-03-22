@@ -21,3 +21,4 @@ MonoBehaviour:
   massModification: 0
   spawnBulletBuilder: 0
   bulletBuilderPattern: 0
+  enabledTutorials: 03000000

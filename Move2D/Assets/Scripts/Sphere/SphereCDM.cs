@@ -9,7 +9,7 @@ namespace Move2D
 	/// <summary>  
 	///  General class for the sphere
 	/// </summary>  
-	public class SphereCDM : NetworkBehaviour
+	public class SphereCDM : NetworkBehaviour, IPlayerLineObject
 	{
 		/// <summary>
 		/// How many seconds the sphere waits until it fades
@@ -100,7 +100,7 @@ namespace Move2D
 		{
 			if (isServer)
 				RpcDamage ();
-			this.GetComponent<Blinker> ().DamageAnimation (damageDuration);
+			// this.GetComponent<Blinker> ().DamageAnimation (damageDuration);
 		}
 
 		void SphereVisibility ()
@@ -123,7 +123,7 @@ namespace Move2D
 		[ClientRpc]
 		void RpcDamage ()
 		{
-			this.GetComponent<Blinker> ().DamageAnimation (damageDuration);
+			// this.GetComponent<Blinker> ().DamageAnimation (damageDuration);
 		}
 
 		[ClientRpc]
@@ -143,5 +143,19 @@ namespace Move2D
 			go.text.text = value.ToString ();
 			go.text.color = value >= 0 ? Color.white : Color.red;
 		}
+
+		#region IPlayerLineObject implementation
+
+		public Color GetColor ()
+		{
+			return Color.white;
+		}
+
+		public float GetMass ()
+		{
+			return 1.0f;
+		}
+
+		#endregion
 	}
 }

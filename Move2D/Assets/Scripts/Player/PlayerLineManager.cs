@@ -26,7 +26,7 @@ namespace Move2D
 		void OnPlayerDestroy (Player player)
 		{
 			for (int i = 0; i < _lines.Count; i++) {
-				if (_lines [i].player1 == player || _lines [i].player2 == player) {
+				if (_lines [i].playerLineObject1 == player || _lines [i].playerLineObject2 == player) {
 					Destroy (_lines [i].gameObject);
 					Destroy (_lines [i]);
 				}
@@ -40,6 +40,31 @@ namespace Move2D
 			InitLines ();
 		}
 
+		void PlayerToSphereInit(List<PlayerLine> lines)
+		{
+			var players = GameObject.FindGameObjectsWithTag ("Player");
+			var sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
+			foreach (var player in players) {
+				var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
+				line.GetComponent<PlayerLine> ().playerLineObject1 = player;
+				line.GetComponent<PlayerLine> ().playerLineObject2 = sphereCDM;
+				lines.Add (line);
+			}
+		}
+
+		void PlayerToPlayerInit(List<PlayerLine> lines)
+		{
+			var players = GameObject.FindGameObjectsWithTag ("Player");
+			for (int i = 0; i < players.Length; i++) {
+				for (int j = i + 1; j < players.Length; j++) {
+					var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
+					line.GetComponent<PlayerLine> ().playerLineObject1 = players [i];
+					line.GetComponent<PlayerLine> ().playerLineObject2 = players [j];
+					lines.Add (line);
+				}
+			}
+		}
+
 		void InitLines ()
 		{
 			foreach (var line in this._lines) {
@@ -47,15 +72,8 @@ namespace Move2D
 				Destroy (line);
 			}
 			this._lines = new List<PlayerLine> ();
-			var players = GameObject.FindGameObjectsWithTag ("Player");
-			for (int i = 0; i < players.Length; i++) {
-				for (int j = i + 1; j < players.Length; j++) {
-					var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
-					line.GetComponent<PlayerLine> ().player1 = players [i];
-					line.GetComponent<PlayerLine> ().player2 = players [j];
-					_lines.Add (line);
-				}
-			}
+			PlayerToSphereInit (this._lines);
+			// PlayerToPlayerInit (this._lines);
 		}
 	}
 }

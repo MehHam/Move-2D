@@ -60,6 +60,7 @@ namespace Move2D
 		}
 
 		private GameObject _sphereCDM;
+		private bool _levelStarted = false;
 
 		void OnEnable ()
 		{
@@ -116,6 +117,7 @@ namespace Move2D
 		void OnLevelStarted ()
 		{
 			this._sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
+			this._levelStarted = true;
 			StartPattern (this._pattern);
 		}
 
@@ -169,19 +171,21 @@ namespace Move2D
 
 		void StartPattern(Pattern pattern)
 		{
-			switch (pattern) {
-			case Pattern.Random:
-				StartCoroutine (RandomPattern ());
-				break;
-			case Pattern.Circle:
-				StartCoroutine (CirclePattern ());
-				break;
-			case Pattern.Orbit:
-				StartCoroutine (OrbitPattern ());
-				break;
-			case Pattern.TargetSphere:
-				StartCoroutine (TargetSpherePattern ());
-				break;
+			if (this._levelStarted) {
+				switch (pattern) {
+				case Pattern.Random:
+					StartCoroutine (RandomPattern ());
+					break;
+				case Pattern.Circle:
+					StartCoroutine (CirclePattern ());
+					break;
+				case Pattern.Orbit:
+					StartCoroutine (OrbitPattern ());
+					break;
+				case Pattern.TargetSphere:
+					StartCoroutine (TargetSpherePattern ());
+					break;
+				}
 			}
 		}
 
@@ -189,6 +193,11 @@ namespace Move2D
 		{
 			StopAllCoroutines();
 			StartPattern (pattern);
+		}
+
+		void OnDestroy ()
+		{
+			StopAllCoroutines ();
 		}
 	}
 }

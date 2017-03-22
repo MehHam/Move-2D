@@ -449,6 +449,7 @@ namespace Move2D
 						gamePlayer,
 						networkPlayerInfo.playerInfo.playerControllerId);
 					gamePlayer.GetComponent<Player> ().playerInfo = networkPlayerInfo.playerInfo;
+					gamePlayer.GetComponent<Player> ().playerInfo.mass = 1.0f;
 					_readyToStart = true;
 				}
 			}
@@ -546,10 +547,7 @@ namespace Move2D
 	public void AddToScore (int value = 1)
 		{
 			int previousScore = this.score;
-			if (value > 0)
-				this.score += value * Math.Max (1, (networkPlayersInfo.Count - 1));
-			if (value < 0)
-				this.score = Mathf.Max (this.score + value, 0);
+			this.score = Mathf.Max (this.score + value, 0);
 			if (previousScore != this.score)
 				onScoreChange (this.score - previousScore);
 		}
@@ -598,7 +596,7 @@ namespace Move2D
 		/// <summary>
 		/// Spawn all networkPrefabs
 		/// </summary>
-		void SpawnNetworkPrefabs()
+		void SpawnNetworkPrefabs ()
 		{
 			if (this.GetCurrentLevel ().spawnMotionPointFollow) {
 				var motionPointFollow = GameObject.Instantiate (this.motionPointFollow, new Vector3 (0, 4, 0), Quaternion.identity);

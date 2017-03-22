@@ -36,7 +36,7 @@ public class PlayerInfo
 /// <summary>
 /// Class used to keep basic informations about the player and manage its behaviour when it's disconnected
 /// </summary>
-public class Player : NetworkBehaviour {
+public class Player : NetworkBehaviour, IPlayerLineObject {
 	/// <summary>
 	/// All the informations about this player
 	/// </summary>
@@ -209,5 +209,19 @@ public class Player : NetworkBehaviour {
 		if (onPlayerDestroy != null)
 			onPlayerDestroy (this);		
 	}
+
+		#region IPlayerLineObject implementation
+
+		public Color GetColor ()
+		{
+			return this.playerInfo.color;
+		}
+
+		public float GetMass ()
+		{
+			return this.playerInfo.mass;
+		}
+
+		#endregion
 }
 }
