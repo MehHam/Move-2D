@@ -16,6 +16,7 @@ namespace Move2D
 
 		Vector3 _startPosition;
 		float _zDistanceToCamera;
+		bool _isMoving = false;
 
 		Vector3 GetDragPosition (float zDistanceToCamera)
 		{
@@ -30,6 +31,7 @@ namespace Move2D
 				return;
 			this._startPosition = this.transform.position;
 			_zDistanceToCamera = Mathf.Abs (_startPosition.z - Camera.main.transform.position.z);
+			_isMoving = true;
 		}
 
 		#endregion
@@ -55,15 +57,16 @@ namespace Move2D
 		{
 			if (!GameManager.singleton.isPlaying)
 				return;
+			_isMoving = false;
 		}
 
 		#endregion
 
 		#region IPlayerMotion implementation
 
-		public void Move ()
+		public bool Move ()
 		{
-		
+			return _isMoving;
 		}
 
 		public bool IsActivated (int sliderValue)

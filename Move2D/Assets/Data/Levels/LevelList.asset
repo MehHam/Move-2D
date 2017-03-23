@@ -19,6 +19,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 130b906397947495a8960fc80242e963, type: 2}
   - {fileID: 11400000, guid: 4780a00dcc40b4754932dea1cd5d461d, type: 2}
   intermediateLevels:
+  - {fileID: 11400000, guid: d9ffb15ff2e5e46ddb81f5952287cac0, type: 2}
+  - {fileID: 11400000, guid: a399d2ee837ef4483af657655089d623, type: 2}
   - {fileID: 11400000, guid: a1b618fe6d087419d979cbfb71a0c76c, type: 2}
   expertLevels:
   - {fileID: 11400000, guid: 6f9e5fd4f9ca2490f864dda4d45c4a17, type: 2}

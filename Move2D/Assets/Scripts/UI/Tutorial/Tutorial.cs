@@ -12,6 +12,8 @@ namespace Move2D
 		ExitBis,
 		MotionPoint,
 		Lava,
+		MassSlider,
+		ProgressBar,
 		Controls,
 		None,
 	}
@@ -29,8 +31,21 @@ namespace Move2D
 		/// The type of the next tutorial
 		/// </summary>
 		public TutorialType nextTutorial = TutorialType.None;
-
+		/// <summary>
+		/// Shows the tutorial when it's activated
+		/// </summary>
 		public bool showOnActivate = true;
+		/// <summary>
+		/// Whether this tutorial has a timer or not
+		/// </summary>
+		public bool hasTimer = true;
+		#if UNITY_EDITOR
+		[HideWhenFalseAttribute("hasTimer")]
+		#endif 
+		/// <summary>
+		/// If this tutorial has a timer, how much time is left until he's deactivated
+		/// </summary>
+		public float timer;
 
 		protected bool _activated = false;
 		protected bool _blocksRaycast;
@@ -54,8 +69,19 @@ namespace Move2D
 		{
 		}
 
-		protected virtual void Init()
+		protected virtual void OnActivate()
 		{
+		}
+
+		protected virtual void OnDeactivate()
+		{
+		}
+
+		protected void Hide()
+		{
+			this.GetComponent<CanvasGroup> ().alpha = 0;
+			this.GetComponent<CanvasGroup> ().interactable = false;
+			this.GetComponent<CanvasGroup> ().blocksRaycasts = false;
 		}
 
 		/// <summary>
@@ -67,6 +93,14 @@ namespace Move2D
 			this.GetComponent<CanvasGroup> ().alpha = 0;
 			this.GetComponent<CanvasGroup> ().interactable = false;
 			this.GetComponent<CanvasGroup> ().blocksRaycasts = false;
+			OnDeactivate ();
+		}
+
+		protected void Show()
+		{
+			this.GetComponent<CanvasGroup> ().alpha = 1;
+			this.GetComponent<CanvasGroup> ().interactable = _interactable;
+			this.GetComponent<CanvasGroup> ().blocksRaycasts = _blocksRaycast;
 		}
 
 		/// <summary>
@@ -75,12 +109,21 @@ namespace Move2D
 		public virtual void Activate (bool forceShow = false)
 		{
 			_activated = true;
+			if (hasTimer)
+				StartCoroutine (Countdown());
 			if (showOnActivate || forceShow) {
-				this.GetComponent<CanvasGroup> ().alpha = 1;
-				this.GetComponent<CanvasGroup> ().interactable = _interactable;
-				this.GetComponent<CanvasGroup> ().blocksRaycasts = _blocksRaycast;
+				Show ();
 			}
-			Init ();
+			OnActivate ();
+		}
+
+		protected virtual IEnumerator Countdown()
+		{
+			yield return new WaitForSeconds (timer);
+			if (_activated) {
+				Deactivate ();
+				NextTutorial ();
+			}
 		}
 
 		/// <summary>

@@ -12,7 +12,7 @@ namespace Move2D
 		/// <summary>
 		/// Generic move method to be called whenever you want the player to move
 		/// </summary>
-		void Move ();
+		bool Move ();
 
 		/// <summary>
 		/// Is the movement module activated ?

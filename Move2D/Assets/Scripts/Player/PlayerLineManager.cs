@@ -11,6 +11,7 @@ namespace Move2D
 	public class PlayerLineManager : NetworkBehaviour
 	{
 		public PlayerLine linePrefab;
+		public SphereCDM _sphereCDM;
 		List<PlayerLine> _lines;
 
 		void OnEnable ()
@@ -34,10 +35,11 @@ namespace Move2D
 			}
 		}
 
-		void Start ()
+		public override void OnStartClient ()
 		{
 			this._lines = new List<PlayerLine> ();
 			InitLines ();
+			base.OnStartLocalPlayer ();
 		}
 
 		void PlayerToSphereInit(List<PlayerLine> lines)
@@ -48,6 +50,7 @@ namespace Move2D
 				var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
 				line.GetComponent<PlayerLine> ().object1 = player;
 				line.GetComponent<PlayerLine> ().object2 = sphereCDM;
+				line.GetComponent<PlayerLine> ().spherePhysics = sphereCDM.GetComponent<SpherePhysics>();
 				lines.Add (line);
 			}
 		}
@@ -55,11 +58,13 @@ namespace Move2D
 		void PlayerToPlayerInit(List<PlayerLine> lines)
 		{
 			var players = GameObject.FindGameObjectsWithTag ("Player");
+			var sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
 			for (int i = 0; i < players.Length; i++) {
 				for (int j = i + 1; j < players.Length; j++) {
 					var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
 					line.GetComponent<PlayerLine> ().object1 = players [i];
 					line.GetComponent<PlayerLine> ().object2 = players [j];
+					line.GetComponent<PlayerLine> ().spherePhysics = sphereCDM.GetComponent<SpherePhysics>();
 					lines.Add (line);
 				}
 			}
@@ -73,7 +78,7 @@ namespace Move2D
 			}
 			this._lines = new List<PlayerLine> ();
 			PlayerToSphereInit (this._lines);
-			// PlayerToPlayerInit (this._lines);
+			//PlayerToPlayerInit (this._lines);
 		}
 	}
 }

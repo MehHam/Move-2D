@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 183040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.08, z: -1.55}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.33, y: 0.33, z: 0.33}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -159,6 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linePrefab: {fileID: 114984759723951976, guid: 811988556a36d4eb79384d3cc9372286,
     type: 2}
+  _sphereCDM: {fileID: 0}
 --- !u!114 &114424921309173602
 MonoBehaviour:
   m_ObjectHideFlags: 1

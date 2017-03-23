@@ -349,6 +349,14 @@ namespace Move2D
 			if (this._nextLevelIndex < this.GetCurrentLevels ().Length) {
 				this.currentLevelIndex = this._nextLevelIndex;
 				LoadLevel ();
+			} else if (this.difficulty == Difficulty.Beginner) {
+				difficulty = Difficulty.Intermediate;
+				this.currentLevelIndex = 0;
+				LoadLevel ();
+			} else if (this.difficulty == Difficulty.Intermediate) {
+				difficulty = Difficulty.Expert;
+				this.currentLevelIndex = 0;
+				LoadLevel ();
 			}
 		}
 
@@ -397,9 +405,7 @@ namespace Move2D
 				break;
 			}
 		}
-
-
-
+			
 		// ----------------- Handlers ------------------
 		
 

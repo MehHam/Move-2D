@@ -23,6 +23,10 @@ namespace Move2D
 		[Tooltip ("The alpha of the line")]
 		public float alpha;
 
+		private float _currentAlpha;
+
+		public SpherePhysics spherePhysics;
+
 		LineRenderer _lineRenderer;
 
 		void Start ()
@@ -34,8 +38,8 @@ namespace Move2D
 		{
 			var startColor = object1.GetComponent<ILineObject> ().GetColor ();
 			var endColor = object2.GetComponent<ILineObject> ().GetColor ();
-			_lineRenderer.startColor = new Color (startColor.r, startColor.g, startColor.b, Input.GetKey (KeyCode.Tab) ? alpha : 0.0f);
-			_lineRenderer.endColor = new Color (endColor.r, endColor.g, endColor.b, Input.GetKey (KeyCode.Tab) ? alpha : 0.0f);
+			_lineRenderer.startColor = new Color (startColor.r, startColor.g, startColor.b, _currentAlpha);
+			_lineRenderer.endColor = new Color (endColor.r, endColor.g, endColor.b, _currentAlpha);
 			_lineRenderer.startWidth = object1.GetComponent<ILineObject> ().GetMass();
 			_lineRenderer.endWidth = object2.GetComponent<ILineObject> ().GetMass();
 			_lineRenderer.material.mainTextureOffset = new Vector2 (Time.time, 0.0f);
@@ -50,8 +54,12 @@ namespace Move2D
 			_lineRenderer.SetPositions (positions);
 		}
 
-		void LateUpdate ()
+		void Update ()
 		{
+			if (spherePhysics.hasMoved)
+				_currentAlpha = Mathf.Min (_currentAlpha + 0.05f, alpha);
+			else
+				_currentAlpha = Mathf.Max (_currentAlpha - 0.05f, 0.0f);
 			SetColors ();
 			SetPositions ();
 		}

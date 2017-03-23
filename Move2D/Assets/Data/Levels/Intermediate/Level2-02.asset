@@ -9,16 +9,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d4bbf88bba444e4387aa78bd5bd04fe, type: 3}
-  m_Name: Level2-01
+  m_Name: Level2-02
   m_EditorClassIdentifier: 
-  index: 1
+  index: 2
   time: 600
-  sceneName: Level5
+  sceneName: Level6
   spawnMotionPointFollow: 0
-  motionMode: 2
+  motionMode: 0
   readyAnimation: 1
   sphereVisibility: 0
   massModification: 0
   spawnBulletBuilder: 0
   bulletBuilderPattern: 0
-  enabledTutorials: 05000000
+  enabledTutorials: 

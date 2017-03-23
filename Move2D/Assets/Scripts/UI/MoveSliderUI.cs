@@ -13,6 +13,8 @@ namespace Move2D
 	[RequireComponent (typeof(CanvasGroup))]
 	public class MoveSliderUI : MonoBehaviour
 	{
+		public delegate void MoveSliderHandler(float value);
+		public static event MoveSliderHandler onSliderValueChanged;
 		/// <summary>
 		/// Text to display the current slider value
 		/// </summary>
@@ -20,22 +22,45 @@ namespace Move2D
 
 		Player _player;
 
-		IEnumerator Start ()
+		void OnEnable()
 		{
-			SetVisibility ();
-			do {
-				yield return new WaitForEndOfFrame ();
-				_player = FindLocalPlayer ();
-			} while (_player == null);
+			GameManager.onLevelStarted += OnLevelStarted;
+			MassZone.onMassZoneEnter += OnMassZoneEnter;
+			MassZone.onMassZoneExit += OnMassZoneExit;
+		}
+
+		void OnDisable()
+		{
+			GameManager.onLevelStarted -= OnLevelStarted;
+			MassZone.onMassZoneEnter -= OnMassZoneEnter;
+			MassZone.onMassZoneExit -= OnMassZoneExit;
+		}
+			
+		void OnLevelStarted ()
+		{
+			SetVisibility (GameManager.singleton.GetCurrentLevel ().massModification);
+			_player = FindLocalPlayer ();
 			GetComponent<Slider> ().value = _player.mass;
 			GetComponent<Slider> ().onValueChanged.AddListener (delegate {
 				OnValueChanged ();
 			});
 		}
-
+			
+		void OnMassZoneEnter ()
+		{
+			SetVisibility (true);
+		}
+			
+		void OnMassZoneExit ()
+		{
+			SetVisibility (false);
+		}
+			
 		void OnValueChanged ()
 		{
 			_player.CmdSetMass (GetComponent<Slider> ().value);
+			if (onSliderValueChanged != null)
+				onSliderValueChanged (GetComponent<Slider> ().value);
 		}
 
 		Player FindLocalPlayer ()
@@ -47,9 +72,8 @@ namespace Move2D
 			return null;
 		}
 
-		void SetVisibility ()
+		void SetVisibility (bool massModification)
 		{
-			var massModification = GameManager.singleton.GetCurrentLevel ().massModification;
 			this.GetComponent<CanvasGroup> ().interactable = massModification;
 			this.GetComponent<CanvasGroup> ().blocksRaycasts = massModification;
 			this.GetComponent<CanvasGroup> ().alpha = massModification ? 1.0f : 0.0f;
@@ -58,7 +82,6 @@ namespace Move2D
 		void Update ()
 		{
 			this.GetComponent<Slider> ().interactable = GameManager.singleton.isPlaying;
-			SetVisibility ();
 			text.text = (_player != null) ? "Mass: " + this._player.mass.ToString ("0.00") : "";
 		}
 	}

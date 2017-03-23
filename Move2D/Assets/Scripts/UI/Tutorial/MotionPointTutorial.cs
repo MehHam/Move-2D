@@ -20,11 +20,13 @@ namespace Move2D {
 
 		void OnMotionPointEnter ()
 		{
-			Deactivate ();
-			NextTutorial ();
+			if (_activated) {
+				Deactivate ();
+				NextTutorial ();
+			}
 		}
 
-		protected override void Init ()
+		protected override void OnActivate ()
 		{
 			_pointFollow = GameObject.FindGameObjectWithTag ("PointFollow").transform;
 		}

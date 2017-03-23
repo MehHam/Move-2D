@@ -23,7 +23,7 @@ namespace Move2D
 			return (this.sliderValue == sliderValue);
 		}
 
-		public void Move ()
+		public bool Move ()
 		{
 			float horizontal = Input.GetAxis ("Horizontal");
 			float vertical = Input.GetAxis ("Vertical");
@@ -32,6 +32,7 @@ namespace Move2D
 				+ Vector3.forward * vertical)
 				* Time.deltaTime * speed
 			);
+			return horizontal != 0 || vertical != 0;
 		}
 	}
 }

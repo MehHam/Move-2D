@@ -19,7 +19,7 @@ namespace Move2D
 			return (this.sliderValue == sliderValue);
 		}
 
-		public void Move ()
+		public bool Move ()
 		{
 			// You can only move if the gyroscope is supporter
 			if (SystemInfo.supportsGyroscope) {
@@ -40,8 +40,10 @@ namespace Move2D
 						* Time.deltaTime * speed
 					);*/
 					this.GetComponentInChildren<Rigidbody2D> ().transform.position = Vector2.Lerp (this.GetComponentInChildren<Rigidbody2D> ().position, playerPos, 0.25f);
+					return true;
 				}
 			}
+			return false;
 		}
 	}
 }
