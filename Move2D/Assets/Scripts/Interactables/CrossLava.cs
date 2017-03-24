@@ -17,6 +17,8 @@ namespace Move2D
 		[Tooltip ("Interval of time during which the players won't lose points when the sphere stays on the collider")]
 		public float scoreCooldownTime;
 
+		public const int damage = 1;
+
 		private bool _cooldown;
 
 		#region IInteractable implementation
@@ -24,28 +26,38 @@ namespace Move2D
 		[Server]
 		public void OnEnterEffect (SphereCDM sphere)
 		{
+			sphere.LoseLife (damage);
+			sphere.DestroySphere ();
+			/*
 			GameManager.singleton.AddToScore (-1);
 			StartCoroutine (ScoreCooldown ());
 			sphere.Damage ();
+			*/
 		}
 
 		[Server]
 		public void OnStayEffect (SphereCDM sphere)
 		{
+			sphere.LoseLife (damage);
+			sphere.DestroySphere ();
+			/*
 			if (!_cooldown) {
 				GameManager.singleton.AddToScore (-1);
 				StartCoroutine (ScoreCooldown ());
 			}
+			*/
 		}
 
 		[Server]
 		public void OnExitEffect (SphereCDM sphere)
 		{
+			/*
 			sphere.Damage ();
 			if (GameManager.singleton.invisibleSphere) {
 				sphere.GetComponent<Blinker> ().FadeOut ();
 				sphere.GetComponent<Blinker> ().RpcFadeOut ();
 			}
+			*/
 		}
 
 		#endregion

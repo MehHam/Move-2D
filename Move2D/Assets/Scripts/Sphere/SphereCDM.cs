@@ -22,6 +22,10 @@ namespace Move2D
 		/// </summary>
 		[Tooltip ("The duration of the damage animation")]
 		public float damageDuration = 2.0f;
+		/// <summary>
+		/// When the sphere is invincible, it doesn't take any damage
+		/// </summary>
+		public bool isInvincible = false;
 
 		public ScorePopupUI scorePopup;
 
@@ -30,6 +34,7 @@ namespace Move2D
 		void OnEnable ()
 		{
 			GameManager.onLevelStarted += OnLevelStarted;
+			GameManager.onRespawn += OnLevelStarted;
 			GameManager.onScoreChange += OnScoreChange;
 		}
 
@@ -37,6 +42,7 @@ namespace Move2D
 		void OnDisable ()
 		{
 			GameManager.onLevelStarted -= OnLevelStarted;
+			GameManager.onRespawn -= OnLevelStarted;
 			GameManager.onScoreChange -= OnScoreChange;
 		}
 
@@ -93,6 +99,25 @@ namespace Move2D
 			this.GetComponent<Blinker> ().Blink ();
 		}
 
+		public void LoseLife(int amount)
+		{
+			if (!isInvincible) {
+				GameManager.singleton.LoseLife (amount);
+			}
+		}
+
+		public void DestroySphere()
+		{
+			if (!isInvincible) {
+				isInvincible = true;
+				GetComponent<SpherePhysics> ().enabled = false;
+				this.GetComponent<Blinker> ().FadeOut (0.5f);
+				StartCoroutine (WaitForRespawn (1.0f));
+				Destroy (this.GetComponent<PlayerLineManager> ());
+				RpcDestroySphere ();
+			}
+		}
+
 		/// <summary>
 		/// Start the damage animation
 		/// </summary>
@@ -120,6 +145,13 @@ namespace Move2D
 			}
 		}
 
+		[Server]
+		IEnumerator WaitForRespawn(float respawnTime)
+		{
+			yield return new WaitForSeconds (respawnTime);
+			GameManager.singleton.StartRespawn ();
+		}
+
 		[ClientRpc]
 		void RpcDamage ()
 		{
@@ -142,6 +174,14 @@ namespace Move2D
 			        );
 			go.text.text = value.ToString ();
 			go.text.color = value >= 0 ? Color.white : Color.red;
+		}
+
+		[ClientRpc]
+		void RpcDestroySphere()
+		{
+			GetComponent<SpherePhysics> ().enabled = false;
+			this.GetComponent<Blinker> ().FadeOut (0.5f);
+			Destroy (this.GetComponent<PlayerLineManager> ());
 		}
 
 		#region IPlayerLineObject implementation

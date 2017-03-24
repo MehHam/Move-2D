@@ -7,18 +7,26 @@ namespace Move2D {
 		#region implemented abstract members of Tutorial
 		protected override void OnEnable() {
 			MoveSliderUI.onSliderValueChanged += OnSliderValueChanged;
-			MassZone.onMassZoneEnter += OnMassZoneEnter;
+			MassZoneEnter.onMassZoneEnter += OnMassZoneEnter;
+			MassZoneExit.onMassZoneExit += OnMassZoneExit;
 		}
 
 		protected override void OnDisable() {
 			MoveSliderUI.onSliderValueChanged -= OnSliderValueChanged;
-			MassZone.onMassZoneEnter -= OnMassZoneEnter;
+			MassZoneEnter.onMassZoneEnter -= OnMassZoneEnter;
+			MassZoneExit.onMassZoneExit -= OnMassZoneExit;
 		}
 
 		void OnMassZoneEnter ()
 		{
 			if (_activated)
 				Show ();
+		}
+
+		void OnMassZoneExit ()
+		{
+			if (_activated)
+				Deactivate ();
 		}
 
 

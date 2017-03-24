@@ -25,6 +25,8 @@ namespace Move2D
 		Playing,
 		PreLevelEnd,
 		LevelEnd,
+		Respawn,
+		GameOver,
 		EndGame,
 	}
 
@@ -45,6 +47,10 @@ namespace Move2D
 		/// Event called whenever the level started
 		/// </summary>
 		public static event GameManagerHandler onLevelStarted;
+		/// <summary>
+		/// Event called whenever the sphere respawned;
+		/// </summary>
+		public static event GameManagerHandler onRespawn;
 		/// <summary>
 		/// Occurs when the score is changed;
 		/// </summary>
@@ -170,6 +176,11 @@ namespace Move2D
 		[Tooltip ("Time left in the current level")]
 		[SyncVar] public int time = 0;
 		/// <summary>
+		/// How much life the sphere has left
+		/// </summary>
+		[Tooltip ("How much life the sphere has left")]
+		[SyncVar] public int life = 5;
+		/// <summary>
 		/// The current score of the players
 		/// </summary>
 		[Tooltip ("Current score of the player")]
@@ -232,7 +243,7 @@ namespace Move2D
 		// ----------------- State Machine ------------------
 
 
-
+		[Server]
 		void Inactive ()
 		{
 			int count = 0;
@@ -251,6 +262,7 @@ namespace Move2D
 		/// Waits for all players to be ready, kicks all the clients that aren't after the timeout.
 		/// </summary>
 		/// <param name="timeOut">The time out time.</param>
+		[Server]
 		void WaitingForPlayers ()
 		{
 			if (!_startingTime.HasValue)
@@ -320,6 +332,7 @@ namespace Move2D
 		/// <summary>
 		/// Called when the game state is Playing.
 		/// </summary>
+		[Server]
 		void Playing ()
 		{
 		}
@@ -360,6 +373,20 @@ namespace Move2D
 			}
 		}
 
+		[Server]
+		void Respawn()
+		{
+			RespawnPlayers ();
+			if (onRespawn != null)
+				onRespawn ();
+			RpcRespawn ();
+			this.gameState = GameState.Playing;
+		}
+
+		void GameOver ()
+		{
+		}
+
 		/// <summary>
 		/// Called when the game state is at EndGame.a
 		/// </summary>
@@ -397,6 +424,12 @@ namespace Move2D
 				break;
 			case GameState.LevelEnd:
 				LevelEnd ();
+				break;
+			case GameState.Respawn:
+				Respawn ();
+				break;
+			case GameState.GameOver:
+				GameOver ();
 				break;
 			case GameState.EndGame:
 				EndGame ();
@@ -506,8 +539,6 @@ namespace Move2D
 
 		// ----------------- Public Methods ------------------
 
-
-
 		/// <summary>
 		/// Exits the level.
 		/// </summary>
@@ -546,11 +577,11 @@ namespace Move2D
 
 		[Server]
 		/// <summary>
-	/// Increase the score by a value.
-	/// The more player there is, the more points you get
-	/// </summary>
-	/// <param name="value">The value by which the score will incremented. Can be negative</param>
-	public void AddToScore (int value = 1)
+		/// Increase the score by a value.
+		/// The more player there is, the more points you get
+		/// </summary>
+		/// <param name="value">The value by which the score will incremented. Can be negative</param>
+		public void AddToScore (int value = 1)
 		{
 			int previousScore = this.score;
 			this.score = Mathf.Max (this.score + value, 0);
@@ -560,10 +591,10 @@ namespace Move2D
 
 		[Server]
 		/// <summary>
-	/// Change the difficulty of the game. The first level of that difficulty setting is automatically started.
-	/// </summary>
-	/// <param name="difficulty">The new difficulty.</param>
-	public void ChangeDifficulty (Difficulty difficulty)
+		/// Change the difficulty of the game. The first level of that difficulty setting is automatically started.
+		/// </summary>
+		/// <param name="difficulty">The new difficulty.</param>
+		public void ChangeDifficulty (Difficulty difficulty)
 		{
 			StopAllCoroutines ();
 			this.score = 0;
@@ -572,6 +603,18 @@ namespace Move2D
 			this.gameState = GameState.LevelEnd;
 		}
 
+		public void LoseLife(int amount)
+		{
+			life = Math.Max(life - amount, 0);
+			if (life == 0)
+				this.gameState = GameState.GameOver;
+		}
+
+		public void StartRespawn() 
+		{
+			if (this.isPlaying)
+				this.gameState = GameState.Respawn;
+		}
 
 
 		// ----------------- Client ------------------
@@ -595,10 +638,46 @@ namespace Move2D
 			}
 		}
 
+		void RpcRespawn ()
+		{
+			if (!isServer) {
+				if (onRespawn != null)
+					onRespawn ();
+			}
+		}
+
 
 
 		// ---------------------------------------------------
 
+		[Server]
+		/// <summary>
+		/// Reset the position of all players
+		/// </summary>
+		void RespawnPlayers()
+		{
+			var players = GameObject.FindGameObjectsWithTag ("Player");
+			var sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
+			foreach (var player in players) {
+				if (player.transform.parent != null)
+					GameObject.Destroy (player.transform.parent.gameObject);
+				GameObject.Destroy (player);
+			}
+			GameObject.Destroy (sphereCDM);
+			foreach (var networkPlayerInfo in networkPlayersInfo) {
+				var startPos = networkPlayerInfo.playerInfo.startPosition;
+				var gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
+					startPos,
+					Quaternion.identity);
+				NetworkServer.ReplacePlayerForConnection (networkPlayerInfo.networkConnection,
+					gamePlayer,
+					networkPlayerInfo.playerInfo.playerControllerId);
+				gamePlayer.GetComponent<Player> ().playerInfo = networkPlayerInfo.playerInfo;
+				gamePlayer.GetComponent<Player> ().playerInfo.mass = 1.0f;
+			}
+			sphereCDM = GameObject.Instantiate (this.sphereCDM, Vector3.zero, Quaternion.identity);
+			NetworkServer.Spawn (sphereCDM);
+		}
 		/// <summary>
 		/// Spawn all networkPrefabs
 		/// </summary>

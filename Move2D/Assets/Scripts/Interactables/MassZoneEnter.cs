@@ -5,24 +5,18 @@ using UnityEngine.Networking;
 
 namespace Move2D
 {
-	public class MassZone : NetworkBehaviour, IEnterInteractable, IExitInteractable
+	public class MassZoneEnter : NetworkBehaviour, IEnterInteractable
 	{
 		public delegate void OnMassZoneHandler ();
 		public static event OnMassZoneHandler onMassZoneEnter;
-		public static event OnMassZoneHandler onMassZoneExit;
-		#region IExitInteractable implementation
 
-		public void OnExitEffect (SphereCDM sphere)
-		{
-			RpcOnExit ();
-		}
-
-		#endregion
+		public GameObject bridgeDirection;
 
 		#region IEnterInteractable implementation
 
 		public void OnEnterEffect (SphereCDM sphere)
 		{
+			sphere.isInvincible = true;
 			RpcOnEnter ();
 		}
 
@@ -31,15 +25,13 @@ namespace Move2D
 		[ClientRpc]
 		void RpcOnEnter()
 		{
+			foreach (var renderer in bridgeDirection.GetComponentsInChildren<SpriteRenderer>()) {
+				var color = renderer.color;
+				renderer.color = new Color (color.r, color.g, color.b, 0.0f);
+			}
+			bridgeDirection.SetActive (true);
 			if (onMassZoneEnter != null)
 				onMassZoneEnter ();
-		}
-
-		[ClientRpc]
-		void RpcOnExit()
-		{
-			if (onMassZoneExit != null)
-				onMassZoneExit ();
 		}
 	}
 }

@@ -25,20 +25,27 @@ namespace Move2D
 		void OnEnable()
 		{
 			GameManager.onLevelStarted += OnLevelStarted;
-			MassZone.onMassZoneEnter += OnMassZoneEnter;
-			MassZone.onMassZoneExit += OnMassZoneExit;
+			GameManager.onRespawn += OnRespawn;
+			MassZoneEnter.onMassZoneEnter += OnMassZoneEnter;
+			MassZoneExit.onMassZoneExit += OnMassZoneExit;
 		}
 
 		void OnDisable()
 		{
 			GameManager.onLevelStarted -= OnLevelStarted;
-			MassZone.onMassZoneEnter -= OnMassZoneEnter;
-			MassZone.onMassZoneExit -= OnMassZoneExit;
+			GameManager.onRespawn -= OnRespawn;
+			MassZoneEnter.onMassZoneEnter -= OnMassZoneEnter;
+			MassZoneExit.onMassZoneExit -= OnMassZoneExit;
 		}
 			
 		void OnLevelStarted ()
 		{
 			SetVisibility (GameManager.singleton.GetCurrentLevel ().massModification);
+			OnRespawn ();
+		}
+
+		void OnRespawn()
+		{
 			_player = FindLocalPlayer ();
 			GetComponent<Slider> ().value = _player.mass;
 			GetComponent<Slider> ().onValueChanged.AddListener (delegate {

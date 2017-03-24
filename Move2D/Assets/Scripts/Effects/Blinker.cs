@@ -94,7 +94,7 @@ namespace Move2D
 			}
 		}
 
-		void FadeIn (float newFadeTime)
+		public void FadeIn (float newFadeTime)
 		{
 			if (_routine != null)
 				StopCoroutine (_routine);
@@ -118,7 +118,7 @@ namespace Move2D
 			FadeOut (fadeOutTime);
 		}
 
-		void FadeOut (float newFadeTime)
+		public void FadeOut (float newFadeTime)
 		{
 			if (_routine != null)
 				StopCoroutine (_routine);

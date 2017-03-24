@@ -12,62 +12,76 @@ namespace Move2D
 	{
 		public PlayerLine linePrefab;
 		public SphereCDM _sphereCDM;
-		List<PlayerLine> _lines;
+		List<PlayerLine> _lines = new List<PlayerLine> ();
 
 		void OnEnable ()
 		{
 			Player.onPlayerDestroy += OnPlayerDestroy;
+			GameManager.onLevelStarted += OnLevelStarted;
+			GameManager.onRespawn += OnLevelStarted;
 		}
 
 		void OnDisable ()
 		{
 			Player.onPlayerDestroy -= OnPlayerDestroy;
+			GameManager.onLevelStarted -= OnLevelStarted;
+			GameManager.onRespawn -= OnLevelStarted;
 		}
 
 		void OnPlayerDestroy (Player player)
 		{
-			for (int i = 0; i < _lines.Count; i++) {
-				if (_lines [i].object1 == player || _lines [i].object2 == player) {
-					Destroy (_lines [i].gameObject);
-					Destroy (_lines [i]);
-				}
-				_lines.RemoveAt (i);
+			var line = _lines.Find (x => x.object1 == player.gameObject || x.object2 == player.gameObject);
+			if (line != null) {
+				_lines.Remove (line);
+				Destroy (line.gameObject);
+				Destroy (line);
 			}
 		}
 
-		public override void OnStartClient ()
+		void OnLevelStarted ()
 		{
-			this._lines = new List<PlayerLine> ();
 			InitLines ();
-			base.OnStartLocalPlayer ();
 		}
 
 		void PlayerToSphereInit(List<PlayerLine> lines)
 		{
 			var players = GameObject.FindGameObjectsWithTag ("Player");
-			var sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
 			foreach (var player in players) {
-				var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
-				line.GetComponent<PlayerLine> ().object1 = player;
-				line.GetComponent<PlayerLine> ().object2 = sphereCDM;
-				line.GetComponent<PlayerLine> ().spherePhysics = sphereCDM.GetComponent<SpherePhysics>();
-				lines.Add (line);
+				if (player != null) {
+					var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
+					line.GetComponent<PlayerLine> ().object1 = player;
+					line.GetComponent<PlayerLine> ().object2 = this.gameObject;
+					line.GetComponent<PlayerLine> ().spherePhysics = this.GetComponent<SpherePhysics> ();
+					lines.Add (line);
+				}
 			}
 		}
 
 		void PlayerToPlayerInit(List<PlayerLine> lines)
 		{
 			var players = GameObject.FindGameObjectsWithTag ("Player");
-			var sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
 			for (int i = 0; i < players.Length; i++) {
 				for (int j = i + 1; j < players.Length; j++) {
-					var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
-					line.GetComponent<PlayerLine> ().object1 = players [i];
-					line.GetComponent<PlayerLine> ().object2 = players [j];
-					line.GetComponent<PlayerLine> ().spherePhysics = sphereCDM.GetComponent<SpherePhysics>();
-					lines.Add (line);
+					if (players [i] != null && players [j] != null) {
+						var line = Instantiate (linePrefab, new Vector3 (0, 0, -20.0f), Quaternion.identity);
+						line.GetComponent<PlayerLine> ().object1 = players [i];
+						line.GetComponent<PlayerLine> ().object2 = players [j];
+						line.GetComponent<PlayerLine> ().spherePhysics = this.GetComponent<SpherePhysics> ();
+						lines.Add (line);
+					}
 				}
 			}
+		}
+
+		void OnDestroy ()
+		{
+			foreach (var line in this._lines) {
+				if (line != null) {
+					Destroy (line.gameObject);
+					Destroy (line);
+				}
+			}
+			this._lines.Clear ();
 		}
 
 		void InitLines ()
@@ -76,8 +90,9 @@ namespace Move2D
 				Destroy (line.gameObject);
 				Destroy (line);
 			}
-			this._lines = new List<PlayerLine> ();
+			this._lines.Clear ();
 			PlayerToSphereInit (this._lines);
+			Debug.Log (this._lines.Count);
 			//PlayerToPlayerInit (this._lines);
 		}
 	}
