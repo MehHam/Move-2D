@@ -7,15 +7,16 @@ namespace Move2D
 {
 	public enum TutorialType
 	{
+		None,
 		Exit,
 		Pickup,
 		ExitBis,
 		MotionPoint,
-		Lava,
+		TimeWarning,
 		MassSlider,
 		ProgressBar,
 		Controls,
-		None,
+		LifeLoss,
 	}
 
 	[RequireComponent (typeof(CanvasGroup))]
@@ -98,6 +99,8 @@ namespace Move2D
 
 		protected void Show()
 		{
+			if (hasTimer)
+				StartCoroutine (Countdown());
 			this.GetComponent<CanvasGroup> ().alpha = 1;
 			this.GetComponent<CanvasGroup> ().interactable = _interactable;
 			this.GetComponent<CanvasGroup> ().blocksRaycasts = _blocksRaycast;
@@ -109,8 +112,6 @@ namespace Move2D
 		public virtual void Activate (bool forceShow = false)
 		{
 			_activated = true;
-			if (hasTimer)
-				StartCoroutine (Countdown());
 			if (showOnActivate || forceShow) {
 				Show ();
 			}

@@ -27,6 +27,7 @@ namespace Move2D
 		LevelEnd,
 		Respawn,
 		GameOver,
+		Victory,
 		EndGame,
 	}
 
@@ -55,6 +56,14 @@ namespace Move2D
 		/// Occurs when the score is changed;
 		/// </summary>
 		public static event GameManagerScoreHandler onScoreChange;
+		/// <summary>
+		/// Occurs when the sphere takes its first damage
+		/// </summary>
+		public static event GameManagerHandler onFirstDamage;
+		/// <summary>
+		/// Occurs when the players get a time warning
+		/// </summary>
+		public static event GameManagerHandler onTimeWarning;
 
 		public enum Difficulty
 		{
@@ -152,6 +161,7 @@ namespace Move2D
 		public bool isPlaying { get { return this._gameState == GameState.Playing; } }
 		public bool isWaitingForPlayers { get { return this._gameState == GameState.WaitingForPlayers; } }
 		public bool isGameOver { get { return this._gameState == GameState.GameOver; } }
+		public bool isVictory { get { return this._gameState == GameState.Victory; } }
 
 		/// <summary>
 		/// Has the game started or not.
@@ -189,6 +199,15 @@ namespace Move2D
 		/// </summary>
 		[Tooltip ("Current score of the player")]
 		[SyncVar] public int score = 0;
+		/// <summary>
+		/// Whether the player have taken a damage yet
+		/// </summary>
+		[Tooltip ("Whether the players have taken a damage yet.")]
+		public bool firstDamage = false;
+		/// <summary>
+		/// Whether the player got a warning about the timeLeft
+		/// </summary>
+		public bool timeWarning = false;
 
 
 
@@ -259,6 +278,7 @@ namespace Move2D
 			// If all clients are ready we can start the level
 			if (count == this._playerReadyToStart)
 				this._gameState = GameState.PreLevel;
+			this._playerReadyToStart = 0;
 		}
 
 		/// <summary>
@@ -369,14 +389,8 @@ namespace Move2D
 			if (this._nextLevelIndex < this.GetCurrentLevels ().Length) {
 				this.currentLevelIndex = this._nextLevelIndex;
 				LoadLevel ();
-			} else if (this.difficulty == Difficulty.Beginner) {
-				difficulty = Difficulty.Intermediate;
-				this.currentLevelIndex = 0;
-				LoadLevel ();
-			} else if (this.difficulty == Difficulty.Intermediate) {
-				difficulty = Difficulty.Expert;
-				this.currentLevelIndex = 0;
-				LoadLevel ();
+			} else {
+				this._gameState = GameState.Victory;
 			}
 		}
 
@@ -392,6 +406,22 @@ namespace Move2D
 
 		[Server]
 		void GameOver ()
+		{
+			int count = 0;
+			// Some connections can be null for some reason, so we have to do the count by ourselves
+			foreach (var connection in NetworkServer.connections) {
+				if (connection != null)
+					count++;
+			}
+			// If all clients are ready we can start the level
+			if (count == this._playerReadyToStart) {
+				this._nextLevelIndex = 0;
+				this._gameState = GameState.LevelEnd;
+			}
+		}
+
+		[Server]
+		void Victory ()
 		{
 		}
 
@@ -438,6 +468,9 @@ namespace Move2D
 				break;
 			case GameState.GameOver:
 				GameOver ();
+				break;
+			case GameState.Victory:
+				Victory ();
 				break;
 			case GameState.EndGame:
 				EndGame ();
@@ -613,6 +646,12 @@ namespace Move2D
 
 		public void LoseLife(int amount)
 		{
+			if (!firstDamage) {
+				firstDamage = true;
+				if (onFirstDamage != null)
+					onFirstDamage ();
+				RpcFirstDamage ();
+			}
 			life = Math.Max(life - amount, 0);
 		}
 
@@ -644,11 +683,36 @@ namespace Move2D
 			}
 		}
 
+		[ClientRpc]
 		void RpcRespawn ()
 		{
 			if (!isServer) {
 				if (onRespawn != null)
 					onRespawn ();
+			}
+		}
+
+		[ClientRpc]
+		void RpcFirstDamage ()
+		{
+			if (!isServer) {
+				if (!firstDamage) {
+					if (onFirstDamage != null)
+						onFirstDamage ();
+					firstDamage = true;
+				}
+			}
+		}
+
+		[ClientRpc]
+		void RpcTimeWarning ()
+		{
+			if (!isServer) {
+				if (!timeWarning) {
+					if (onTimeWarning != null)
+						onTimeWarning ();
+					timeWarning = true;
+				}
 			}
 		}
 
@@ -752,7 +816,14 @@ namespace Move2D
 		{
 			while (time > 0) {
 				yield return new WaitForSeconds (1.0f);
-				time--;
+				if (isPlaying) {
+					time--;
+					if (!timeWarning && time < 30) {
+						RpcTimeWarning ();
+						if (onTimeWarning != null)
+							onTimeWarning ();
+					}
+				}
 			}
 		}
 

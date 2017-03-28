@@ -20,8 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4854703450869698}
   - component: {fileID: 212957265173824154}
-  - component: {fileID: 68784643987659544}
-  - component: {fileID: 60541094071890222}
+  - component: {fileID: 60026632289526966}
   m_Layer: 0
   m_Name: level8
   m_TagString: Untagged
@@ -35,40 +34,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1419968202465404}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 747.349, y: 356.62, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.509091, y: -0.030303027, z: 0}
+  m_LocalScale: {x: 3.5476718, y: 3.636363, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &60541094071890222
+--- !u!60 &60026632289526966
 PolygonCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1419968202465404}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  m_Points:
-    m_Paths:
-    - - {x: 0.32999998, y: 2.69}
-      - {x: 0.22999999, y: 2.69}
-      - {x: -0.35, y: 2.04}
-      - {x: -0.35, y: 1.9599999}
-      - {x: -0.34, y: -1.8499999}
-      - {x: 0.01, y: -2.35}
-      - {x: -0.04, y: -2.4199998}
-      - {x: 0.01, y: -2.49}
-      - {x: 0.28, y: -2.71}
-      - {x: 0.35, y: -2.71}
-      - {x: 0.35, y: 2.6799998}
---- !u!68 &68784643987659544
-EdgeCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -76,15 +50,30 @@ EdgeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   m_Points:
-  - {x: -0.31854248, y: -1.7909546}
-  - {x: -0.3078003, y: 2.0106812}
-  - {x: 0.31933594, y: 2.6610107}
-  - {x: 0.31469727, y: -2.6517334}
-  - {x: -0.3203125, y: -1.7858276}
+    m_Paths:
+    - - {x: 0.32, y: 2.69}
+      - {x: 0.26999998, y: 2.69}
+      - {x: -0.32999998, y: 2.06}
+      - {x: -0.35, y: 2.01}
+      - {x: -0.35, y: 0.13}
+      - {x: -0.34, y: -1.8499999}
+      - {x: -0.049999997, y: -2.44}
+      - {x: 0.26999998, y: -2.7}
+      - {x: 0.29, y: -2.71}
+      - {x: 0.34, y: -2.71}
+      - {x: 0.35, y: -2.6799998}
+      - {x: 0.35, y: 2.6799998}
+    - - {x: -0.089999996, y: -2.48}
+      - {x: -0.089999996, y: -2.57}
+      - {x: -0.04, y: -2.6599998}
+      - {x: 0, y: -2.69}
+      - {x: 0.03, y: -2.6699998}
+      - {x: 0, y: -2.54}
+      - {x: -0.049999997, y: -2.48}
 --- !u!212 &212957265173824154
 SpriteRenderer:
   m_ObjectHideFlags: 1

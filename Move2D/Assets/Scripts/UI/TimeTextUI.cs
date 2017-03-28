@@ -22,8 +22,10 @@ namespace Move2D
 			if (GameManager.singleton == null)
 				this.GetComponent<Text> ().text = baseText + "/";
 			else {
-				string formattedTime = baseText + (GameManager.singleton.time / 60).ToString ("00") + ":" + (GameManager.singleton.time % 60).ToString ("00");
-				this.GetComponent<Text> ().text = formattedTime;
+				int time = GameManager.singleton.time;
+				string formattedTime = (time / 60).ToString ("00") + ":" + (time % 60).ToString ("00");
+				string coloredTime = (GameManager.singleton.isPlaying && time <= 10) ? "<color=red>" + formattedTime + "</color>" : formattedTime;
+				this.GetComponent<Text> ().text = baseText + coloredTime;
 			}
 		}
 	}

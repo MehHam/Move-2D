@@ -35,13 +35,22 @@ namespace Move2D
 
 		IEnumerator ExitCountdown ()
 		{
-			this.timeLeft = countdownTime;
+			// The countdown doesn't always have the same value. If the players are in a hurry or they have nothing left to do,
+			// they should'nt have to wait as much
+			if (GameManager.singleton.time < 2)
+				this.timeLeft = 0;
+			else if (GameManager.singleton.time < 30 || LevelManager.singleton.pickupCount == 0)
+				this.timeLeft = Mathf.Min (2, countdownTime);
+			else
+				this.timeLeft = countdownTime;
 			this.countdownActivated = true;
-			while (this.timeLeft > 0) {
+			while (this.timeLeft > 0 && GameManager.singleton.isPlaying) {
 				yield return new WaitForSeconds (1.0f);
 				timeLeft--;
 			}
-			GameManager.singleton.ExitLevel ();
+			if (GameManager.singleton.isPlaying) {
+				GameManager.singleton.ExitLevel ();
+			}
 			this.countdownActivated = false;
 		}
 
@@ -62,7 +71,7 @@ namespace Move2D
 
 		public void OnEnterEffect (SphereCDM sphere)
 		{
-			if (LevelManager.singleton.isScoreReached) {
+			if (LevelManager.singleton.hasScoreReached) {
 				StartExitCountdown ();
 				RpcExitEvent ();
 			}
@@ -80,10 +89,22 @@ namespace Move2D
 				onExitEnter ();
 		}
 
+		void Activation()
+		{
+			bool activated = (LevelManager.singleton.levelHasStarted && LevelManager.singleton.hasScoreReached);
+			var color = this.GetComponent<SpriteRenderer> ().color;
+			this.GetComponent<SpriteRenderer> ().color = new Color (color.r, color.g, color.b, activated ? 1.0f : 0.3f);
+			this.GetComponent<Collider2D> ().enabled = activated;
+		}
+
+		void Awake()
+		{
+			Activation ();
+		}
+
 		void Update()
 		{
-			this.GetComponent<Renderer> ().enabled = (LevelManager.singleton.isScoreReached);
-			this.GetComponent<Collider2D> ().enabled = (LevelManager.singleton.isScoreReached);
+			Activation ();
 		}
 	}
 }

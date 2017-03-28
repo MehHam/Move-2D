@@ -11,9 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4bbf88bba444e4387aa78bd5bd04fe, type: 3}
   m_Name: Level2-03
   m_EditorClassIdentifier: 
-  index: 0
+  index: 3
   time: 600
-  sceneName: Level7
+  sceneName: Level6
   spawnMotionPointFollow: 0
   motionMode: 0
   readyAnimation: 1

@@ -92,7 +92,6 @@ namespace Move2D
 			}
 			this._lines.Clear ();
 			PlayerToSphereInit (this._lines);
-			Debug.Log (this._lines.Count);
 			//PlayerToPlayerInit (this._lines);
 		}
 	}

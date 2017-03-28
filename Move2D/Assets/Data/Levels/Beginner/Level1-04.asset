@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Name: Level1-04
   m_EditorClassIdentifier: 
   index: 4
-  time: 30
+  time: 400
   sceneName: Level3
-  gameMode: 0
+  spawnMotionPointFollow: 0
   motionMode: 0
   readyAnimation: 1
   sphereVisibility: 0
   massModification: 0
+  spawnBulletBuilder: 0
+  bulletBuilderPattern: 0
+  enabledTutorials: 0900000005000000

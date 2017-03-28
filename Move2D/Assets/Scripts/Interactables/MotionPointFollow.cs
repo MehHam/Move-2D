@@ -70,7 +70,7 @@ namespace Move2D
 		[Server]
 		public void OnEnterEffect (SphereCDM sphere)
 		{
-			if (!GameManager.singleton.invisibleSphere) { 
+			if (!GameManager.singleton.invisibleSphere && GameManager.singleton.isPlaying) { 
 				GameManager.singleton.AddToScore ();
 				_coroutineHandle = StartCoroutine (ScoreCooldown ());
 			}
@@ -80,7 +80,7 @@ namespace Move2D
 		[Server]
 		public void OnStayEffect (SphereCDM sphere)
 		{
-			if (!GameManager.singleton.invisibleSphere) {
+			if (!GameManager.singleton.invisibleSphere && GameManager.singleton.isPlaying) {
 				if (!_cooldown) {
 					GameManager.singleton.AddToScore ();
 					_coroutineHandle = StartCoroutine (ScoreCooldown ());
@@ -122,10 +122,12 @@ namespace Move2D
 		{
 			float timeInterval = GameManager.singleton.GetCurrentLevel ().time / randomTransitions;
 			while (true) {
-				var pos = new Vector2 (Random.Range (-randomPositionRange, randomPositionRange),
-					         Random.Range (-randomPositionRange, randomPositionRange));
-				Debug.Log (pos);
-				this.transform.position = pos;
+				if (GameManager.singleton.isPlaying) {
+					var pos = new Vector2 (Random.Range (-randomPositionRange, randomPositionRange),
+						         Random.Range (-randomPositionRange, randomPositionRange));
+					Debug.Log (pos);
+					this.transform.position = pos;
+				}
 				yield return new WaitForSeconds (timeInterval);
 			}
 		}
@@ -134,9 +136,11 @@ namespace Move2D
 		IEnumerator CosPattern ()
 		{
 			while (true) {
-				var pos = new Vector2 (0.0f, amplitude * Mathf.Cos (6.24f * Time.fixedTime / velocity));
-				Debug.Log (pos);
-				this.transform.position = pos;
+				if (GameManager.singleton.isPlaying) {
+					var pos = new Vector2 (0.0f, amplitude * Mathf.Cos (6.24f * Time.fixedTime / velocity));
+					Debug.Log (pos);
+					this.transform.position = pos;
+				}
 				yield return new WaitForFixedUpdate ();
 			}
 		}
@@ -145,7 +149,9 @@ namespace Move2D
 		IEnumerator RotationPattern ()
 		{
 			while (true) {
-				this.transform.RotateAround (centrePos, Vector3.forward * 10f, velocity * Time.fixedDeltaTime);
+				if (GameManager.singleton.isPlaying) {
+					this.transform.RotateAround (centrePos, Vector3.forward * 10f, velocity * Time.fixedDeltaTime);
+				}
 				yield return new WaitForFixedUpdate ();
 			}
 		}

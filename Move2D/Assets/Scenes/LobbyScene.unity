@@ -252,6 +252,11 @@ Prefab:
       propertyPath: m_SpawnPrefabs.Array.size
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 114853022390471970, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 224703497825070660, guid: d452712503b114cc1a33b1f89fcb7081,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -396,6 +401,26 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114853022390471970, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114853022390471970, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114853022390471970, guid: d452712503b114cc1a33b1f89fcb7081,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1863550537}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d452712503b114cc1a33b1f89fcb7081, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1863550537 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1798090175471452, guid: d452712503b114cc1a33b1f89fcb7081,
+    type: 2}
+  m_PrefabInternal: {fileID: 1863550536}
