@@ -276,9 +276,10 @@ namespace Move2D
 					count++;
 			}
 			// If all clients are ready we can start the level
-			if (count == this._playerReadyToStart)
+			if (count == this._playerReadyToStart) {
 				this._gameState = GameState.PreLevel;
-			this._playerReadyToStart = 0;
+				this._playerReadyToStart = 0;
+			}
 		}
 
 		/// <summary>
