@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 163029665}
   - component: {fileID: 163029664}
   - component: {fileID: 163029663}
+  - component: {fileID: 163029667}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -381,6 +382,17 @@ SpriteRenderer:
   m_Color: {r: 0.6985294, g: 0.6985294, b: 0.6985294, a: 1}
   m_FlipX: 1
   m_FlipY: 1
+--- !u!114 &163029667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 163029661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6e70dcf4f60349d79bac16183b7b239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!20 &189350786 stripped
 Camera:
   m_PrefabParentObject: {fileID: 20166849674913562, guid: 3b21dd99b96d44a63b401627fa547dd3,
@@ -823,11 +835,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4875208583288798, guid: 50fbb5e0e1c8d41319540b1d62d9e902, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -2.94
+      value: 8.04
       objectReference: {fileID: 0}
     - target: {fileID: 4875208583288798, guid: 50fbb5e0e1c8d41319540b1d62d9e902, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 7.63
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 4875208583288798, guid: 50fbb5e0e1c8d41319540b1d62d9e902, type: 2}
       propertyPath: m_LocalPosition.z

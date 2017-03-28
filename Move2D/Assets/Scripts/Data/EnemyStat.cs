@@ -35,10 +35,10 @@ namespace Move2D
 		[Tooltip ("The enemy speed")]
 		public float speed;
 		/// <summary>
-		/// The number of points the player loses when the sphere touches the enemy
+		/// The number of life points loses when the sphere touches the enemy
 		/// </summary>
-		[Tooltip ("The number of points the player loses when the sphere touches the enemy")]
-		public int scoreValue;
+		[Tooltip ("The number of life points the player loses when the sphere touches the enemy")]
+		public int damageValue = 1;
 		/// <summary>
 		/// Is the enemy destroyed when the sphere touches it ?
 		/// </summary>

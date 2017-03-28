@@ -34,8 +34,8 @@ namespace Move2D
 		/// <summary>
 		/// The number of points the player loses when 
 		/// </summary>
-		public int scoreValue {
-			get { return stats.scoreValue; }
+		public int damageValue {
+			get { return stats.damageValue; }
 		}
 
 		/// <summary>
@@ -167,7 +167,7 @@ namespace Move2D
 
 		void Update ()
 		{
-			if (path.Count != 0 && GameManager.singleton != null && GameManager.singleton.gameState == GameState.Playing) {
+			if (path.Count != 0 && GameManager.singleton != null && GameManager.singleton.isPlaying) {
 				Move ();
 			}
 		}
@@ -189,8 +189,7 @@ namespace Move2D
 		{
 			if (_damaged)
 				return;
-			GameManager.singleton.AddToScore (-this.scoreValue);
-			sphere.Damage ();
+			sphere.LoseLife (1);
 			if (this.isDestroyedOnHit)
 				NetworkServer.Destroy (this.gameObject);
 			else {

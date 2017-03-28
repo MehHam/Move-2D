@@ -142,18 +142,21 @@ namespace Move2D
 			this.GetCurrentLevel ().sphereVisibility == Level.SphereVisibility.FadeAfterStartLevel); } }
 
 		public const float arenaRadius = 16.0f;
+		public const int maxLife = 5;
 
 		/// <summary>
 		/// After this timeout the server will start the game and kick all clients that didn't send their ready to begin message
 		/// </summary>
 		public float timeOut = 10.0f;
 
-		public bool isPlaying { get { return this.gameState == GameState.Playing; } }
+		public bool isPlaying { get { return this._gameState == GameState.Playing; } }
+		public bool isWaitingForPlayers { get { return this._gameState == GameState.WaitingForPlayers; } }
+		public bool isGameOver { get { return this._gameState == GameState.GameOver; } }
 
 		/// <summary>
 		/// Has the game started or not.
 		/// </summary>
-		public bool gameStarted { get { return this.gameState != GameState.Inactive; } }
+		public bool gameStarted { get { return this._gameState != GameState.Inactive; } }
 
 		/// <summary>
 		/// The difficulty of the game
@@ -164,7 +167,8 @@ namespace Move2D
 		/// The current game state
 		/// </summary>
 		[Tooltip ("The current game state")]
-		[SyncVar] public GameState gameState = GameState.Inactive;
+		[SerializeField]
+		[SyncVar] protected GameState _gameState = GameState.Inactive;
 		/// <summary>
 		/// The index of the level that is currently played
 		/// </summary>
@@ -179,7 +183,7 @@ namespace Move2D
 		/// How much life the sphere has left
 		/// </summary>
 		[Tooltip ("How much life the sphere has left")]
-		[SyncVar] public int life = 5;
+		[SyncVar] public int life = 0;
 		/// <summary>
 		/// The current score of the players
 		/// </summary>
@@ -254,7 +258,7 @@ namespace Move2D
 			}
 			// If all clients are ready we can start the level
 			if (count == this._playerReadyToStart)
-				this.gameState = GameState.PreLevel;
+				this._gameState = GameState.PreLevel;
 		}
 
 		/// <summary>
@@ -285,7 +289,7 @@ namespace Move2D
 				}
 			}
 			_startingTime = null;
-			this.gameState = GameState.PreLevel;
+			this._gameState = GameState.PreLevel;
 		}
 
 		/// <summary>
@@ -298,10 +302,10 @@ namespace Move2D
 			if (GetCurrentLevel ().readyAnimation && readySetGo != null && readySetGo.GetComponent<Animator> () != null) {
 				readySetGo.GetComponent<Animator> ().SetTrigger ("Activation");
 				readySetGo.GetComponent<NetworkAnimator> ().SetTrigger ("Activation");
-				this.gameState = GameState.WaitingForAnimation;
+				this._gameState = GameState.WaitingForAnimation;
 
 			} else
-				this.gameState = GameState.LevelStart;
+				this._gameState = GameState.LevelStart;
 		}
 
 		/// <summary>
@@ -321,12 +325,13 @@ namespace Move2D
 			InitPlayerInfo ();
 			StopTime ();
 			time = this.GetCurrentLevels () [currentLevelIndex].time;
+			life = maxLife;
 			StartTime ();
 			SpawnNetworkPrefabs ();
 			if (onLevelStarted != null)
 				onLevelStarted ();
 			RpcLevelStarted ();
-			this.gameState = GameState.Playing;
+			this._gameState = GameState.Playing;
 		}
 
 		/// <summary>
@@ -335,6 +340,8 @@ namespace Move2D
 		[Server]
 		void Playing ()
 		{
+			if (life <= 0 || time <= 0)
+				this._gameState = GameState.GameOver;
 		}
 
 		/// <summary>
@@ -348,7 +355,7 @@ namespace Move2D
 				this.score++;
 			} else {
 				this._nextLevelIndex = this.currentLevelIndex + 1;
-				this.gameState = GameState.LevelEnd;
+				this._gameState = GameState.LevelEnd;
 			}
 		}
 
@@ -380,9 +387,10 @@ namespace Move2D
 			if (onRespawn != null)
 				onRespawn ();
 			RpcRespawn ();
-			this.gameState = GameState.Playing;
+			this._gameState = GameState.Playing;
 		}
 
+		[Server]
 		void GameOver ()
 		{
 		}
@@ -400,7 +408,7 @@ namespace Move2D
 		/// </summary>
 		void HandleStateMachine ()
 		{
-			switch (this.gameState) {
+			switch (this._gameState) {
 			case GameState.Inactive:
 				Inactive ();
 				break;
@@ -472,7 +480,7 @@ namespace Move2D
 		[Server]
 		void OnServerSceneChanged ()
 		{
-			if (this.gameState != GameState.Inactive) {
+			if (this._gameState != GameState.Inactive) {
 				foreach (var networkPlayerInfo in networkPlayersInfo) {
 					var startPos = NetworkManager.singleton.GetStartPosition ();
 					GameObject gamePlayer;
@@ -532,7 +540,7 @@ namespace Move2D
 		// Called when the ready set go animation is finished
 		void OnAnimationFinished ()
 		{
-			this.gameState = GameState.LevelStart;
+			this._gameState = GameState.LevelStart;
 		}
 
 
@@ -546,7 +554,7 @@ namespace Move2D
 		public void ExitLevel ()
 		{
 			this._nextLevelIndex = this.currentLevelIndex + 1;
-			this.gameState = GameState.PreLevelEnd;
+			this._gameState = GameState.PreLevelEnd;
 		}
 
 		/// <summary>
@@ -600,20 +608,18 @@ namespace Move2D
 			this.score = 0;
 			this.difficulty = difficulty;
 			this._nextLevelIndex = 0;
-			this.gameState = GameState.LevelEnd;
+			this._gameState = GameState.LevelEnd;
 		}
 
 		public void LoseLife(int amount)
 		{
 			life = Math.Max(life - amount, 0);
-			if (life == 0)
-				this.gameState = GameState.GameOver;
 		}
 
 		public void StartRespawn() 
 		{
 			if (this.isPlaying)
-				this.gameState = GameState.Respawn;
+				this._gameState = GameState.Respawn;
 		}
 
 
@@ -718,7 +724,7 @@ namespace Move2D
 			var nextSceneName = this.GetCurrentLevels () [this.currentLevelIndex].sceneName;
 			this.time = this.GetCurrentLevel ().time;
 			CustomNetworkLobbyManager.singleton.ServerChangeScene (nextSceneName);
-			this.gameState = GameState.WaitingForPlayers;
+			this._gameState = GameState.WaitingForPlayers;
 		}
 
 		/// <summary>
@@ -748,8 +754,6 @@ namespace Move2D
 				yield return new WaitForSeconds (1.0f);
 				time--;
 			}
-			this._nextLevelIndex = this.currentLevelIndex + 1;
-			this.gameState = GameState.PreLevelEnd;
 		}
 
 		void InitPlayerInfo ()

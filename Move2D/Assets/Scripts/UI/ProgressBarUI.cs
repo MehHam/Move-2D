@@ -27,6 +27,9 @@ namespace Move2D
 
 		void OnLevelStarted ()
 		{
+			_active = true;
+			this.transform.parent.gameObject.GetComponent<CanvasGroup> ().alpha = 1;
+			/*
 			_active = (GameManager.singleton.GetCurrentLevel ().spawnMotionPointFollow
 			&& GameManager.singleton.GetCurrentLevel ().sphereVisibility == Level.SphereVisibility.Visible);
 			if (_active) {
@@ -36,13 +39,18 @@ namespace Move2D
 			} else {
 				this.transform.parent.gameObject.GetComponent<CanvasGroup> ().alpha = 0;
 			}
+			*/
 		}
 
 		void Update ()
 		{
 			if (_active) {
-				var criterion = _sphereCDM.GetComponent<SpherePhysics> ().XISquareCriterion (_pointFollow.transform.position);
-				this.GetComponent<ProgressRadialBehaviour> ().Value = criterion;
+				this.GetComponent<ProgressRadialBehaviour> ().Value = Mathf.Lerp(
+					this.GetComponent<ProgressRadialBehaviour> ().Value,
+					LevelManager.singleton.scorePrerequisiteProgress * 100.0f,
+					0.5f);
+				//var criterion = _sphereCDM.GetComponent<SpherePhysics> ().XISquareCriterion (_pointFollow.transform.position);
+				//this.GetComponent<ProgressRadialBehaviour> ().Value = criterion;
 			}
 		}
 	}

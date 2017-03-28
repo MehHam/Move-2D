@@ -9,7 +9,7 @@ namespace Move2D
 		void Update ()
 		{
 			this.GetComponent<CanvasGroup> ().alpha =
-			(GameManager.singleton != null && GameManager.singleton.gameState == GameState.WaitingForPlayers) ?
+			(GameManager.singleton != null && GameManager.singleton.isWaitingForPlayers) ?
 			1 :
 			0;
 		}

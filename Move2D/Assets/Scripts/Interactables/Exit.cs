@@ -17,6 +17,9 @@ namespace Move2D
 		/// </summary>
 		public const int countdownTime = 5;
 
+		int _scorePrerequisite;
+		int _startingScore;
+
 		/// <summary>
 		/// Whether the countdown is activated or not
 		/// </summary>
@@ -59,8 +62,10 @@ namespace Move2D
 
 		public void OnEnterEffect (SphereCDM sphere)
 		{
-			StartExitCountdown ();
-			RpcExitEvent ();
+			if (LevelManager.singleton.isScoreReached) {
+				StartExitCountdown ();
+				RpcExitEvent ();
+			}
 		}
 
 		public void OnExitEffect (SphereCDM sphere)
@@ -73,6 +78,12 @@ namespace Move2D
 		{
 			if (onExitEnter != null)
 				onExitEnter ();
+		}
+
+		void Update()
+		{
+			this.GetComponent<Renderer> ().enabled = (LevelManager.singleton.isScoreReached);
+			this.GetComponent<Collider2D> ().enabled = (LevelManager.singleton.isScoreReached);
 		}
 	}
 }

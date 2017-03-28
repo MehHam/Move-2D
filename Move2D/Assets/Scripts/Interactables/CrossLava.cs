@@ -19,8 +19,6 @@ namespace Move2D
 
 		public const int damage = 1;
 
-		private bool _cooldown;
-
 		#region IInteractable implementation
 
 		[Server]
@@ -62,12 +60,13 @@ namespace Move2D
 
 		#endregion
 
+		/*
 		[Server]
 		IEnumerator ScoreCooldown ()
 		{
 			_cooldown = true;
 			yield return new WaitForSeconds (scoreCooldownTime);
 			_cooldown = false;
-		}
+		}*/
 	}
 }

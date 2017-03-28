@@ -189,10 +189,9 @@ GameObject:
   - component: {fileID: 114204826656582056}
   - component: {fileID: 114045447631748214}
   - component: {fileID: 225211448065870920}
-  - component: {fileID: 114536090841562528}
-  - component: {fileID: 114060119487036470}
+  - component: {fileID: 114238896584874466}
   m_Layer: 5
-  m_Name: WaitingForPlayerText
+  m_Name: GameOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -719,6 +718,27 @@ GameObject:
   - component: {fileID: 114572743852167566}
   m_Layer: 5
   m_Name: 'arrow1 '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1511578735444134
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 224303106429280714}
+  - component: {fileID: 222366825126168592}
+  - component: {fileID: 114529987359189392}
+  - component: {fileID: 114519885416249330}
+  - component: {fileID: 225752076558931988}
+  - component: {fileID: 114536090841562528}
+  - component: {fileID: 114060119487036470}
+  m_Layer: 5
+  m_Name: WaitingForPlayerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1507,7 +1527,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1123280236674876}
+  m_GameObject: {fileID: 1511578735444134}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9224ef7f29eb43eea7387c5678d302a, type: 3}
@@ -1859,18 +1879,18 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 87c316b602156405d92e616621658222, type: 3}
-    m_FontSize: 14
+    m_FontSize: 65
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 0
+    m_MaxSize: 69
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Waiting for players
+  m_Text: GAME OVER
 --- !u!114 &114207332056551384
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1947,6 +1967,17 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &114238896584874466
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1123280236674876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d62e0751c1ccd4deca71580ecc4b7c96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114277962653286374
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2038,7 +2069,7 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 04a842e316b6f44bf8da702de26a8ed6, type: 3}
     m_FontSize: 20
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 40
     m_Alignment: 1
@@ -2047,7 +2078,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: When you're done you can exit the level !
+  m_Text: You can now exit the level.
 --- !u!114 &114378126054838028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2436,6 +2467,20 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114519885416249330
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1511578735444134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114522912102964794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2484,12 +2529,45 @@ MonoBehaviour:
   showOnActivate: 1
   hasTimer: 0
   timer: 0
+--- !u!114 &114529987359189392
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1511578735444134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 87c316b602156405d92e616621658222, type: 3}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Waiting for players
 --- !u!114 &114536090841562528
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1123280236674876}
+  m_GameObject: {fileID: 1511578735444134}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8713f26c140d24f50aaf78c5f9680469, type: 3}
@@ -2925,7 +3003,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: This progress bar tells you how close you are to the motion point.
+  m_Text: You have to fill up this progress bar to exit the level. Try to get enough
+    pickups until the time is up !
 --- !u!114 &114679742691930236
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3607,7 +3686,7 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 04a842e316b6f44bf8da702de26a8ed6, type: 3}
     m_FontSize: 20
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 40
     m_Alignment: 1
@@ -3640,7 +3719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ace777d038c34016a51e0e35030a6fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextTutorial: 2
+  nextTutorial: 6
   showOnActivate: 1
   hasTimer: 0
   timer: 0
@@ -3788,6 +3867,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1187485668806848}
+--- !u!222 &222366825126168592
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1511578735444134}
 --- !u!222 &222421368874087980
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -4394,6 +4479,24 @@ RectTransform:
   m_AnchoredPosition: {x: -283.9, y: -11.6}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &224303106429280714
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1511578735444134}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 224966751315271786}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 313.89993, y: -323.4594}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224305339232286890
 RectTransform:
   m_ObjectHideFlags: 1
@@ -4615,7 +4718,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -16.2, y: -35.99994}
+  m_AnchoredPosition: {x: 236, y: -208}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224450582669003842
@@ -4653,8 +4756,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.25}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 5, y: 16.8}
-  m_SizeDelta: {x: 232.8, y: 33.6}
+  m_AnchoredPosition: {x: -27.2, y: 14.3}
+  m_SizeDelta: {x: 168.5, y: 38.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224462985966108888
 RectTransform:
@@ -5028,8 +5131,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.25}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7.7, y: 16.8}
-  m_SizeDelta: {x: 207.4, y: 33.6}
+  m_AnchoredPosition: {x: -30.7, y: 16.8}
+  m_SizeDelta: {x: 161.4, y: 34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224723318126362460
 RectTransform:
@@ -5142,7 +5245,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 46.6, y: -36}
+  m_AnchoredPosition: {x: 235, y: -208.3}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224815066689628726
@@ -5292,6 +5395,7 @@ RectTransform:
   - {fileID: 224961691737171522}
   - {fileID: 224533893052612864}
   - {fileID: 224588320179372206}
+  - {fileID: 224303106429280714}
   - {fileID: 224990820012224540}
   m_Father: {fileID: 224983360594140648}
   m_RootOrder: 1
@@ -5337,8 +5441,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.25}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -70, y: -45}
-  m_SizeDelta: {x: 185, y: 91}
+  m_AnchoredPosition: {x: -70, y: -30}
+  m_SizeDelta: {x: 185, y: 121}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224983360594140648
 RectTransform:
@@ -5379,12 +5483,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224966751315271786}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 313.89993, y: -323.4594}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -6, y: -113}
+  m_SizeDelta: {x: 799, y: 452}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224998547419101218
 RectTransform:
@@ -5477,7 +5581,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1195283140708594}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -5522,6 +5626,17 @@ CanvasGroup:
   m_GameObject: {fileID: 1300847421979026}
   m_Enabled: 1
   m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
+--- !u!225 &225752076558931988
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1511578735444134}
+  m_Enabled: 1
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0

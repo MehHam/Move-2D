@@ -179,7 +179,7 @@ namespace Move2D
 		{
 			StopAllCoroutines ();
 			var color = this.GetComponent<Renderer> ().material.color;
-			this.GetComponent<Renderer> ().material.color = new Color (color.r, color.g, color.b, 1.0f);
+			this.GetComponent<Renderer> ().material.SetColor ("_Color", new Color (color.r, color.g, color.b, 1.0f));
 		}
 
 
