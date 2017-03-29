@@ -28,7 +28,7 @@ namespace Move2D
 				bool isVictory = (GameManager.singleton != null && GameManager.singleton.isVictory);
 				this.GetComponent<CanvasGroup> ().alpha = isVictory ? 1 : 0;
 				score.text = scoreBaseText + GameManager.singleton.score;
-				difficulty.text = difficultyBaseText + GameManager.singleton.difficulty.ToStringColor ();
+				difficulty.text = difficultyBaseText + GameManager.singleton.difficulty.ToStringColor () + " levels.";
 				this.GetComponent<CanvasGroup> ().interactable = isVictory;
 				this.GetComponent<CanvasGroup> ().blocksRaycasts = isVictory;
 				this.GetComponent<CanvasGroup> ().ignoreParentGroups = isVictory;

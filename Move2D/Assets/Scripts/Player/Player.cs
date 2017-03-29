@@ -152,9 +152,9 @@ namespace Move2D
 				var diff = this.transform.position - Vector3.zero;
 				var direction = diff / diff.magnitude;
 				var moveController = GameObject.Instantiate (this.moveController,
-					                    Vector3.zero,
-					                    Quaternion.Euler (0.0f, 0.0f, Mathf.Atan2 (direction.y, direction.x) * Mathf.Rad2Deg - 90.0f)
-				                    );
+					                     Vector3.zero,
+					                     Quaternion.Euler (0.0f, 0.0f, Mathf.Atan2 (direction.y, direction.x) * Mathf.Rad2Deg - 90.0f)
+				                     );
 				this.transform.SetParent (moveController.transform);
 				_playerPosition = this.transform.position;
 				//CmdSpawnMoveController ();
@@ -182,7 +182,8 @@ namespace Move2D
 
 		void Update ()
 		{
-			this.transform.localScale = new Vector3 (mass / 2.0f, mass / 2.0f, mass / 2.0f);
+			var scale = Vector3.one * (1.0f + ((mass - 1.0f) / 2.0f));
+			this.transform.localScale = scale;
 			this.GetComponent<Renderer> ().material.color = color;
 			//LerpPosition ();
 		}

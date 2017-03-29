@@ -9,7 +9,7 @@ namespace Move2D
 	/// </summary>
 	public class PlayerAccelerometerMove : MonoBehaviour, IPlayerMotion
 	{
-		private Vector2 gyROT = new Vector2 (0, 0);
+		// private Vector2 gyROT = new Vector2 (0, 0);
 		public Gyroscope gyro;
 		public int sliderValue = 0;
 

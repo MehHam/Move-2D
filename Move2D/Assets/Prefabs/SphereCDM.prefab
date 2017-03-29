@@ -70,7 +70,7 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 1
 --- !u!114 &11407542
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -173,6 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waitTimeUntilFade: 5
   damageDuration: 2
+  isInvincible: 0
   scorePopup: {fileID: 114559239373011768, guid: 43ce95358867740c79361ebb89f8062a,
     type: 2}
 --- !u!114 &114862821110090508

@@ -24,13 +24,13 @@ namespace Move2D
 			// You can only move if the gyroscope is supporter
 			if (SystemInfo.supportsGyroscope) {
 				//float radiusR = 15.7f;
-				float alpha = 0f;
+				//float alpha = 0f;
 				gyro = Input.gyro;
 				float theta = Mathf.Atan (gyro.gravity.x / gyro.gravity.y);
 				gyro.enabled = true;
 
 				if (theta < Mathf.PI / 2 && theta > -Mathf.PI / 2) {
-					alpha = 2 * theta;
+				//	alpha = 2 * theta;
 				/*
 					}
 					Vector2 playerPos = new Vector2 (radiusR * Mathf.Cos (alpha), radiusR * Mathf.Sin (alpha));

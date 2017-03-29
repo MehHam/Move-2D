@@ -85,7 +85,7 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1.5
 --- !u!114 &11454790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -160,7 +160,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee875d9e08596584fbbefa0c483374b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereCDM: {fileID: 0}
   amplitude: 8
   velocity: 10
   randomPositionRange: 7

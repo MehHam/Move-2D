@@ -2992,7 +2992,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224376165564198156}
   m_Direction: 2
   m_MinValue: 1
-  m_MaxValue: 3
+  m_MaxValue: 6
   m_WholeNumbers: 0
   m_Value: 3
   m_OnValueChanged:
@@ -6934,9 +6934,9 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1580526642060092}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!225 &225069457939447960
 CanvasGroup:
@@ -7000,7 +7000,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1123280236674876}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0

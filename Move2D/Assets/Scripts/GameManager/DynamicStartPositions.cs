@@ -18,7 +18,7 @@ namespace Move2D
 				float angle = slice * i;
 				float x = Mathf.Cos (angle) * spawnRadius;
 				float y = Mathf.Sin (angle) * spawnRadius;
-				var go = Instantiate (startPosition, new Vector2 (x, y), Quaternion.identity);
+				var go = Instantiate (startPosition, new Vector3 (x, y, -20), Quaternion.identity);
 				go.transform.parent = this.transform;
 				NetworkServer.Spawn (go);
 			}

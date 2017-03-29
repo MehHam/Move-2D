@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Name: Level3-05
   m_EditorClassIdentifier: 
   index: 5
-  time: 120
-  sceneName: level4
-  spawnMotionPointFollow: 1
+  time: 300
+  sceneName: Level8
+  spawnMotionPointFollow: 0
   motionMode: 0
   readyAnimation: 1
   sphereVisibility: 2
   massModification: 1
   spawnBulletBuilder: 0
   bulletBuilderPattern: 0
+  enabledTutorials: 

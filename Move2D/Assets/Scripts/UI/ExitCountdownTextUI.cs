@@ -18,7 +18,7 @@ namespace Move2D
 		}
 	
 		// Update is called once per frame
-		void OnGUI ()
+		void Update ()
 		{
 			this.GetComponent<CanvasGroup> ().alpha = this._exit.countdownActivated ? 1 : 0;
 			this.GetComponent<Text> ().text = this._exit.timeLeft.ToString ();
