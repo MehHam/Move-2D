@@ -182,7 +182,7 @@ namespace Move2D
 
 		void Update ()
 		{
-			this.transform.localScale = new Vector3 (mass, mass, mass);
+			this.transform.localScale = new Vector3 (mass / 2.0f, mass / 2.0f, mass / 2.0f);
 			this.GetComponent<Renderer> ().material.color = color;
 			//LerpPosition ();
 		}

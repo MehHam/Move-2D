@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91a2c767f9e954ecdb2ff4ed2f45f524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  speed: 2
   sliderValue: 0
 --- !u!114 &114378689189625778
 MonoBehaviour:
