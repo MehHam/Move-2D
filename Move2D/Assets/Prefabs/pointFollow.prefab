@@ -161,8 +161,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amplitude: 8
-  velocity: 10
+  velocity: 7
   randomPositionRange: 7
-  randomTransitions: 5
+  randomTransitions: 8
   scoreCooldownTime: 0.15
   centrePos: {x: 0, y: 0}

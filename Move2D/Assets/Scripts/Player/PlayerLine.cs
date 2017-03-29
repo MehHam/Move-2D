@@ -56,7 +56,7 @@ namespace Move2D
 
 		void Update ()
 		{
-			if (spherePhysics.hasMoved)
+			if (spherePhysics.hasMoved || Input.GetKey(KeyCode.Tab))
 				_currentAlpha = Mathf.Min (_currentAlpha + 0.05f, alpha);
 			else
 				_currentAlpha = Mathf.Max (_currentAlpha - 0.05f, 0.0f);
