@@ -526,15 +526,10 @@ namespace Move2D
 		{
 			if (this._gameState != GameState.Inactive) {
 				foreach (var networkPlayerInfo in networkPlayersInfo) {
-					var startPos = NetworkManager.singleton.GetStartPosition ();
+					var startPos = networkPlayerInfo.playerInfo.startPosition;
 					GameObject gamePlayer;
-					if (startPos != null)
-						gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
-							startPos.position,
-							startPos.rotation);
-					else
-						gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
-							Vector3.zero,
+					gamePlayer = (GameObject)Instantiate (((LobbyManager)LobbyManager.singleton).gamePlayerPrefab,
+							startPos,
 							Quaternion.identity);
 					NetworkServer.ReplacePlayerForConnection (networkPlayerInfo.networkConnection,
 						gamePlayer,
