@@ -200,6 +200,11 @@ namespace Move2D
 		[Tooltip ("Current score of the player")]
 		[SyncVar] public int score = 0;
 		/// <summary>
+		/// Time since the players started the game.
+		/// </summary>
+		[Tooltip ("Time since the players started the game.")]
+		[SyncVar] public int totalTime = 0;
+		/// <summary>
 		/// Whether the player have taken a damage yet
 		/// </summary>
 		[Tooltip ("Whether the players have taken a damage yet.")]
@@ -496,6 +501,11 @@ namespace Move2D
 				if (networkPlayersInfo [i].networkConnection == conn)
 					networkPlayersInfo.RemoveAt (i);
 			}
+			// We update all the start positions to have the sphere still be in the center of the arena
+			var startPositions = DynamicStartPositions.GetPositions (networkPlayersInfo.Count);
+			for (int i = 0; i < startPositions.Count && i < networkPlayersInfo.Count; i++) {
+				networkPlayersInfo [i].playerInfo.startPosition = startPositions [i];
+			}
 		}
 
 		/// <summary>
@@ -642,6 +652,7 @@ namespace Move2D
 			this.score = 0;
 			this.difficulty = difficulty;
 			this._nextLevelIndex = 0;
+			this.totalTime = 0;
 			this._gameState = GameState.LevelEnd;
 		}
 
@@ -819,6 +830,7 @@ namespace Move2D
 				yield return new WaitForSeconds (1.0f);
 				if (isPlaying) {
 					time--;
+					totalTime++;
 					if (!timeWarning && time < 30) {
 						RpcTimeWarning ();
 						if (onTimeWarning != null)
