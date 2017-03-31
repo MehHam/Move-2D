@@ -66,6 +66,7 @@ namespace Move2D
 		void OnValueChanged ()
 		{
 			_player.CmdSetMass (GetComponent<Slider> ().value);
+			_player.mass = GetComponent<Slider> ().value;
 			if (onSliderValueChanged != null)
 				onSliderValueChanged (GetComponent<Slider> ().value);
 		}
