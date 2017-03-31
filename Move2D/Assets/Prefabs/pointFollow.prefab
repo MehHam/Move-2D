@@ -163,6 +163,6 @@ MonoBehaviour:
   amplitude: 8
   velocity: 7
   randomPositionRange: 7
-  randomTransitions: 8
+  randomTransitions: 80
   scoreCooldownTime: 0.15
   centrePos: {x: 0, y: 0}
