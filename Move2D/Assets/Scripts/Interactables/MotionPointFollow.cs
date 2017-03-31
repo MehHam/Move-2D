@@ -70,7 +70,7 @@ namespace Move2D
 		[Server]
 		public void OnEnterEffect (SphereCDM sphere)
 		{
-			if (!GameManager.singleton.invisibleSphere && GameManager.singleton.isPlaying) { 
+			if (GameManager.singleton.isPlaying) { 
 				GameManager.singleton.AddToScore ();
 				_coroutineHandle = StartCoroutine (ScoreCooldown ());
 			}
@@ -80,7 +80,7 @@ namespace Move2D
 		[Server]
 		public void OnStayEffect (SphereCDM sphere)
 		{
-			if (!GameManager.singleton.invisibleSphere && GameManager.singleton.isPlaying) {
+			if (GameManager.singleton.isPlaying) {
 				if (!_cooldown) {
 					GameManager.singleton.AddToScore ();
 					_coroutineHandle = StartCoroutine (ScoreCooldown ());

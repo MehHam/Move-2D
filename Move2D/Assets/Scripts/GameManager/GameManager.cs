@@ -782,6 +782,7 @@ namespace Move2D
 			}
 			var sphereCDM = GameObject.Instantiate (this.sphereCDM, Vector3.zero, Quaternion.identity);
 			NetworkServer.Spawn (sphereCDM);
+			NetworkServer.SpawnObjects ();
 		}
 
 		/// <summary>
