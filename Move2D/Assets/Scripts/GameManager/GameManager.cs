@@ -580,7 +580,9 @@ namespace Move2D
 		// Called when the ready set go animation is finished
 		void OnAnimationFinished ()
 		{
-			this._gameState = GameState.LevelStart;
+			if (isServer) {
+				this._gameState = GameState.LevelStart;
+			}
 		}
 
 

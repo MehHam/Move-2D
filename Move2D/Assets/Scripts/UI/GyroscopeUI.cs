@@ -7,7 +7,18 @@ namespace Move2D
 {
 	public class GyroscopeUI : MonoBehaviour
 	{
-		void Awake()
+		void OnEnable()
+		{
+			GameManager.onLevelStarted += OnLevelStarted;
+		}
+
+
+		void OnDisable()
+		{
+			GameManager.onLevelStarted -= OnLevelStarted;
+		}
+
+		void OnLevelStarted ()
 		{
 			if (SystemInfo.supportsGyroscope) {
 				GetComponent<Toggle> ().isOn = GameManager.singleton.gyroscope;	

@@ -231,6 +231,8 @@ namespace Move2D
 
 		void OnDestroy ()
 		{
+			if (this.transform.parent != null && this.transform.parent.gameObject.GetComponent<PlayerMoveManager> () != null)
+				Destroy (this.transform.parent.gameObject);
 			if (onPlayerDestroy != null)
 				onPlayerDestroy (this);		
 		}
