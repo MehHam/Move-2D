@@ -570,7 +570,7 @@ GameObject:
   - component: {fileID: 114768208842843810}
   - component: {fileID: 114926146177350584}
   m_Layer: 5
-  m_Name: VictoryScore
+  m_Name: VictoryTime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -812,6 +812,24 @@ GameObject:
   - component: {fileID: 114769520365030120}
   m_Layer: 5
   m_Name: Label
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1402664869413680
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 224708368414605536}
+  - component: {fileID: 222798838272515160}
+  - component: {fileID: 114006967315240402}
+  - component: {fileID: 114899135180732140}
+  m_Layer: 5
+  m_Name: VictoryScore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1754,6 +1772,39 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114006967315240402
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1402664869413680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 87c316b602156405d92e616621658222, type: 3}
+    m_FontSize: 22
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'Score : <score>'
 --- !u!114 &114019806313630320
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1867,11 +1918,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e79fb1f5b2b41a79232165363433be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: {fileID: 114768208842843810}
+  score: {fileID: 114006967315240402}
   difficulty: {fileID: 114979964411353484}
+  totalTime: {fileID: 114768208842843810}
   backButton: {fileID: 114793139298672208}
   difficultyBaseText: 'You finished all the '
-  scoreBaseText: 'Your final score : '
+  scoreBaseText: 'Final score :'
+  totalTimeBaseText: 'Final time : '
 --- !u!114 &114060119487036470
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2393,7 +2446,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: VICTORY
+  m_Text: CONGRATULATIONS
 --- !u!114 &114207332056551384
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4124,7 +4177,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Your final score : <score>'
+  m_Text: 'Time : <time>'
 --- !u!114 &114769520365030120
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4547,6 +4600,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   restartButton: {fileID: 114082201908830030}
   giveUpButton: {fileID: 114189873622437070}
+--- !u!114 &114899135180732140
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1402664869413680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114910875258593560
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5071,6 +5138,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1249679618868564}
+--- !u!222 &222798838272515160
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1402664869413680}
 --- !u!222 &222819865246261224
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -5191,11 +5264,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224990820012224540}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015259, y: -84.9}
+  m_AnchoredPosition: {x: -0.000018231, y: -105.5}
   m_SizeDelta: {x: 799, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224009882962486768
@@ -6454,6 +6527,24 @@ RectTransform:
   m_AnchoredPosition: {x: 10, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &224708368414605536
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1402664869413680}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 224990820012224540}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.000015259, y: -84.9}
+  m_SizeDelta: {x: 799, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224717856135879016
 RectTransform:
   m_ObjectHideFlags: 1
@@ -6503,11 +6594,11 @@ RectTransform:
   m_Children:
   - {fileID: 224491082952377134}
   m_Father: {fileID: 224990820012224540}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000019074, y: -135.5}
+  m_AnchoredPosition: {x: -0.000020559, y: -159}
   m_SizeDelta: {x: 198, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224775490569898374
@@ -6899,6 +6990,7 @@ RectTransform:
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_Children:
   - {fileID: 224235025440874800}
+  - {fileID: 224708368414605536}
   - {fileID: 224009151355524398}
   - {fileID: 224771341549383620}
   m_Father: {fileID: 224966751315271786}
