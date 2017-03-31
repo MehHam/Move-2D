@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Level1-03
   m_EditorClassIdentifier: 
   index: 3
-  time: 90
+  time: 600
   sceneName: Level1
   spawnMotionPointFollow: 1
   motionMode: 0

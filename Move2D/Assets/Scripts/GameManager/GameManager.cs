@@ -100,6 +100,7 @@ namespace Move2D
 		public GameObject motionPointFollow;
 		public GameObject sphereCDM;
 		public GameObject bulletBuilder;
+		public bool gyroscope = false;
 
 		int _playerReadyToStart = 0;
 		bool _readyToStart = false;
@@ -327,7 +328,7 @@ namespace Move2D
 			var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
 			if (GetCurrentLevel ().readyAnimation && readySetGo != null && readySetGo.GetComponent<Animator> () != null) {
 				readySetGo.GetComponent<Animator> ().SetTrigger ("Activation");
-				readySetGo.GetComponent<NetworkAnimator> ().SetTrigger ("Activation");
+				RpcReadySetGo ();
 				this._gameState = GameState.WaitingForAnimation;
 
 			} else
@@ -723,6 +724,14 @@ namespace Move2D
 			}
 		}
 
+		[ClientRpc]
+		void RpcReadySetGo()
+		{
+			if (!isServer) {
+				var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
+				readySetGo.GetComponent<Animator> ().SetTrigger ("Activation");
+			}
+		}
 
 
 		// ---------------------------------------------------

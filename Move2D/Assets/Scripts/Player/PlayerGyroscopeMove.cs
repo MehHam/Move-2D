@@ -22,7 +22,7 @@ namespace Move2D
 		public bool Move ()
 		{
 			// You can only move if the gyroscope is supporter
-			if (SystemInfo.supportsGyroscope) {
+			if (SystemInfo.supportsGyroscope && GameManager.singleton.gyroscope) {
 				//float radiusR = 15.7f;
 				//float alpha = 0f;
 				gyro = Input.gyro;

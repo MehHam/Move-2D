@@ -26,7 +26,7 @@ namespace Move2D
 		/// <summary>
 		/// How much of the maximum amount of point the player is expected to get in order to open the exit door with a motion point.
 		/// </summary>
-		public const float motionPointScoreRatio = 1.0f / 5.0f;
+		public const float motionPointScoreRatio = 1.0f / 20.0f;
 
 		/// <summary>
 		/// Has the level started yet ?
