@@ -118,6 +118,7 @@ namespace Move2D
 		public void CmdSetMass (float value)
 		{
 			mass = value;
+			RpcReceiveMass (value);
 		}
 
 		[Command]
@@ -220,6 +221,12 @@ namespace Move2D
 		void RpcReceivePosition (Vector3 position)
 		{
 			_playerPosition = position;
+		}
+
+		[ClientRpc]
+		void RpcReceiveMass (float mass)
+		{
+			this.mass = mass;
 		}
 
 		void OnDestroy ()
