@@ -27,9 +27,6 @@ namespace Move2D
 
 		void OnLevelStarted ()
 		{
-			_active = true;
-			this.transform.parent.gameObject.GetComponent<CanvasGroup> ().alpha = 1;
-			/*
 			_active = (GameManager.singleton.GetCurrentLevel ().spawnMotionPointFollow
 			&& GameManager.singleton.GetCurrentLevel ().sphereVisibility == Level.SphereVisibility.Visible);
 			if (_active) {
@@ -39,7 +36,6 @@ namespace Move2D
 			} else {
 				this.transform.parent.gameObject.GetComponent<CanvasGroup> ().alpha = 0;
 			}
-			*/
 		}
 
 		void Update ()
