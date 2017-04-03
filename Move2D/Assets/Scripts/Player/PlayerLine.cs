@@ -38,10 +38,10 @@ namespace Move2D
 		{
 			var startColor = object1.GetComponent<ILineObject> ().GetColor ();
 			var endColor = object2.GetComponent<ILineObject> ().GetColor ();
-			_lineRenderer.startColor = new Color (startColor.r, startColor.g, startColor.b, _currentAlpha);
-			_lineRenderer.endColor = new Color (endColor.r, endColor.g, endColor.b, _currentAlpha);
-			_lineRenderer.startWidth = object1.GetComponent<ILineObject> ().GetMass();
-			_lineRenderer.endWidth = object2.GetComponent<ILineObject> ().GetMass();
+			_lineRenderer.startColor = new Color (startColor.r, startColor.g, startColor.b, Mathf.Min(endColor.a, _currentAlpha));
+			_lineRenderer.endColor = new Color (endColor.r, endColor.g, endColor.b, Mathf.Min(endColor.a, _currentAlpha));
+			//_lineRenderer.startWidth = object1.GetComponent<ILineObject> ().GetMass();
+			//_lineRenderer.endWidth = object2.GetComponent<ILineObject> ().GetMass();
 			_lineRenderer.material.mainTextureOffset = new Vector2 (Time.time, 0.0f);
 		}
 

@@ -1524,6 +1524,7 @@ GameObject:
   - component: {fileID: 114558451435390140}
   - component: {fileID: 114508747719251430}
   - component: {fileID: 114596157600626590}
+  - component: {fileID: 225273956219774658}
   m_Layer: 5
   m_Name: Dropdown
   m_TagString: Untagged
@@ -7407,6 +7408,17 @@ CanvasGroup:
   m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
+--- !u!225 &225273956219774658
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1887796347469098}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!225 &225274644796308620
 CanvasGroup:

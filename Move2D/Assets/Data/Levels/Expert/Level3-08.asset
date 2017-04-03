@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 9
   time: 600
-  sceneName: Level9
+  sceneName: Level7
   spawnMotionPointFollow: 0
   motionMode: 0
   readyAnimation: 1

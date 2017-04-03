@@ -62,7 +62,8 @@ namespace Move2D
 			
 		void OnMassZoneExit ()
 		{
-			SetVisibility (false);
+			if (!GameManager.singleton.GetCurrentLevel().massModification)
+				SetVisibility (false);
 		}
 			
 		void OnValueChanged ()

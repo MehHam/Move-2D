@@ -111,7 +111,7 @@ namespace Move2D
 			if (!isInvincible) {
 				isInvincible = true;
 				GetComponent<SpherePhysics> ().enabled = false;
-				this.GetComponent<Blinker> ().FadeOut (0.5f);
+				Blink ();
 				StartCoroutine (WaitForRespawn (1.0f));
 				Destroy (this.GetComponent<PlayerLineManager> ());
 				RpcDestroySphere ();
@@ -188,7 +188,7 @@ namespace Move2D
 
 		public Color GetColor ()
 		{
-			return Color.white;
+			return this.GetComponent<Renderer> ().material.GetColor ("_Color");
 		}
 
 		public float GetMass ()

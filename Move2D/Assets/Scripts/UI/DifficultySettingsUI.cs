@@ -1,18 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Move2D
 {
-	public class DifficultySettingsUI : MonoBehaviour
+	public class DifficultySettingsUI : NetworkBehaviour
 	{
 		void Start ()
 		{
-			this.GetComponent<Dropdown> ().value = (int)(GameManager.singleton.difficulty);
-			this.GetComponent<Dropdown> ().onValueChanged.AddListener (delegate {
-				OnValueChanged ();
-			});
+			if (isServer)
+			{
+				this.GetComponent<Dropdown> ().value = (int)(GameManager.singleton.difficulty);
+				this.GetComponent<Dropdown> ().onValueChanged.AddListener (delegate {
+					OnValueChanged ();
+				});
+			}
+			else
+			{
+				this.GetComponent<CanvasGroup>().alpha = 0;
+				this.GetComponent<CanvasGroup>().interactable = false;
+				this.GetComponent<CanvasGroup>().blocksRaycasts = false;
+			}
 		}
 
 		void Update ()
