@@ -10,6 +10,10 @@ namespace Move2D
 	/// </summary>
 	class PlayerKeyboardMove : MonoBehaviour, IPlayerMotion
 	{
+		bool _isHorizontalAxisInUse = false;
+		bool _isHorizontalClockWise = false;
+		bool _isVerticalAxisInUse = false;
+		bool _isVerticalClockWise = false;
 		/// <summary>
 		/// The movement speed of the player
 		/// </summary>
@@ -25,14 +29,38 @@ namespace Move2D
 
 		public bool Move ()
 		{
-			float horizontal = Input.GetAxis ("Horizontal");
-			float vertical = Input.GetAxis ("Vertical");
+			float horizontal = Input.GetAxis ("Horizontal") * (this._isHorizontalClockWise ? 1 : -1);
+			float vertical = Input.GetAxis ("Vertical") * (this._isVerticalClockWise ? 1 : -1);
 			this.transform.Rotate (
 				(Vector3.forward * horizontal
 				+ Vector3.forward * vertical)
 				* Time.deltaTime * speed
 			);
 			return horizontal != 0 || vertical != 0;
+		}
+
+		void SetAxisDown()
+		{
+			if (Input.GetAxisRaw ("Horizontal") != 0) {
+				if (!this._isHorizontalAxisInUse) {
+					this._isHorizontalClockWise = !(this.transform.rotation.eulerAngles.z >= 270.0f
+						|| this.transform.rotation.eulerAngles.z <= 90.0f);
+					this._isHorizontalAxisInUse = true;
+				}
+			} else
+				this._isHorizontalAxisInUse = false;
+			if (Input.GetAxisRaw ("Vertical") != 0) {
+				if (!this._isVerticalAxisInUse) {
+					this._isVerticalClockWise = (this.transform.rotation.eulerAngles.z >= 180.0f);
+					this._isVerticalAxisInUse = true;
+				}
+			} else
+				this._isVerticalAxisInUse = false;
+		}
+
+		void Update()
+		{
+			SetAxisDown ();
 		}
 	}
 }

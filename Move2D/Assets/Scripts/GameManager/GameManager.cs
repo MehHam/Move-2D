@@ -378,7 +378,7 @@ namespace Move2D
 		void PreLevelEnd ()
 		{
 			if (this.time > 0) {
-				this.time--;
+				this.time = Mathf.Max(0, this.time - 5);
 				this.score++;
 			} else {
 				this._nextLevelIndex = this.currentLevelIndex + 1;
@@ -424,6 +424,7 @@ namespace Move2D
 			if (count == this._playerReadyToStart) {
 				this._nextLevelIndex = 0;
 				this._gameState = GameState.LevelEnd;
+				count = 0;
 			}
 		}
 
