@@ -38,7 +38,7 @@ namespace Move2D
 				_sphereCDM = GameObject.FindGameObjectWithTag ("SphereCDM");
 			} else {
 				this.transform.parent.gameObject.GetComponent<CanvasGroup> ().alpha = 0;
-			}
+			}b
 			*/
 		}
 

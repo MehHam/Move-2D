@@ -430,6 +430,8 @@ namespace Move2D
 					this._nextLevelIndex = 0;
 					this._gameState = GameState.LevelEnd;
 					this._playerReadyToStart = 0;
+					if (NetworkManager.singleton.numPlayers < CustomNetworkLobbyManager.s_Singleton.minPlayers)
+						CustomNetworkLobbyManager.s_Singleton.GoBackButton();
 				}
 			}
 		}
@@ -514,6 +516,8 @@ namespace Move2D
 			for (int i = 0; i < startPositions.Count && i < networkPlayersInfo.Count; i++) {
 				networkPlayersInfo [i].playerInfo.startPosition = startPositions [i];
 			}
+			if (networkPlayersInfo.Count < CustomNetworkLobbyManager.s_Singleton.minPlayers)
+				CustomNetworkLobbyManager.s_Singleton.GoBackButton();
 		}
 
 		/// <summary>
