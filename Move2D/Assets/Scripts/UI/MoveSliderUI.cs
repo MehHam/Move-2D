@@ -47,10 +47,12 @@ namespace Move2D
 		void OnRespawn()
 		{
 			_player = FindLocalPlayer ();
-			GetComponent<Slider> ().value = _player.mass;
-			GetComponent<Slider> ().onValueChanged.AddListener (delegate {
-				OnValueChanged ();
-			});
+			if (_player != null) {
+				GetComponent<Slider> ().value = _player.mass;
+				GetComponent<Slider> ().onValueChanged.AddListener (delegate {
+					OnValueChanged ();
+				});
+			}
 		}
 			
 		void OnMassZoneEnter ()
