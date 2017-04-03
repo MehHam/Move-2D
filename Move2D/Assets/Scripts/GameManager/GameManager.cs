@@ -253,8 +253,7 @@ namespace Move2D
 
 		void Update ()
 		{
-			if (isServer)
-				HandleStateMachine ();
+			HandleStateMachine ();
 		}
 
 		void OnDestroy ()
@@ -271,20 +270,20 @@ namespace Move2D
 
 		// ----------------- State Machine ------------------
 
-
-		[Server]
 		void Inactive ()
 		{
-			int count = 0;
-			// Some connections can be null for some reason, so we have to do the count by ourself
-			foreach (var connection in NetworkServer.connections) {
-				if (connection != null)
-					count++;
-			}
-			// If all clients are ready we can start the level
-			if (count == this._playerReadyToStart) {
-				this._gameState = GameState.PreLevel;
-				this._playerReadyToStart = 0;
+			if (isServer) {
+				int count = 0;
+				// Some connections can be null for some reason, so we have to do the count by ourself
+				foreach (var connection in NetworkServer.connections) {
+					if (connection != null)
+						count++;
+				}
+				// If all clients are ready we can start the level
+				if (count == this._playerReadyToStart) {
+					this._gameState = GameState.PreLevel;
+					this._playerReadyToStart = 0;
+				}
 			}
 		}
 
@@ -293,52 +292,53 @@ namespace Move2D
 		/// Waits for all players to be ready, kicks all the clients that aren't after the timeout.
 		/// </summary>
 		/// <param name="timeOut">The time out time.</param>
-		[Server]
 		void WaitingForPlayers ()
 		{
-			if (!_startingTime.HasValue)
-				_startingTime = Time.time;
-			if ((Time.time < _startingTime.Value + timeOut) && !AllPlayersReady ()) {
-				return;
-			}
-			var players = FindObjectsOfType<Player> ();
-			// Kick all players that aren't ready if timeout
-			for (int i = networkPlayersInfo.Count - 1; i >= 0; i--) {
-				if (!networkPlayersInfo [i].readyToBegin) {
-					foreach (var player in players) {
-						if (player.playerControllerId == networkPlayersInfo [i].playerInfo.playerControllerId)
-							player.connectionToClient.Disconnect ();
-					}
-					networkPlayersInfo.RemoveAt (i);
-				} else {
-					// Then we set the player as not ready to begin for the next time a level is loaded
-					networkPlayersInfo [i].readyToBegin = false;
+			if (isServer) {
+				if (!_startingTime.HasValue)
+					_startingTime = Time.time;
+				if ((Time.time < _startingTime.Value + timeOut) && !AllPlayersReady ()) {
+					return;
 				}
+				var players = FindObjectsOfType<Player> ();
+				// Kick all players that aren't ready if timeout
+				for (int i = networkPlayersInfo.Count - 1; i >= 0; i--) {
+					if (!networkPlayersInfo [i].readyToBegin) {
+						foreach (var player in players) {
+							if (player.playerControllerId == networkPlayersInfo [i].playerInfo.playerControllerId)
+								player.connectionToClient.Disconnect ();
+						}
+						networkPlayersInfo.RemoveAt (i);
+					} else {
+						// Then we set the player as not ready to begin for the next time a level is loaded
+						networkPlayersInfo [i].readyToBegin = false;
+					}
+				}
+				_startingTime = null;
+				this._gameState = GameState.PreLevel;
 			}
-			_startingTime = null;
-			this._gameState = GameState.PreLevel;
 		}
 
 		/// <summary>
 		/// Called when the game state is at PreLevel. Do all the pre-level actions.
 		/// </summary>
-		[Server]
 		void PreLevel ()
 		{
-			var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
-			if (GetCurrentLevel ().readyAnimation && readySetGo != null && readySetGo.GetComponent<Animator> () != null) {
-				readySetGo.GetComponent<Animator> ().SetTrigger ("Activation");
-				RpcReadySetGo ();
-				this._gameState = GameState.WaitingForAnimation;
+			if (isServer) {
+				var readySetGo = GameObject.FindObjectOfType<ReadySetGo> ();
+				if (GetCurrentLevel ().readyAnimation && readySetGo != null && readySetGo.GetComponent<Animator> () != null) {
+					readySetGo.GetComponent<Animator> ().SetTrigger ("Activation");
+					RpcReadySetGo ();
+					this._gameState = GameState.WaitingForAnimation;
 
-			} else
-				this._gameState = GameState.LevelStart;
+				} else
+					this._gameState = GameState.LevelStart;
+			}
 		}
 
 		/// <summary>
 		/// Waitings for pre level animation.
 		/// </summary>
-		[Server]
 		void WaitingForAnimation ()
 		{
 		}
@@ -346,25 +346,25 @@ namespace Move2D
 		/// <summary>
 		/// Called when the game state is at LevelStart. Start the level
 		/// </summary>
-		[Server]
 		void LevelStart ()
 		{
-			InitPlayerInfo ();
-			StopTime ();
-			time = this.GetCurrentLevels () [currentLevelIndex].time;
-			life = maxLife;
-			StartTime ();
-			SpawnNetworkPrefabs ();
-			if (onLevelStarted != null)
-				onLevelStarted ();
-			RpcLevelStarted ();
-			this._gameState = GameState.Playing;
+			if (isServer) {
+				InitPlayerInfo ();
+				StopTime ();
+				time = this.GetCurrentLevels () [currentLevelIndex].time;
+				life = maxLife;
+				StartTime ();
+				SpawnNetworkPrefabs ();
+				if (onLevelStarted != null)
+					onLevelStarted ();
+				RpcLevelStarted ();
+				this._gameState = GameState.Playing;
+			}
 		}
 
 		/// <summary>
 		/// Called when the game state is Playing.
 		/// </summary>
-		[Server]
 		void Playing ()
 		{
 			if (life <= 0 || time <= 0)
@@ -378,7 +378,7 @@ namespace Move2D
 		void PreLevelEnd ()
 		{
 			if (this.time > 0) {
-				this.time = Mathf.Max(0, this.time - 5);
+				this.time = Mathf.Max (0, this.time - 5);
 				this.score++;
 			} else {
 				this._nextLevelIndex = this.currentLevelIndex + 1;
@@ -393,38 +393,44 @@ namespace Move2D
 		void LevelEnd ()
 		{
 			StopAllCoroutines ();
-			if (this._nextLevelIndex < this.GetCurrentLevels ().Length) {
-				this.currentLevelIndex = this._nextLevelIndex;
-				LoadLevel ();
-			} else {
-				this._gameState = GameState.Victory;
+			if (isServer) {
+				if (this._nextLevelIndex < this.GetCurrentLevels ().Length) {
+					this.currentLevelIndex = this._nextLevelIndex;
+					LoadLevel ();
+				} else {
+					this._gameState = GameState.Victory;
+				}
 			}
 		}
 
 		[Server]
 		void Respawn()
 		{
-			RespawnPlayers ();
-			if (onRespawn != null)
-				onRespawn ();
-			RpcRespawn ();
-			this._gameState = GameState.Playing;
+			if (isServer) {
+				RespawnPlayers ();
+				if (onRespawn != null)
+					onRespawn ();
+				RpcRespawn ();
+				this._gameState = GameState.Playing;
+			}
 		}
 
 		[Server]
 		void GameOver ()
 		{
-			int count = 0;
-			// Some connections can be null for some reason, so we have to do the count by ourselves
-			foreach (var connection in NetworkServer.connections) {
-				if (connection != null)
-					count++;
-			}
-			// If all clients are ready we can start the level
-			if (count == this._playerReadyToStart) {
-				this._nextLevelIndex = 0;
-				this._gameState = GameState.LevelEnd;
-				count = 0;
+			if (isServer) {
+				int count = 0;
+				// Some connections can be null for some reason, so we have to do the count by ourselves
+				foreach (var connection in NetworkServer.connections) {
+					if (connection != null)
+						count++;
+				}
+				// If all clients are ready we can start the level
+				if (count == this._playerReadyToStart) {
+					this._nextLevelIndex = 0;
+					this._gameState = GameState.LevelEnd;
+					this._playerReadyToStart = 0;
+				}
 			}
 		}
 
