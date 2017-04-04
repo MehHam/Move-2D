@@ -82,6 +82,9 @@ namespace Move2D
 		public float positionUpdateRate = 0.2f;
 		public float smoothRatio = 15.0f;
 
+		public Sprite localPlayer;
+		public Sprite networkPlayer;
+
 		Vector3 _playerPosition;
 
 		public delegate void PlayerDestroyHandler (Player player);
@@ -186,6 +189,11 @@ namespace Move2D
 			var scale = Vector3.one * (1.0f + ((mass - 1.0f) / 2.0f));
 			this.transform.localScale = scale;
 			this.GetComponent<Renderer> ().material.color = color;
+			if (isLocalPlayer && localPlayer != null) {
+				this.GetComponent<SpriteRenderer> ().sprite = localPlayer;
+			} else if (networkPlayer != null) {
+				this.GetComponent<SpriteRenderer> ().sprite = networkPlayer;
+			}
 			//LerpPosition ();
 		}
 

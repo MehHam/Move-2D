@@ -1,10 +1,13 @@
 fileFormatVersion: 2
 guid: c1023d2db129c4c0cb4e653b31401341
-timeCreated: 1486993848
+timeCreated: 1491316157
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - moveController: {instanceID: 0}
+  - localPlayer: {fileID: 21300000, guid: d1c0a9750f0714492b4a76e380e4a328, type: 3}
+  - networkPlayer: {fileID: 21300000, guid: 765fa4d4530b548d29d40ec565cb336c, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

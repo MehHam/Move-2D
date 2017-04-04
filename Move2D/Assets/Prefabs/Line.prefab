@@ -68,7 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   object1: {fileID: 0}
   object2: {fileID: 0}
-  alpha: 0.5
+  alpha: 1
   spherePhysics: {fileID: 0}
 --- !u!120 &120596243454661694
 LineRenderer:
@@ -83,7 +83,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: 77ae2445aae554a1093e2a8ce7f7a297, type: 2}
+  - {fileID: 2100000, guid: a913ead756dd743c8a4949ad59846c39, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,7 +106,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 2
+    widthMultiplier: 1
     widthCurve:
       serializedVersion: 2
       m_Curve:

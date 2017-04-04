@@ -7,7 +7,7 @@ namespace Move2D
 {
 	public class DynamicStartPositions : NetworkBehaviour
 	{
-		public static float spawnRadius = 16.0f;
+		public static float spawnRadius = 15.5f;
 		public GameObject startPosition;
 
 		[ServerCallback]

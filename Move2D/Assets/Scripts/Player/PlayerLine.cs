@@ -29,20 +29,23 @@ namespace Move2D
 
 		LineRenderer _lineRenderer;
 
+		float randomOffset;
+
 		void Start ()
 		{
 			_lineRenderer = GetComponent<LineRenderer> ();
+			randomOffset = Random.Range (0.0f, 5.0f);
 		}
 
 		void SetColors ()
 		{
 			var startColor = object1.GetComponent<ILineObject> ().GetColor ();
 			var endColor = object2.GetComponent<ILineObject> ().GetColor ();
-			_lineRenderer.startColor = new Color (startColor.r, startColor.g, startColor.b, Mathf.Min(endColor.a, _currentAlpha));
+			_lineRenderer.startColor = new Color (startColor.r, startColor.g, startColor.b, Mathf.Min(startColor.a, _currentAlpha));
 			_lineRenderer.endColor = new Color (endColor.r, endColor.g, endColor.b, Mathf.Min(endColor.a, _currentAlpha));
 			//_lineRenderer.startWidth = object1.GetComponent<ILineObject> ().GetMass();
 			//_lineRenderer.endWidth = object2.GetComponent<ILineObject> ().GetMass();
-			_lineRenderer.material.mainTextureOffset = new Vector2 (Time.time, 0.0f);
+			_lineRenderer.material.mainTextureOffset = new Vector2 (randomOffset + Time.time * 3.5f, 0.0f);
 		}
 
 		void SetPositions ()
