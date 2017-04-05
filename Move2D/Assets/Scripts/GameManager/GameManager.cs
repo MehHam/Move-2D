@@ -428,6 +428,7 @@ namespace Move2D
 				// If all clients are ready we can start the level
 				if (count == this._playerReadyToStart) {
 					this._nextLevelIndex = 0;
+					this.score = 0;
 					this._gameState = GameState.LevelEnd;
 					this._playerReadyToStart = 0;
 					if (NetworkManager.singleton.numPlayers < CustomNetworkLobbyManager.s_Singleton.minPlayers)
