@@ -22,6 +22,10 @@ namespace Move2D
 		/// </summary>
 		[Tooltip ("The alpha of the line")]
 		public float alpha;
+		/// <summary>
+		/// The number of points in the line
+		/// </summary>
+		public int numberOfPoints;
 
 		private float _currentAlpha;
 
@@ -43,7 +47,6 @@ namespace Move2D
 			var endColor = object2.GetComponent<ILineObject> ().GetColor ();
 			var startMass = object1.GetComponent<ILineObject> ().GetMass ();
 			var endMass = object2.GetComponent<ILineObject> ().GetMass ();
-			/*
 			var colorGradient = new Gradient ();
 			var widthCurve = new AnimationCurve ();
 			var gradientColorKeys = new GradientColorKey[2];
@@ -52,7 +55,7 @@ namespace Move2D
 			gradientColorKeys [0].color = startColor;
 			gradientColorKeys [0].time = 0.0f;
 			gradientColorKeys [1].color = endColor;
-			gradientColorKeys [1].time = 0.0f;
+			gradientColorKeys [1].time = 1.0f;
 
 			gradientAlphaKeys [0].alpha = Mathf.Min (startColor.a, _currentAlpha);
 			gradientAlphaKeys [0].time = 0.0f;
@@ -61,24 +64,27 @@ namespace Move2D
 
 			colorGradient.SetKeys (gradientColorKeys, gradientAlphaKeys);
 
-			widthCurve.AddKey (new Keyframe (0, startMass));
-			widthCurve.AddKey (new Keyframe (0, endMass));
+			widthCurve.AddKey (new Keyframe (0.0f, startMass));
+			widthCurve.AddKey (new Keyframe (1.0f, endMass));
 
 			_lineRenderer.colorGradient = colorGradient;
-			_lineRenderer.widthCurve = widthCurve;*/
+			_lineRenderer.widthCurve = widthCurve;
 			_lineRenderer.material.mainTextureOffset = new Vector2 (randomOffset + Time.time * 3, 0.0f);
-			_lineRenderer.startColor = new Color (startColor.r, startColor.g, startColor.b, Mathf.Min(endColor.a, _currentAlpha));
-			_lineRenderer.endColor = new Color (endColor.r, endColor.g, endColor.b, Mathf.Min(endColor.a, _currentAlpha));
-			_lineRenderer.widthMultiplier = (startMass + endMass) / 2.0f;
 		}
 
 		void SetPositions ()
 		{
-			Vector3[] positions = new Vector3[2];
-			positions [0] = object1.transform.position;
-			positions [1] = object2.transform.position;
-			_lineRenderer.numPositions = positions.Length;
-			_lineRenderer.SetPositions (positions);
+			if (numberOfPoints >= 2) {
+				Vector3[] positions = new Vector3[numberOfPoints];
+				var startPosition = object1.transform.position;
+				var endPosition = object2.transform.position;
+
+				for (int i = 0; i < numberOfPoints; i++) {
+					positions [i] = ((float)(i + 1) / (float)numberOfPoints) * (endPosition - startPosition) + startPosition;
+				}
+				_lineRenderer.numPositions = positions.Length;
+				_lineRenderer.SetPositions (positions);
+			}
 		}
 
 		void Update ()
