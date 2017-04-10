@@ -33,12 +33,14 @@ namespace Move2D
 
 		LineRenderer _lineRenderer;
 
-		float randomOffset;
+		float _randomOffset;
+		int _randomDirection;
 
 		void Start ()
 		{
 			_lineRenderer = GetComponent<LineRenderer> ();
-			randomOffset = Random.Range (0.0f, 5.0f);
+			_randomOffset = Random.Range (0.0f, 5.0f);
+			_randomDirection = Random.Range (0.0f, 1.0f) > 0.5f ? -1 : 1;
 		}
 
 		void SetColors ()
@@ -69,7 +71,7 @@ namespace Move2D
 
 			_lineRenderer.colorGradient = colorGradient;
 			_lineRenderer.widthCurve = widthCurve;
-			_lineRenderer.material.mainTextureOffset = new Vector2 (randomOffset + Time.time * 3, 0.0f);
+			_lineRenderer.material.mainTextureOffset = new Vector2 (_randomOffset + _randomDirection * Time.time * 3, 0.0f);
 		}
 
 		void SetPositions ()
