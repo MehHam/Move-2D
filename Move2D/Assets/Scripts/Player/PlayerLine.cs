@@ -77,12 +77,13 @@ namespace Move2D
 		void SetPositions ()
 		{
 			if (numberOfPoints >= 2) {
-				Vector3[] positions = new Vector3[numberOfPoints];
+				var positions = new Vector3[numberOfPoints];
 				var startPosition = object1.transform.position;
 				var endPosition = object2.transform.position;
+				var heading = (endPosition - startPosition);
 
 				for (int i = 0; i < numberOfPoints; i++) {
-					positions [i] = ((float)(i + 1) / (float)numberOfPoints) * (endPosition - startPosition) + startPosition;
+					positions [i] = ((float)i / (float)(numberOfPoints - 1)) * heading + startPosition;
 				}
 				_lineRenderer.numPositions = positions.Length;
 				_lineRenderer.SetPositions (positions);

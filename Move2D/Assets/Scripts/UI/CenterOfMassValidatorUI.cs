@@ -6,11 +6,12 @@ using UnityEngine.Networking;
 
 namespace Move2D
 {
-	[RequireComponent (typeof(CanvasGroup))]
 	public class CenterOfMassValidatorUI : NetworkBehaviour
 	{
 		public RangeScoreList rangeScoreList;
 		public float cooldownDuration = 5.0f;
+		public Text buttonText;
+		public CanvasGroup canvasGroup;
 
 		private string _baseText;
 		private GameObject _sphereCDM;
@@ -30,7 +31,7 @@ namespace Move2D
 
 		void Start ()
 		{
-			_baseText = this.GetComponentInChildren<Text> ().text;
+			_baseText = buttonText.text;
 		}
 
 		/// <summary>
@@ -95,12 +96,12 @@ namespace Move2D
 
 		void Update ()
 		{
-			this.GetComponent<CanvasGroup> ().alpha = IsActivated () ? 1 : 0;
-			this.GetComponent<CanvasGroup> ().interactable = IsActivated () && !_isCooldown;
-			this.GetComponent<CanvasGroup> ().blocksRaycasts = IsActivated ();
+			canvasGroup.alpha = IsActivated () ? 1 : 0;
+			canvasGroup.interactable = IsActivated () && !_isCooldown;
+			canvasGroup.blocksRaycasts = IsActivated ();
 			if (isServer && _cooldownTime + cooldownDuration <= Time.time)
 				_isCooldown = false;
-			this.GetComponentInChildren<Text> ().text = 
+			buttonText.text = 
 				(_isCooldown) ?
 				((int)(cooldownDuration - (Time.time - _cooldownTime)) + 1).ToString () :
 				_baseText;

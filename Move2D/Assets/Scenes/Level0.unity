@@ -915,29 +915,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 4875208583288798, guid: 50fbb5e0e1c8d41319540b1d62d9e902, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 0.059127863
-      objectReference: {fileID: 0}
-    - target: {fileID: 4875208583288798, guid: 50fbb5e0e1c8d41319540b1d62d9e902, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 0.06060605
-      objectReference: {fileID: 0}
-    - target: {fileID: 114837380762851940, guid: 50fbb5e0e1c8d41319540b1d62d9e902,
-        type: 2}
-      propertyPath: m_EffectColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114837380762851940, guid: 50fbb5e0e1c8d41319540b1d62d9e902,
-        type: 2}
-      propertyPath: m_EffectColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114837380762851940, guid: 50fbb5e0e1c8d41319540b1d62d9e902,
-        type: 2}
-      propertyPath: m_EffectColor.b
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 50fbb5e0e1c8d41319540b1d62d9e902, type: 2}
   m_IsPrefabParent: 0
@@ -1237,83 +1214,11 @@ Prefab:
       propertyPath: m_AnchorMax.x
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 224795781266905172, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224376165564198156, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 224376165564198156, guid: 938a21221b1fe43cb9ca80e56eab0acb,
         type: 2}
       propertyPath: m_AnchorMax.x
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 224376165564198156, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114077368778683278, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_EffectColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114077368778683278, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_EffectColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114077368778683278, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_EffectColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 223289747862617600, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_RenderMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225116893844573882, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_Alpha
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 225709271328074086, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114989620015348972, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_FillAmount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 225035050183474238, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114494637188520598, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_Value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114989620015348972, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 8bdd3f87f25042248a57d43f183d59c2,
-        type: 3}
-    - target: {fileID: 114399482472698358, guid: 938a21221b1fe43cb9ca80e56eab0acb,
-        type: 2}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 8bdd3f87f25042248a57d43f183d59c2,
-        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 938a21221b1fe43cb9ca80e56eab0acb, type: 2}
   m_IsPrefabParent: 0

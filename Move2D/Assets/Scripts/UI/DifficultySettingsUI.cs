@@ -6,13 +6,21 @@ using UnityEngine.UI;
 
 namespace Move2D
 {
-	public class DifficultySettingsUI : NetworkBehaviour
+	public class DifficultySettingsUI : MonoBehaviour
 	{
-		void Start ()
+		void OnEnable()
 		{
-			if (isServer)
+			GameManager.onLevelStarted += OnLevelStarted;
+		}
+
+		void OnLevelStarted ()
+		{
+			if (GameManager.singleton.isServer)
 			{
 				this.GetComponent<Dropdown> ().value = (int)(GameManager.singleton.difficulty);
+				this.GetComponent<CanvasGroup> ().alpha = 1;
+				this.GetComponent<CanvasGroup> ().interactable = true;
+				this.GetComponent<CanvasGroup> ().blocksRaycasts = true;
 				this.GetComponent<Dropdown> ().onValueChanged.AddListener (delegate {
 					OnValueChanged ();
 				});
@@ -23,6 +31,18 @@ namespace Move2D
 				this.GetComponent<CanvasGroup>().interactable = false;
 				this.GetComponent<CanvasGroup>().blocksRaycasts = false;
 			}
+		}
+
+		void Start ()
+		{
+			this.GetComponent<CanvasGroup>().alpha = 0;
+			this.GetComponent<CanvasGroup>().interactable = false;
+			this.GetComponent<CanvasGroup>().blocksRaycasts = false;
+		}
+
+		void OnDisable()
+		{
+			GameManager.onLevelStarted -= OnLevelStarted;
 		}
 
 		void Update ()

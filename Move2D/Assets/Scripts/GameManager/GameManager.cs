@@ -402,8 +402,7 @@ namespace Move2D
 				}
 			}
 		}
-
-		[Server]
+			
 		void Respawn()
 		{
 			if (isServer) {
