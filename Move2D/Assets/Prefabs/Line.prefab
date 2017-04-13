@@ -70,6 +70,7 @@ MonoBehaviour:
   object2: {fileID: 0}
   alpha: 1
   numberOfPoints: 50
+  speed: 3
   spherePhysics: {fileID: 0}
 --- !u!120 &120596243454661694
 LineRenderer:

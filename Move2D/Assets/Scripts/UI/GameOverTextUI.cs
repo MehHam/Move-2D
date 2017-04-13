@@ -15,8 +15,22 @@ namespace Move2D
 
 		void Awake()
 		{
-			giveUpButton.onClick.AddListener(delegate { CustomNetworkLobbyManager.s_Singleton.GoBackButton(); });
-			restartButton.onClick.AddListener (delegate { GameManager.singleton.OnStartClient ();});
+			giveUpButton.onClick.AddListener(OnGiveUpClick);
+			restartButton.onClick.AddListener (OnReadyToStartClick);
+		}
+
+		void OnReadyToStartClick()
+		{
+			Debug.Log ("OnReadyToStartClick");
+			GameManager.singleton.OnStartClient ();
+			restartButton.onClick.RemoveAllListeners ();
+			restartButton.interactable = false;
+			restartButton.GetComponentInChildren<Text> ().text = "Waiting for players...";
+		}
+
+		void OnGiveUpClick()
+		{
+			CustomNetworkLobbyManager.s_Singleton.GoBackButton();
 		}
 
 		void Update ()

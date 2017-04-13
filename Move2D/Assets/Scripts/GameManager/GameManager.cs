@@ -291,7 +291,6 @@ namespace Move2D
 		/// Called when the game state is WaitingForPlayers.
 		/// Waits for all players to be ready, kicks all the clients that aren't after the timeout.
 		/// </summary>
-		/// <param name="timeOut">The time out time.</param>
 		void WaitingForPlayers ()
 		{
 			if (isServer) {
@@ -418,6 +417,10 @@ namespace Move2D
 		void GameOver ()
 		{
 			if (isServer) {
+				if (!_startingTime.HasValue) {
+					this._playerReadyToStart = 0;
+					_startingTime = Time.time;
+				}
 				int count = 0;
 				// Some connections can be null for some reason, so we have to do the count by ourselves
 				foreach (var connection in NetworkServer.connections) {
@@ -425,11 +428,12 @@ namespace Move2D
 						count++;
 				}
 				// If all clients are ready we can start the level
-				if (count == this._playerReadyToStart) {
+				if (count == this._playerReadyToStart || (Time.time >= _startingTime.Value + timeOut)) {
 					this._nextLevelIndex = 0;
 					this.score = 0;
 					this._gameState = GameState.LevelEnd;
 					this._playerReadyToStart = 0;
+					_startingTime = null;
 					if (NetworkManager.singleton.numPlayers < CustomNetworkLobbyManager.s_Singleton.minPlayers)
 						CustomNetworkLobbyManager.s_Singleton.GoBackButton();
 				}

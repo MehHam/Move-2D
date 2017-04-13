@@ -25,7 +25,13 @@ namespace Move2D
 		/// <summary>
 		/// The number of points in the line
 		/// </summary>
+		[Tooltip ("The number of points in the line")]
 		public int numberOfPoints;
+		/// <summary>
+		/// The speed of the texture animation.
+		/// </summary>
+		[Tooltip ("The speed of the texture animation")]
+		public float speed;
 
 		private float _currentAlpha;
 
@@ -67,11 +73,11 @@ namespace Move2D
 			colorGradient.SetKeys (gradientColorKeys, gradientAlphaKeys);
 
 			widthCurve.AddKey (new Keyframe (0.0f, startMass));
-			widthCurve.AddKey (new Keyframe (1.0f, endMass));
+			widthCurve.AddKey (new Keyframe (1.0f, (startMass + endMass) / 2.0f));
 
 			_lineRenderer.colorGradient = colorGradient;
 			_lineRenderer.widthCurve = widthCurve;
-			_lineRenderer.material.mainTextureOffset = new Vector2 (_randomOffset + _randomDirection * Time.time * 3, 0.0f);
+			_lineRenderer.material.mainTextureOffset = new Vector2 (_randomOffset + _randomDirection * Time.time * speed, 0.0f);
 		}
 
 		void SetPositions ()
