@@ -40,6 +40,7 @@ namespace Move2D
 		void Awake()
 		{
 			backButton.onClick.AddListener (delegate {
+				((CustomNetworkLobbyManager)(CustomNetworkLobbyManager.singleton)).errorMessage = NetworkErrorMessage.ClientLeft;
 				CustomNetworkLobbyManager.s_Singleton.GoBackButton();
 			});
 		}

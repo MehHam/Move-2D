@@ -158,6 +158,10 @@ namespace Move2D
 		/// After this timeout the server will start the game and kick all clients that didn't send their ready to begin message
 		/// </summary>
 		public float timeOut = 10.0f;
+		/// <summary>
+		/// The restart time out.
+		/// </summary>
+		public float restartTimeOut = 30.0f;
 
 		public bool isPlaying { get { return this._gameState == GameState.Playing; } }
 		public bool isWaitingForPlayers { get { return this._gameState == GameState.WaitingForPlayers; } }
@@ -428,14 +432,16 @@ namespace Move2D
 						count++;
 				}
 				// If all clients are ready we can start the level
-				if (count == this._playerReadyToStart || (Time.time >= _startingTime.Value + timeOut)) {
+				if (count == this._playerReadyToStart || (Time.time >= _startingTime.Value + restartTimeOut)) {
 					this._nextLevelIndex = 0;
 					this.score = 0;
 					this._gameState = GameState.LevelEnd;
 					this._playerReadyToStart = 0;
 					_startingTime = null;
-					if (NetworkManager.singleton.numPlayers < CustomNetworkLobbyManager.s_Singleton.minPlayers)
-						CustomNetworkLobbyManager.s_Singleton.GoBackButton();
+					if (NetworkManager.singleton.numPlayers < CustomNetworkLobbyManager.s_Singleton.minPlayers) {
+						RpcNetworkErrorMessage (NetworkErrorMessage.NotEnoughPlayers);
+						CustomNetworkLobbyManager.s_Singleton.GoBackButton ();
+					}
 				}
 			}
 		}
@@ -739,6 +745,12 @@ namespace Move2D
 					timeWarning = true;
 				}
 			}
+		}
+
+		[ClientRpc]
+		void RpcNetworkErrorMessage (NetworkErrorMessage networkErrorMessage)
+		{
+			((CustomNetworkLobbyManager)(CustomNetworkLobbyManager.singleton)).errorMessage = networkErrorMessage;
 		}
 
 		[ClientRpc]

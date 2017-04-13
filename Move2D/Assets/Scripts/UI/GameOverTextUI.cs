@@ -30,6 +30,7 @@ namespace Move2D
 
 		void OnGiveUpClick()
 		{
+			((CustomNetworkLobbyManager)(CustomNetworkLobbyManager.singleton)).errorMessage = NetworkErrorMessage.ClientLeft;
 			CustomNetworkLobbyManager.s_Singleton.GoBackButton();
 		}
 

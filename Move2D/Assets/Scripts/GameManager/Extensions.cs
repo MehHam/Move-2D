@@ -40,6 +40,29 @@ namespace Move2D
 			}
 			return res;
 		}
+
+		public static string ToMessageString (this NetworkErrorMessage networkErrorMessage)
+		{
+			string res = "";
+			switch (networkErrorMessage) {
+			case NetworkErrorMessage.ClientLeft:
+				res = "You left the game.";
+				break;
+			case NetworkErrorMessage.NotEnoughPlayers:
+				res = "Not enough players to continue the game.";
+				break;
+			case NetworkErrorMessage.ServerDisconnected:
+				res = "You were disconnected from server.";
+				break;
+			case NetworkErrorMessage.StopServer:
+				res = "The server was stopped.";
+				break;
+			case NetworkErrorMessage.None:
+				res = "You were disconnected form server.";
+				break;
+			}
+			return res;
+		}
 	}
 
 	public static class GameObjectExtension

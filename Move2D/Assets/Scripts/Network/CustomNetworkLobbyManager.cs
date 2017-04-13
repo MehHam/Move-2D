@@ -8,6 +8,14 @@ using UnityEngine.Networking.NetworkSystem;
 
 namespace Move2D
 {
+	public enum NetworkErrorMessage {
+		ServerDisconnected,
+		NotEnoughPlayers,
+		ClientLeft,
+		StopServer,
+		None,
+	}
+
 	/// <summary>
 	/// Custom NetworkLobby class
 	/// </summary>
@@ -44,6 +52,8 @@ namespace Move2D
 		/// </summary>
 		public static event NetworkConnectionHandler onClientSceneChanged;
 
+		public NetworkErrorMessage errorMessage = NetworkErrorMessage.None;
+
 		public override NetworkClient StartHost ()
 		{
 			var networkClient = base.StartHost ();
@@ -56,9 +66,10 @@ namespace Move2D
 		public override void OnStopHost ()
 		{
 			if (!_isMatchmaking && GameManager.singleton != null) {
+				errorMessage = NetworkErrorMessage.StopServer;
 				GameObject.Destroy (GameManager.singleton.gameObject);
 				NetworkServer.Destroy (GameManager.singleton.gameObject);
-				infoPanel.Display ("The host disconnected", "OK", null);
+				infoPanel.Display (errorMessage.ToMessageString(), "OK", null);
 				CustomNetworkLobbyManager.networkSceneName = this.onlineScene;
 			}
 			base.OnStopHost ();
@@ -72,7 +83,7 @@ namespace Move2D
 			if (!_isMatchmaking && GameManager.singleton != null) {
 				GameObject.Destroy (GameManager.singleton.gameObject);
 				NetworkServer.Destroy (GameManager.singleton.gameObject);
-				infoPanel.Display ("You were disconnected from server", "OK", null);
+				infoPanel.Display (errorMessage.ToMessageString(), "OK", null);
 				CustomNetworkLobbyManager.networkSceneName = this.onlineScene;
 			}
 			base.OnStopClient ();
@@ -90,7 +101,8 @@ namespace Move2D
 				foreach (var playerInfo in GameObject.FindObjectsOfType<LobbyPlayer> ()) {
 					GameObject.Destroy (playerInfo.gameObject);
 				}
-				infoPanel.Display ("The server was stopped", "OK", null);
+				errorMessage = NetworkErrorMessage.StopServer;
+				infoPanel.Display (errorMessage.ToMessageString(), "OK", null);
 				CustomNetworkLobbyManager.networkSceneName = this.onlineScene;
 			}
 			base.OnStopServer ();
