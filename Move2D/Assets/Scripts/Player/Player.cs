@@ -30,6 +30,11 @@ namespace Move2D
 		/// The position of the player at the start of the level
 		/// </summary>
 		public Vector3 startPosition;
+		/// <summary>
+		/// Whether this player is considerer the main player. By default the main player is the host but if there's no player host it
+		/// is a random player in the list.
+		/// </summary>
+		[SyncVar] public bool isMainPlayer;
 
 		/// <summary>
 		/// The player controller identifier.
@@ -225,6 +230,12 @@ namespace Move2D
 			RpcReceivePosition (position);
 		}
 
+		[Command]
+		public void CmdChangeDifficulty (GameManager.Difficulty difficulty)
+		{
+			GameManager.singleton.ChangeDifficulty (difficulty);
+		}
+
 		[ClientRpc]
 		void RpcReceivePosition (Vector3 position)
 		{
@@ -235,6 +246,12 @@ namespace Move2D
 		void RpcReceiveMass (float mass)
 		{
 			this.mass = mass;
+		}
+
+		[ClientRpc]
+		public void RpcSetMainPlayer (bool isMainPlayer)
+		{
+			this.playerInfo.isMainPlayer = isMainPlayer;
 		}
 
 		void OnDestroy ()

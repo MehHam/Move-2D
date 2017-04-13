@@ -73,7 +73,7 @@ namespace Move2D
 			colorGradient.SetKeys (gradientColorKeys, gradientAlphaKeys);
 
 			widthCurve.AddKey (new Keyframe (0.0f, startMass));
-			widthCurve.AddKey (new Keyframe (1.0f, (startMass + endMass) / 2.0f));
+			widthCurve.AddKey (new Keyframe (1.0f, endMass));
 
 			_lineRenderer.colorGradient = colorGradient;
 			_lineRenderer.widthCurve = widthCurve;

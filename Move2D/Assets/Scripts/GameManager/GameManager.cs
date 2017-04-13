@@ -43,6 +43,7 @@ namespace Move2D
 		public delegate void ClientHandler (NetworkConnection conn);
 
 		public static event ClientHandler onClientSceneChanged;
+		public static event ClientHandler onClientDisconnect;
 
 		/// <summary>
 		/// Event called whenever the level started
@@ -172,7 +173,6 @@ namespace Move2D
 		/// Has the game started or not.
 		/// </summary>
 		public bool gameStarted { get { return this._gameState != GameState.Inactive; } }
-
 		/// <summary>
 		/// The difficulty of the game
 		/// </summary>
@@ -526,9 +526,17 @@ namespace Move2D
 			for (int i = 0; i < startPositions.Count && i < networkPlayersInfo.Count; i++) {
 				networkPlayersInfo [i].playerInfo.startPosition = startPositions [i];
 			}
+			if (isServer && !isClient
+				&& networkPlayersInfo.Count != 0
+				&& networkPlayersInfo.Find (x => x.playerInfo.isMainPlayer) == null)
+				SetMainPlayer ();
 			if (networkPlayersInfo.Count < CustomNetworkLobbyManager.s_Singleton.minPlayers) {
 				RpcNetworkErrorMessage (NetworkErrorMessage.NotEnoughPlayers);
 				CustomNetworkLobbyManager.s_Singleton.GoBackButton ();
+			} else {
+				if (onClientDisconnect != null)
+					onClientDisconnect (conn);
+				RpcClientDisconnect (conn.hostId);
 			}
 		}
 
@@ -750,6 +758,21 @@ namespace Move2D
 		}
 
 		[ClientRpc]
+		void RpcClientDisconnect(int connectionId)
+		{
+			if (!isServer) {
+				if (onClientDisconnect != null) {
+					NetworkConnection conn = null;
+					foreach (var connection in NetworkServer.connections) {
+						if (connection.connectionId == connectionId)
+							conn = connection;
+					}
+					onClientDisconnect (conn);
+				}
+			}
+		}
+
+		[ClientRpc]
 		void RpcNetworkErrorMessage (NetworkErrorMessage networkErrorMessage)
 		{
 			((CustomNetworkLobbyManager)(CustomNetworkLobbyManager.singleton)).errorMessage = networkErrorMessage;
@@ -876,14 +899,30 @@ namespace Move2D
 			}
 		}
 
+		void SetMainPlayer()
+		{
+			var players = GameObject.FindGameObjectsWithTag ("Player");
+			networkPlayersInfo [0].playerInfo.isMainPlayer = true;
+			foreach (var player in players) {
+				if (player.GetComponent<Player> ().playerInfo == networkPlayersInfo [0].playerInfo)
+					player.GetComponent<Player> ().RpcSetMainPlayer (true);
+			}
+		}
+
 		void InitPlayerInfo ()
 		{
 			networkPlayersInfo = new List<NetworkPlayerInfo> ();
-			foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
+			var players = GameObject.FindGameObjectsWithTag ("Player");
+			foreach (var player in players) {
 				networkPlayersInfo.Add (
 					new NetworkPlayerInfo (player.GetComponent<Player> ().playerInfo,
 						player.GetComponent<Player> ().connectionToClient)
 				);
+			}
+			if (isServer && !isClient
+			    && networkPlayersInfo.Count != 0
+			    && networkPlayersInfo.Find (x => x.playerInfo.isMainPlayer) == null) {
+				SetMainPlayer ();
 			}
 		}
 	}
