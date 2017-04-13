@@ -526,8 +526,10 @@ namespace Move2D
 			for (int i = 0; i < startPositions.Count && i < networkPlayersInfo.Count; i++) {
 				networkPlayersInfo [i].playerInfo.startPosition = startPositions [i];
 			}
-			if (networkPlayersInfo.Count < CustomNetworkLobbyManager.s_Singleton.minPlayers)
-				CustomNetworkLobbyManager.s_Singleton.GoBackButton();
+			if (networkPlayersInfo.Count < CustomNetworkLobbyManager.s_Singleton.minPlayers) {
+				RpcNetworkErrorMessage (NetworkErrorMessage.NotEnoughPlayers);
+				CustomNetworkLobbyManager.s_Singleton.GoBackButton ();
+			}
 		}
 
 		/// <summary>
