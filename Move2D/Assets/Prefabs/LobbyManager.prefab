@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 222507836499922832}
   - component: {fileID: 114160173115438148}
   - component: {fileID: 114116192550307024}
+  - component: {fileID: 114067627831594608}
   m_Layer: 5
   m_Name: InputField
   m_TagString: Untagged
@@ -431,6 +432,7 @@ GameObject:
   - component: {fileID: 222384382743602538}
   - component: {fileID: 114912230416709514}
   - component: {fileID: 114057782666342434}
+  - component: {fileID: 114433170259902824}
   m_Layer: 5
   m_Name: DedicatedServerButton
   m_TagString: Untagged
@@ -537,6 +539,7 @@ GameObject:
   - component: {fileID: 224087880914261362}
   - component: {fileID: 222241089644339340}
   - component: {fileID: 114274165539674244}
+  - component: {fileID: 114696656447561068}
   m_Layer: 5
   m_Name: CreateAGame
   m_TagString: Untagged
@@ -648,7 +651,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1534148017749772
 GameObject:
   m_ObjectHideFlags: 1
@@ -677,6 +680,7 @@ GameObject:
   - component: {fileID: 222375864171743066}
   - component: {fileID: 114747715405722976}
   - component: {fileID: 114797334362367252}
+  - component: {fileID: 114718919801338622}
   m_Layer: 5
   m_Name: CreateButton
   m_TagString: Untagged
@@ -871,6 +875,8 @@ GameObject:
   - component: {fileID: 114381268376647804}
   - component: {fileID: 114634318891947548}
   - component: {fileID: 114701847764645100}
+  - component: {fileID: 114521943703374534}
+  - component: {fileID: 114285565073335432}
   m_Layer: 5
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -905,6 +911,7 @@ GameObject:
   - component: {fileID: 224979150145180844}
   - component: {fileID: 222996676025751922}
   - component: {fileID: 114388168229570758}
+  - component: {fileID: 114107147280239266}
   m_Layer: 5
   m_Name: OR
   m_TagString: Untagged
@@ -975,6 +982,7 @@ GameObject:
   - component: {fileID: 222087358073695024}
   - component: {fileID: 114127328597742732}
   - component: {fileID: 114464081136340468}
+  - component: {fileID: 114010850803135792}
   m_Layer: 5
   m_Name: PlayAndHostButton
   m_TagString: Untagged
@@ -1171,7 +1179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1936585804850352
 GameObject:
   m_ObjectHideFlags: 1
@@ -1339,6 +1347,18 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 0
   m_Text: FIND A GAME
+--- !u!114 &114010850803135792
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1847939824009232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46024cf54b1604a3fa5a29a84740cf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  someMask: 1
 --- !u!114 &114023596171448014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1576,6 +1596,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114067627831594608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1342250172894994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46024cf54b1604a3fa5a29a84740cf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  someMask: 1
 --- !u!114 &114082043780367536
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1849,6 +1881,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 0
   m_Text: START A GAME
+--- !u!114 &114107147280239266
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1824206909697654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46024cf54b1604a3fa5a29a84740cf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  someMask: 1
 --- !u!114 &114116192550307024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2321,6 +2365,17 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 0
   m_Text: CREATE A GAME
+--- !u!114 &114285565073335432
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1798090175471452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e790e8b0c735747db94d4d4f463d72be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114291197817371184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2655,6 +2710,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114433170259902824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1368028936604844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46024cf54b1604a3fa5a29a84740cf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  someMask: 1
 --- !u!114 &114441427551642770
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2865,6 +2932,17 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 0
   m_Text: Hosting
+--- !u!114 &114521943703374534
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1798090175471452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e790e8b0c735747db94d4d4f463d72be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114526656737351566
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3100,6 +3178,7 @@ MonoBehaviour:
   - {fileID: 1975468176997332, guid: 141870fd06f6544518af4e98304b730b, type: 2}
   - {fileID: 1650740931237868, guid: 287b8e07dd7ca4f83bff9255c6bc8758, type: 2}
   - {fileID: 1529073537378002, guid: 13f4a3b7782e94c2eb5b0d8538c2fd52, type: 2}
+  - {fileID: 1775025622414674, guid: 2f60369a6be9d409e813327bf23794d5, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -3144,7 +3223,7 @@ MonoBehaviour:
   matchMaker: {fileID: 0}
   m_ShowLobbyGUI: 0
   m_MaxPlayers: 5
-  m_MaxPlayersPerConnection: 2
+  m_MaxPlayersPerConnection: 5
   m_MinPlayers: 2
   m_LobbyPlayerPrefab: {fileID: 11487034, guid: ad727d7e1462ecc4f83c898ecc501997,
     type: 2}
@@ -3165,6 +3244,7 @@ MonoBehaviour:
   ipAddressInfo: {fileID: 114664114279869672}
   _playerNumber: 0
   _isMatchmaking: 0
+  errorMessage: 4
 --- !u!114 &114638147961347756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3554,6 +3634,18 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: You were disconnected from server
+--- !u!114 &114696656447561068
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1427294114792714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46024cf54b1604a3fa5a29a84740cf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  someMask: 1
 --- !u!114 &114701847764645100
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3625,6 +3717,18 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 0
   m_Text: MOVE 2D
+--- !u!114 &114718919801338622
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534984695419600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46024cf54b1604a3fa5a29a84740cf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  someMask: 1
 --- !u!114 &114724681540904114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5450,7 +5554,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000091552734}
+  m_AnchoredPosition: {x: 0, y: -0.00013974}
   m_SizeDelta: {x: 0, y: 440}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224501610914474226

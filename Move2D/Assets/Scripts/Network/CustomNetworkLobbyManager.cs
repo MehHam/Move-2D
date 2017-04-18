@@ -52,13 +52,11 @@ namespace Move2D
 		/// </summary>
 		public static event NetworkConnectionHandler onClientSceneChanged;
 
+		public NetworkServerSimple webGLServer;
+
 		public NetworkErrorMessage errorMessage = NetworkErrorMessage.None;
 
-		public override NetworkClient StartHost ()
-		{
-			var networkClient = base.StartHost ();
-			return networkClient;
-		}
+		public static int secondServerHostId = 0;
 
 		/// <summary>
 		/// Called when the host is stopped. Destroy the gameManager, display an error message and reset the default lobby scene
@@ -105,7 +103,17 @@ namespace Move2D
 				infoPanel.Display (errorMessage.ToMessageString(), "OK", null);
 				CustomNetworkLobbyManager.networkSceneName = this.onlineScene;
 			}
+			this.GetComponent<WebGLCustomServer> ().Stop ();
+		
 			base.OnStopServer ();
+		}
+
+		public override void OnStartServer ()
+		{
+			base.OnStartServer ();
+
+			if (!useWebSockets)
+				this.GetComponent<WebGLCustomServer> ().Initialize ();
 		}
 
 		/// <summary>

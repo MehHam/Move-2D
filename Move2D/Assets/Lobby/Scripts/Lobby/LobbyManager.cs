@@ -156,7 +156,9 @@ namespace Prototype.NetworkLobby
         {
             statusInfo.text = status;
             hostInfo.text = host;
+			#if UNITY_EDITOR || !UNITY_WEBGL
 			ipAddressInfo.text = LocalIPAddress ();
+			#endif
         }
 
 
