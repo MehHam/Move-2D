@@ -311,6 +311,7 @@ GameObject:
   - component: {fileID: 224064790791708328}
   - component: {fileID: 222967247695842194}
   - component: {fileID: 114177927212397956}
+  - component: {fileID: 114484873791215288}
   m_Layer: 5
   m_Name: 'NetworkIpAddress:'
   m_TagString: Untagged
@@ -364,6 +365,7 @@ GameObject:
   - component: {fileID: 224060788512602342}
   - component: {fileID: 222650032770141106}
   - component: {fileID: 114664114279869672}
+  - component: {fileID: 114067834500409642}
   m_Layer: 5
   m_Name: LocalIpAddressInfo
   m_TagString: Untagged
@@ -876,7 +878,6 @@ GameObject:
   - component: {fileID: 114634318891947548}
   - component: {fileID: 114701847764645100}
   - component: {fileID: 114521943703374534}
-  - component: {fileID: 114285565073335432}
   m_Layer: 5
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -1602,6 +1603,18 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1342250172894994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46024cf54b1604a3fa5a29a84740cf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  someMask: 1
+--- !u!114 &114067834500409642
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1348640004171718}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46024cf54b1604a3fa5a29a84740cf74, type: 3}
@@ -2365,17 +2378,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 0
   m_Text: CREATE A GAME
---- !u!114 &114285565073335432
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1798090175471452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e790e8b0c735747db94d4d4f463d72be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114291197817371184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2872,6 +2874,18 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114484873791215288
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1332419831319028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46024cf54b1604a3fa5a29a84740cf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  someMask: 1
 --- !u!114 &114485714593605670
 MonoBehaviour:
   m_ObjectHideFlags: 1
