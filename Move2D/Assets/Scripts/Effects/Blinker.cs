@@ -146,17 +146,23 @@ namespace Move2D
 			this.GetComponent<Renderer> ().material.color = new Color (color.r, color.g, color.b, 1.0f);
 		}
 
+		IEnumerator WaitForFadeOut (float waitDuration, float newFadeTime)
+		{
+			yield return new WaitForSeconds (waitDuration);
+			FadeOut (newFadeTime);
+		}
+
 		/// <summary>
 		/// Blink this instance.
 		/// </summary>
-		public void Blink ()
+		public void Blink (float time = 0.0f)
 		{
 			var color = this.GetComponent<Renderer> ().material.color;
 			// Only blink if the sphere is already invisible
 			if (color.a > 0)
 				return;
 			this.GetComponent<Renderer> ().material.color = new Color (color.r, color.g, color.b, maxBlinkAlpha);
-			FadeOut (blinkDuration);
+			StartCoroutine (WaitForFadeOut(time, blinkDuration));
 		}
 
 		/// <summary>

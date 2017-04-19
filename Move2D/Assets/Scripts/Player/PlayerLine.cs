@@ -58,7 +58,7 @@ namespace Move2D
 			var colorGradient = new Gradient ();
 			var widthCurve = new AnimationCurve ();
 			var gradientColorKeys = new GradientColorKey[2];
-			var gradientAlphaKeys = new GradientAlphaKey[2];
+			var gradientAlphaKeys = new GradientAlphaKey[3];
 
 			gradientColorKeys [0].color = startColor;
 			gradientColorKeys [0].time = 0.0f;
@@ -68,7 +68,9 @@ namespace Move2D
 			gradientAlphaKeys [0].alpha = Mathf.Min (startColor.a, _currentAlpha);
 			gradientAlphaKeys [0].time = 0.0f;
 			gradientAlphaKeys [1].alpha = Mathf.Min (endColor.a, _currentAlpha);
-			gradientAlphaKeys [1].time = 1.0f;
+			gradientAlphaKeys [1].time = 0.5f;
+			gradientAlphaKeys [2].alpha = Mathf.Min (endColor.a, _currentAlpha);
+			gradientAlphaKeys [2].time = 1.0f;
 
 			colorGradient.SetKeys (gradientColorKeys, gradientAlphaKeys);
 

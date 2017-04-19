@@ -26,8 +26,20 @@ namespace Move2D
 		/// When the sphere is invincible, it doesn't take any damage
 		/// </summary>
 		public bool isInvincible = false;
+		/// <summary>
+		/// Time until which the sphere reappears if the sphere is in invisible mode
+		/// </summary>
+		[Tooltip ("Time until which the sphere reappears if the sphere is in invisible mode")]
+		public float sphereApparitionTime = 5.0f;
+		/// <summary>
+		/// The duration of the sphere apparition.
+		/// </summary>
+		[Tooltip ("The duration of the sphere apparition.")]
+		public float sphereApparitionDuration = 1.0f;
 
 		public ScorePopupUI scorePopup;
+
+		float _timeSinceLastApparition = 0.0f;
 
 		// ----------------- Events ------------------
 
@@ -92,11 +104,12 @@ namespace Move2D
 		/// <summary>
 		/// Start the blink animation
 		/// </summary>
-		public void Blink ()
+		public void Blink (float blinkTime = 0.0f)
 		{
 			if (isServer)
-				RpcBlink ();
-			this.GetComponent<Blinker> ().Blink ();
+				RpcBlink (blinkTime);
+			this.GetComponent<Blinker> ().Blink (blinkTime);
+			_timeSinceLastApparition = Time.time;
 		}
 
 		public void LoseLife(int amount)
@@ -140,7 +153,7 @@ namespace Move2D
 				StartCoroutine (FadeAtStartLevel ());
 				break;
 			case Level.SphereVisibility.Invisible:
-				this.GetComponent<Blinker> ().FadeOut ();
+				this.GetComponent<SpriteRenderer> ().color = new Color (color.r, color.g, color.b, 0.0f);
 				break;
 			}
 		}
@@ -159,9 +172,9 @@ namespace Move2D
 		}
 
 		[ClientRpc]
-		void RpcBlink ()
+		void RpcBlink (float time)
 		{
-			this.GetComponent<Blinker> ().Blink ();
+			this.GetComponent<Blinker> ().Blink (time);
 		}
 
 		[ClientRpc]
@@ -182,6 +195,14 @@ namespace Move2D
 			GetComponent<SpherePhysics> ().enabled = false;
 			this.GetComponent<Blinker> ().FadeOut (0.5f);
 			Destroy (this.GetComponent<PlayerLineManager> ());
+		}
+
+		[ServerCallback]
+		void Update()
+		{
+			if (Time.time - _timeSinceLastApparition > sphereApparitionTime) {
+				Blink ();
+			}
 		}
 
 		#region IPlayerLineObject implementation
