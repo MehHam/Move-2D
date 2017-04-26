@@ -20,9 +20,13 @@ namespace Move2D
 		/// </summary>
 		public Text totalTime;
 		/// <summary>
-		/// The back button component
+		/// The back button component.
 		/// </summary>
 		public Button backButton;
+		/// <summary>
+		/// The continue button component.
+		/// </summary>
+		public Button continueButton;
 
 		/// <summary>
 		/// Base text that will be displayed before the difficulty text.
@@ -39,10 +43,22 @@ namespace Move2D
 
 		void Awake()
 		{
-			backButton.onClick.AddListener (delegate {
-				((CustomNetworkLobbyManager)(CustomNetworkLobbyManager.singleton)).errorMessage = NetworkErrorMessage.ClientLeft;
-				CustomNetworkLobbyManager.s_Singleton.GoBackButton();
-			});
+			backButton.onClick.AddListener (OnBackButtonClick);
+			continueButton.onClick.AddListener (OnContinueButtonClick);
+		}
+
+		void OnBackButtonClick()
+		{
+			((CustomNetworkLobbyManager)(CustomNetworkLobbyManager.singleton)).errorMessage = NetworkErrorMessage.ClientLeft;
+			CustomNetworkLobbyManager.s_Singleton.GoBackButton();
+		}
+
+		void OnContinueButtonClick()
+		{
+			GameManager.singleton.OnStartClient ();
+			continueButton.onClick.RemoveAllListeners ();
+			continueButton.interactable = false;
+			continueButton.GetComponentInChildren<Text> ().text = "Waiting for players...";
 		}
 
 		void Update()

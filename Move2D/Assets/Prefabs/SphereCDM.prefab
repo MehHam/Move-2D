@@ -174,7 +174,7 @@ MonoBehaviour:
   waitTimeUntilFade: 5
   damageDuration: 2
   isInvincible: 0
-  sphereApparitionTime: 3
+  sphereApparitionTime: 8
   sphereApparitionDuration: 1
   scorePopup: {fileID: 114559239373011768, guid: 43ce95358867740c79361ebb89f8062a,
     type: 2}
@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83eef7eac8ff642f2adf6619f541cca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeInTime: 5
+  fadeInTime: 3
   fadeOutTime: 5
   blinkDuration: 5
   maxBlinkAlpha: 0.5

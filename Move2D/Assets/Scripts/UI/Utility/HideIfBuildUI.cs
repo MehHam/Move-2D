@@ -54,7 +54,6 @@ namespace Move2D
 
 		void Start ()
 		{
-			Debug.Log (build);
 		if ((int)someMask == ((int)someMask | build)) {
 				var canvas = GetComponent<CanvasGroup> () == null ? this.gameObject.AddComponent<CanvasGroup> () : GetComponent<CanvasGroup> ();
 				canvas.alpha = 0;

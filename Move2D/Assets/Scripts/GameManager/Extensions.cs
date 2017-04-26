@@ -5,6 +5,21 @@ namespace Move2D
 {
 	public static class Extensions
 	{
+		public static GameManager.Difficulty Next(this GameManager.Difficulty difficulty)
+		{
+			var res = GameManager.Difficulty.Beginner;
+			switch (difficulty) {
+			case GameManager.Difficulty.Beginner:
+				res = GameManager.Difficulty.Intermediate;
+				break;
+			case GameManager.Difficulty.Intermediate:
+			case GameManager.Difficulty.Expert:
+				res = GameManager.Difficulty.Expert;
+				break;
+			}
+			return res;
+		}
+
 		public static string ToString (this GameManager.Difficulty difficulty)
 		{
 			string res = "";

@@ -95,9 +95,11 @@ namespace Move2D
 				other.gameObject.GetComponent<IExitInteractable> ().OnExitEffect (this);
 		}
 
-		IEnumerator FadeAtStartLevel ()
+		IEnumerator DelayedFadeOut (float time)
 		{
-			yield return new WaitForSeconds (waitTimeUntilFade);
+			yield return new WaitForSeconds (time);
+			if (isServer)
+				this.GetComponent<Blinker> ().RpcFadeOut ();
 			this.GetComponent<Blinker> ().FadeOut ();
 		}
 
@@ -150,10 +152,10 @@ namespace Move2D
 				new Vector4 (color.r, color.g, color.b, 1.0f);
 				break;
 			case Level.SphereVisibility.FadeAfterStartLevel:
-				StartCoroutine (FadeAtStartLevel ());
+				StartCoroutine (DelayedFadeOut (waitTimeUntilFade));
 				break;
 			case Level.SphereVisibility.Invisible:
-				this.GetComponent<SpriteRenderer> ().color = new Color (color.r, color.g, color.b, 0.0f);
+				StartCoroutine (DelayedFadeOut (0.0f));
 				break;
 			}
 		}
@@ -201,7 +203,10 @@ namespace Move2D
 		void Update()
 		{
 			if (Time.time - _timeSinceLastApparition > sphereApparitionTime) {
-				Blink ();
+				this.GetComponent<Blinker> ().FadeIn ();
+				if (isServer)
+					this.GetComponent<Blinker> ().RpcFadeIn ();
+				DelayedFadeOut (this.GetComponent<Blinker> ().fadeInTime);
 			}
 		}
 

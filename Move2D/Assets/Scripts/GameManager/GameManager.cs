@@ -449,6 +449,31 @@ namespace Move2D
 		[Server]
 		void Victory ()
 		{
+			if (isServer) {
+				if (!_startingTime.HasValue) {
+					this._playerReadyToStart = 0;
+					_startingTime = Time.time;
+					difficulty = difficulty.Next ();
+				}
+				int count = 0;
+				// Some connections can be null for some reason, so we have to do the count by ourselves
+				foreach (var connection in NetworkServer.connections) {
+					if (connection != null)
+						count++;
+				}
+				// If all clients are ready we can start the level
+				if (count == this._playerReadyToStart || (Time.time >= _startingTime.Value + restartTimeOut)) {
+					this._nextLevelIndex = 0;
+					this.score = 0;
+					this._gameState = GameState.LevelEnd;
+					this._playerReadyToStart = 0;
+					_startingTime = null;
+					if (NetworkManager.singleton.numPlayers < CustomNetworkLobbyManager.s_Singleton.minPlayers) {
+						RpcNetworkErrorMessage (NetworkErrorMessage.NotEnoughPlayers);
+						CustomNetworkLobbyManager.s_Singleton.GoBackButton ();
+					}
+				}
+			}
 		}
 
 		/// <summary>
