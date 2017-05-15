@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 9908c587d5744469399b0272f42584e6
+timeCreated: 1493720058
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Audimat Mono
+  fontNames:
+  - Audimat Mono
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 3861a923221b14a1c862e27744415dda, type: 3}
+  - {fileID: 12800000, guid: 2973a0437e72d4f0fac41d261b34c485, type: 3}
+  - {fileID: 12800000, guid: 5e76c90883416488fa12247334e13b8c, type: 3}
+  - {fileID: 12800000, guid: 0729fcbaeb02e4017a385af99d34de23, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

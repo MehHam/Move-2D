@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 114424921309173602}
   - component: {fileID: 114003466200835296}
   - component: {fileID: 212445998365808830}
-  - component: {fileID: 114862821110090508}
   - component: {fileID: 114363858803713878}
+  - component: {fileID: 95198548443062840}
   m_Layer: 0
   m_Name: SphereCDM
   m_TagString: SphereCDM
@@ -31,7 +31,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.08, z: -1.55}
+  m_LocalPosition: {x: -1.96, y: 0.05, z: -1.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -134,6 +134,23 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 183040}
   m_IsPrefabParent: 1
+--- !u!95 &95198548443062840
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183040}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0747f2752f4e842e0aa5dcfe07642eae, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114003466200835296
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -178,21 +195,6 @@ MonoBehaviour:
   sphereApparitionDuration: 1
   scorePopup: {fileID: 114559239373011768, guid: 43ce95358867740c79361ebb89f8062a,
     type: 2}
---- !u!114 &114862821110090508
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 183040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83eef7eac8ff642f2adf6619f541cca3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadeInTime: 3
-  fadeOutTime: 5
-  blinkDuration: 5
-  maxBlinkAlpha: 0.5
 --- !u!212 &212445998365808830
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -27,21 +27,19 @@ namespace Move2D
 				if (player.isLocalPlayer && player.playerInfo.isMainPlayer)
 					isMainPlayer = true;
 			}
+			this.GetComponent<Dropdown> ().value = (int)(GameManager.singleton.difficulty);
+			this.GetComponent<CanvasGroup> ().alpha = 1;
+			this.GetComponent<CanvasGroup> ().interactable = true;
+			this.GetComponent<CanvasGroup> ().blocksRaycasts = true;
 			if (isMainPlayer || GameManager.singleton.isServer)
 			{
-				this.GetComponent<Dropdown> ().value = (int)(GameManager.singleton.difficulty);
-				this.GetComponent<CanvasGroup> ().alpha = 1;
-				this.GetComponent<CanvasGroup> ().interactable = true;
-				this.GetComponent<CanvasGroup> ().blocksRaycasts = true;
 				this.GetComponent<Dropdown> ().onValueChanged.AddListener (delegate {
 					OnValueChanged ();
 				});
 			}
 			else
 			{
-				this.GetComponent<CanvasGroup>().alpha = 0;
-				this.GetComponent<CanvasGroup>().interactable = false;
-				this.GetComponent<CanvasGroup>().blocksRaycasts = false;
+				this.GetComponent<Dropdown> ().interactable = false;
 			}
 		}
 			
@@ -60,7 +58,12 @@ namespace Move2D
 
 		void Update ()
 		{
-			this.GetComponent<Dropdown> ().interactable = GameManager.singleton.isPlaying;
+			bool isMainPlayer = false;
+			foreach (var player in GameObject.FindObjectsOfType<Player>()) {
+				if (player.isLocalPlayer && player.playerInfo.isMainPlayer)
+					isMainPlayer = true;
+			}
+			this.GetComponent<Dropdown> ().interactable = isMainPlayer || (GameManager.singleton.isServer) && GameManager.singleton.isPlaying;
 		}
 
 		public void OnValueChanged ()

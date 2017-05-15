@@ -8,7 +8,6 @@ namespace Move2D
 	/// <summary>
 	/// An Interactable Enemy. He goes from one point to another and ignore the sphere position completely
 	/// </summary>
-	[RequireComponent (typeof(Blinker))]
 	public class Enemy : NetworkBehaviour, IEnterInteractable
 	{
 		public EnemyStat stats;
@@ -62,7 +61,7 @@ namespace Move2D
 
 		private const float _blinkTime = 0.25f;
 		private bool _damaged = false;
-		private int _currentDestinationIndex = 0;
+		[SyncVar] private int _currentDestinationIndex = 0;
 		private float _startTime;
 		private float _journeyLength;
 		private Transform _sphereCDM;
@@ -159,7 +158,8 @@ namespace Move2D
 				break;
 			}
 			if (this.transform.position == Destination ()) {
-				_currentDestinationIndex = (_currentDestinationIndex + 1) % path.Count;
+				if (isServer)
+					_currentDestinationIndex = (_currentDestinationIndex + 1) % path.Count;
 				_startTime = Time.time;
 				_journeyLength = Vector3.Distance (this.transform.position, path [_currentDestinationIndex].position);
 			}
@@ -190,6 +190,7 @@ namespace Move2D
 			if (_damaged)
 				return;
 			sphere.LoseLife (1);
+			sphere.Damage ();
 			if (this.isDestroyedOnHit)
 				NetworkServer.Destroy (this.gameObject);
 			else {
@@ -201,9 +202,9 @@ namespace Move2D
 		IEnumerator BlinkRoutine (float blinkDuration)
 		{
 			this._damaged = true;
-			this.GetComponent<Blinker> ().DamageAnimation ();
+			this.GetComponent<Animator> ().SetBool ("Damage", true);
 			yield return new WaitForSeconds (blinkDuration);
-			this.GetComponent<Blinker> ().StopDamageAnimation ();
+			this.GetComponent<Animator> ().SetBool ("Damage", false);
 			this._damaged = false;
 		}
 	}

@@ -55,10 +55,7 @@ namespace Move2D
 		void Start ()
 		{
 		if ((int)someMask == ((int)someMask | build)) {
-				var canvas = GetComponent<CanvasGroup> () == null ? this.gameObject.AddComponent<CanvasGroup> () : GetComponent<CanvasGroup> ();
-				canvas.alpha = 0;
-				canvas.interactable = false;
-				canvas.blocksRaycasts = false;
+				this.gameObject.SetActive (false);
 			}
 		}
 	}

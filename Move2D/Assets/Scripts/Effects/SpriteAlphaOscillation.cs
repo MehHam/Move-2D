@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class SpriteAlphaOscillation : MonoBehaviour {
 	public float maxAlpha = 1.0f;
+	public float minAlpha = 0.0f;
 	public float speed = 0.0025f;
 	bool _down = false;
 	// Update is called once per frame
@@ -19,8 +20,9 @@ public class SpriteAlphaOscillation : MonoBehaviour {
 		var color = GetComponent<SpriteRenderer> ().color;
 		if (color.a >= maxAlpha)
 			_down = true;
-		if (color.a <= 0)
+		if (color.a <= minAlpha)
 			_down = false;
-		GetComponent<SpriteRenderer> ().color = new Color (color.r, color.g, color.b, Mathf.Min(color.a + (_down ? -speed : speed), maxAlpha));
+		GetComponent<SpriteRenderer> ().color = new Color (color.r, color.g, color.b,
+			Mathf.Clamp(color.a + (_down ? -speed : speed), minAlpha, maxAlpha));
 	}
 }

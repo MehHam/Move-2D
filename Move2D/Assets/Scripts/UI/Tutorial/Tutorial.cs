@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace Move2D
 {
@@ -20,7 +21,7 @@ namespace Move2D
 	}
 
 	[RequireComponent (typeof(CanvasGroup))]
-	public abstract class Tutorial : MonoBehaviour
+	public abstract class Tutorial : MonoBehaviour, IPointerClickHandler
 	{
 		/// <summary>
 		/// Gets the type of this tutorial
@@ -49,8 +50,6 @@ namespace Move2D
 		public float timer;
 
 		protected bool _activated = false;
-		protected bool _blocksRaycast;
-		protected bool _interactable;
 
 		protected virtual void OnEnable ()
 		{
@@ -58,12 +57,6 @@ namespace Move2D
 
 		protected virtual void OnDisable ()
 		{
-		}
-
-		protected virtual void Start ()
-		{
-			_blocksRaycast = this.GetComponent<CanvasGroup> ().blocksRaycasts;
-			_interactable = this.GetComponent<CanvasGroup> ().interactable;
 		}
 
 		protected virtual void Update ()
@@ -102,8 +95,15 @@ namespace Move2D
 			if (hasTimer)
 				StartCoroutine (Countdown());
 			this.GetComponent<CanvasGroup> ().alpha = 1;
-			this.GetComponent<CanvasGroup> ().interactable = _interactable;
-			this.GetComponent<CanvasGroup> ().blocksRaycasts = _blocksRaycast;
+			this.GetComponent<CanvasGroup> ().interactable = true;
+			this.GetComponent<CanvasGroup> ().blocksRaycasts = true;
+			if (this.GetComponentInChildren<TextTyper>() != null)
+				this.GetComponentInChildren<TextTyper> ().StartTyping ();
+		}
+
+		public void OnPointerClick (PointerEventData eventData)
+		{
+			Deactivate ();
 		}
 
 		/// <summary>

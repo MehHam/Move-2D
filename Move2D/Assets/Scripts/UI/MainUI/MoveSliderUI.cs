@@ -93,7 +93,7 @@ namespace Move2D
 		void Update ()
 		{
 			this.GetComponent<Slider> ().interactable = GameManager.singleton.isPlaying;
-			text.text = (_player != null) ? "Mass: " + this._player.mass.ToString ("0.00") : "";
+			text.text = (_player != null) ? this._player.mass.ToString ("0.00") : "";
 		}
 	}
 }

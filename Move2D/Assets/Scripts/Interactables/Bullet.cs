@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using MovementEffects;
 
 namespace Move2D
 {
@@ -61,9 +60,9 @@ namespace Move2D
 		void Start ()
 		{
 			Destroy (gameObject, bulletLifeSpan);
-			Timing.CallDelayed (timeUntilStart, delegate {
+			/*Timing.CallDelayed (timeUntilStart, delegate {
 				_moveEnabled = true;
-			});
+			});*/
 		}
 
 		/// <summary>

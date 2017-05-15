@@ -22,11 +22,13 @@ namespace Move2D
 		void OnEnable ()
 		{
 			GameManager.onLevelStarted += OnLevelStarted;
+			GameManager.onRespawn += OnLevelStarted;
 		}
 
 		void OnDisable ()
 		{
 			GameManager.onLevelStarted -= OnLevelStarted;
+			GameManager.onRespawn -= OnLevelStarted;
 		}
 
 		void Start ()

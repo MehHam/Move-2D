@@ -8,6 +8,10 @@ namespace Prototype.NetworkLobby
     {
         public bool isInGame = false;
 
+		public GameObject title;
+		public Button backButton;
+		public GameObject info;
+
         protected bool isDisplayed = true;
         protected Image panelImage;
 
@@ -32,11 +36,9 @@ namespace Prototype.NetworkLobby
         public void ToggleVisibility(bool visible)
         {
             isDisplayed = visible;
-            foreach (Transform t in transform)
-            {
-                t.gameObject.SetActive(isDisplayed);
-            }
-
+			backButton.gameObject.SetActive ((isInGame && Application.isMobilePlatform) || isDisplayed);
+			title.gameObject.SetActive (!isInGame && isDisplayed);
+			info.gameObject.SetActive (!isInGame && isDisplayed);
             if (panelImage != null)
             {
                 panelImage.enabled = isDisplayed;

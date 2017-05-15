@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using MovementEffects;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -25,11 +24,11 @@ namespace Move2D
 		public void OnEnterEffect (SphereCDM sphere)
 		{
 			sphere.LoseLife (damage);
+			//sphere.Damage ();
 			sphere.DestroySphere ();
 			/*
 			GameManager.singleton.AddToScore (-1);
-			StartCoroutine (ScoreCooldown ());
-			sphere.Damage ();
+			StartCoroutine (ScoreCooldown ())
 			*/
 		}
 

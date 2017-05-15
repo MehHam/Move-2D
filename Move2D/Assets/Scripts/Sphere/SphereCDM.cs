@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
-using MovementEffects;
 
 namespace Move2D
 {
@@ -98,9 +97,7 @@ namespace Move2D
 		IEnumerator DelayedFadeOut (float time)
 		{
 			yield return new WaitForSeconds (time);
-			if (isServer)
-				this.GetComponent<Blinker> ().RpcFadeOut ();
-			this.GetComponent<Blinker> ().FadeOut ();
+			this.GetComponent<Animator> ().SetTrigger ("FadeOut");
 		}
 
 		/// <summary>
@@ -110,7 +107,7 @@ namespace Move2D
 		{
 			if (isServer)
 				RpcBlink (blinkTime);
-			this.GetComponent<Blinker> ().Blink (blinkTime);
+			this.GetComponent<Animator> ().SetTrigger ("Blink");
 			_timeSinceLastApparition = Time.time;
 		}
 
@@ -126,7 +123,7 @@ namespace Move2D
 			if (!isInvincible) {
 				isInvincible = true;
 				GetComponent<SpherePhysics> ().enabled = false;
-				Blink ();
+				this.GetComponent<Animator> ().SetTrigger ("Destroy");
 				StartCoroutine (WaitForRespawn (1.0f));
 				Destroy (this.GetComponent<PlayerLineManager> ());
 				RpcDestroySphere ();
@@ -140,7 +137,7 @@ namespace Move2D
 		{
 			if (isServer)
 				RpcDamage ();
-			// this.GetComponent<Blinker> ().DamageAnimation (damageDuration);
+			this.GetComponent<Animator> ().SetTrigger ("Damage");
 		}
 
 		void SphereVisibility ()
@@ -170,13 +167,13 @@ namespace Move2D
 		[ClientRpc]
 		void RpcDamage ()
 		{
-			// this.GetComponent<Blinker> ().DamageAnimation (damageDuration);
+			this.GetComponent<Animator> ().SetTrigger ("Damage");
 		}
 
 		[ClientRpc]
 		void RpcBlink (float time)
 		{
-			this.GetComponent<Blinker> ().Blink (time);
+			this.GetComponent<Animator> ().SetTrigger ("Blink");
 		}
 
 		[ClientRpc]
@@ -195,26 +192,20 @@ namespace Move2D
 		void RpcDestroySphere()
 		{
 			GetComponent<SpherePhysics> ().enabled = false;
-			this.GetComponent<Blinker> ().FadeOut (0.5f);
+			this.GetComponent<Animator> ().SetTrigger ("Destroy");
 			Destroy (this.GetComponent<PlayerLineManager> ());
 		}
 
-		[ServerCallback]
 		void Update()
 		{
-			if (Time.time - _timeSinceLastApparition > sphereApparitionTime) {
-				this.GetComponent<Blinker> ().FadeIn ();
-				if (isServer)
-					this.GetComponent<Blinker> ().RpcFadeIn ();
-				DelayedFadeOut (this.GetComponent<Blinker> ().fadeInTime);
-			}
+			this.GetComponent<Animator> ().SetBool ("Danger", GameManager.singleton.life <= 1 && GameManager.singleton.isPlaying);
 		}
 
 		#region IPlayerLineObject implementation
 
 		public Color GetColor ()
 		{
-			return this.GetComponent<Renderer> ().material.GetColor ("_Color");
+			return this.GetComponent<SpriteRenderer> ().color;
 		}
 
 		public float GetMass ()

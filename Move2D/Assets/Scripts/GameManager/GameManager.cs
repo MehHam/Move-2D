@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using MovementEffects;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
@@ -453,7 +452,6 @@ namespace Move2D
 				if (!_startingTime.HasValue) {
 					this._playerReadyToStart = 0;
 					_startingTime = Time.time;
-					difficulty = difficulty.Next ();
 				}
 				int count = 0;
 				// Some connections can be null for some reason, so we have to do the count by ourselves
@@ -463,6 +461,7 @@ namespace Move2D
 				}
 				// If all clients are ready we can start the level
 				if (count == this._playerReadyToStart || (Time.time >= _startingTime.Value + restartTimeOut)) {
+					difficulty = difficulty.Next ();
 					this._nextLevelIndex = 0;
 					this.score = 0;
 					this._gameState = GameState.LevelEnd;

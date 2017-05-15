@@ -11,7 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43eded7389246414d942c31cebd839db, type: 3}
   m_Name: BasicEnemy
   m_EditorClassIdentifier: 
-  enemyName: Basic Enemy
+  enemyName: BasicEnemy
   movementType: 0
   speed: 1
-  scoreValue: 1
+  damageValue: 1
+  isDestroyedOnHit: 0
+  blinkDuration: 3

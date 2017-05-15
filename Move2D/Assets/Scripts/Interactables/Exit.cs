@@ -91,7 +91,9 @@ namespace Move2D
 
 		void Activation()
 		{
-			bool activated = (LevelManager.singleton.levelHasStarted && LevelManager.singleton.hasScoreReached);
+			bool activated = (LevelManager.singleton != null
+				&& LevelManager.singleton.levelHasStarted
+				&& LevelManager.singleton.hasScoreReached);
 			var color = this.GetComponent<SpriteRenderer> ().color;
 			this.GetComponent<SpriteRenderer> ().color = new Color (color.r, color.g, color.b, activated ? 1.0f : 0.3f);
 			this.GetComponent<Collider2D> ().enabled = activated;

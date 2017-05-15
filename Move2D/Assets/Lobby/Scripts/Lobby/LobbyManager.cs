@@ -104,9 +104,8 @@ namespace Prototype.NetworkLobby
                 {
                     ChangeTo(mainMenuPanel);
                 }
-
+				topPanel.isInGame = false;
                 topPanel.ToggleVisibility(true);
-                topPanel.isInGame = false;
             }
             else
             {
