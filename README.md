@@ -1,12 +1,5 @@
 # Mass-Affect:
-We have developed at the CRI-Paris MobileLab a multi-pedagogical serious game. It is based on the control of the Center Of Mass of players, a physical concept which links participants in real-time. The major pedagogical point is to organize the learning process around: corporal and oral language, action through physical activity, logical structuration of thinking and world exploration using gaming.
-
-In this work, we describe a multi-pedagogical serious game based
-on a real-time collaborative combination of movements. is two dimensional game aims to improve body comprehension of younger
-pupils and mathematics for the older ones. In the rst case, psychomotor development might be enhanced. In the second one,
-mathematical analysis will be beer understood by vectorial visualization of movement. In both cases, collaboration between players
-is the most important and original key to success unlike games
-based on competition.
+Mass Effect is a multi-pedagogical serious game developped at the CRI-Paris MobileLab. It is based on the control of the Center Of Mass of players, a physical concept which offers a real-time collaborative combination of movements. The major pedagogical point is to organize the learning process around: corporal and oral language, action through physical activity, logical structuration of thinking and world exploration using gaming. In a first case, psychomotor development might be enhanced. In the second one, mathematical analysis will be better understood by vectorial visualization of movement. In both cases, collaboration between players is the most important and original key to success unlike games based on competition.
 
 
 ![alt tag](https://github.com/MehHam/Move-2D/blob/master/images/ImageCDM.png) 
