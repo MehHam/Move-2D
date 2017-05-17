@@ -17,7 +17,7 @@ The game is available for a 5 players maximum collaborations.
 1- Click on "Play and Host"
 2- On the Lobby Menu click on "Join"
 
-![alt tag](https://github.com/MehHam/Move-2D/blob/master/images/Screen Shot 2017-05-12 at 15.42.28.png)
+![alt tag](https://github.com/MehHam/Move-2D/blob/master/images/Screenshot1.png)
 
 # Player Side (To join a local Game):
 1- Click on "Join a Game "button
