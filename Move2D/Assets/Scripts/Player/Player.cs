@@ -82,6 +82,10 @@ namespace Move2D
 		/// </summary>
 		public bool player2;
 
+		public bool isLocalMainPlayer {
+			get { return this.isLocalPlayer && this.playerInfo.isMainPlayer; }
+		}
+
 		public GameObject moveController;
 
 		public float positionUpdateRate = 0.2f;

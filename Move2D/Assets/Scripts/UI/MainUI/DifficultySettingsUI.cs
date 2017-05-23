@@ -8,6 +8,8 @@ namespace Move2D
 {
 	public class DifficultySettingsUI : MonoBehaviour
 	{
+		public Player[] _players;
+
 		void OnEnable()
 		{
 			GameManager.onLevelStarted += OnLevelStarted;
@@ -23,8 +25,9 @@ namespace Move2D
 		void OnLevelStarted ()
 		{
 			bool isMainPlayer = false;
-			foreach (var player in GameObject.FindObjectsOfType<Player>()) {
-				if (player.isLocalPlayer && player.playerInfo.isMainPlayer)
+			_players = GameObject.FindObjectsOfType<Player> ();
+			foreach (var player in _players) {
+				if (player != null && player.isLocalMainPlayer)
 					isMainPlayer = true;
 			}
 			this.GetComponent<Dropdown> ().value = (int)(GameManager.singleton.difficulty);
@@ -59,11 +62,11 @@ namespace Move2D
 		void Update ()
 		{
 			bool isMainPlayer = false;
-			foreach (var player in GameObject.FindObjectsOfType<Player>()) {
-				if (player.isLocalPlayer && player.playerInfo.isMainPlayer)
+			foreach (var player in _players) {
+				if (player != null && player.isLocalMainPlayer)
 					isMainPlayer = true;
 			}
-			this.GetComponent<Dropdown> ().interactable = isMainPlayer || (GameManager.singleton.isServer) && GameManager.singleton.isPlaying;
+			this.GetComponent<Dropdown> ().interactable = (isMainPlayer || (GameManager.singleton.isServer)) && GameManager.singleton.isPlaying;
 		}
 
 		public void OnValueChanged ()
@@ -72,7 +75,7 @@ namespace Move2D
 			if (GameManager.singleton.isServer)
 				GameManager.singleton.ChangeDifficulty (difficulty);
 			else {
-				foreach (var player in GameObject.FindObjectsOfType<Player>()) {
+				foreach (var player in _players) {
 					if (player.isLocalPlayer) {
 						player.CmdChangeDifficulty (difficulty);
 						break;
