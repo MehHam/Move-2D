@@ -11,7 +11,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: CRI
-  productName: Move2Dalpha
+  productName: Mass Affect
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21176471, a: 1}
@@ -118,7 +118,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 0
-  bundleIdentifier: com.CRI.Move2D
+  bundleIdentifier: com.CRI.MassAffect
   bundleVersion: 1.0
   preloadedAssets: []
   metroInputSource: 0
@@ -212,7 +212,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 3791edb3e24e9bf4cb1e57749a4223bf, type: 3}
+      m_Icon: {fileID: 2800000, guid: 60903882d9d6148938e58ea785310c92, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []
